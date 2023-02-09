@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: odprti-racuni-obcine
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
     nginx.ingress.kubernetes.io/proxy-body-size: 15m
     nginx.org/client-max-body-size: "15m"
 spec:
@@ -29,7 +29,7 @@ kind: Ingress
 metadata:
   name: odprti-racuni-obcine-nginx
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*" # TODO
