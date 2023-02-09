@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="no-js" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Odprti računi občine</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+    <div class="nav">
+        <a href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}">Pregled</a>
+        <a href="{% url 'cut_of_funds' municipality_id=request.resolver_match.kwargs.municipality_id %}">Razrez sredstev</a>
+        <a href="{% url 'comparison_over_time' municipality_id=request.resolver_match.kwargs.municipality_id %}">Primerjava skozi čas</a>
+    </div>
+
+    {% block description %}
+    {% endblock description %}
+
+    {% block budget %}
+    {% endblock budget %}
+
+    {% block content %}
+    {% endblock content %}
+
+    <div id="footer">
+        To je footer
+    </div>
+
+</body>
+</html>

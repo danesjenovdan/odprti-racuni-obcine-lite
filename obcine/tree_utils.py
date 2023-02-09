@@ -27,6 +27,7 @@ class RevenueTreeBuilder():
 
     def build_tree(self, items):
         parent_level = {}
+        parent = None
         print('Build level')
         for item in items:
             parent = self.definiton_storage[item['parent_id']]
@@ -38,7 +39,7 @@ class RevenueTreeBuilder():
                 parent.children = [item]
                 parent_level[parent.id] = parent.get_offline_dict()
 
-        if parent.parent:
+        if parent and parent.parent:
             return self.build_tree(parent_level.values())
         else:
             return parent_level
@@ -71,6 +72,7 @@ class ExpanseTreeBuilder():
 
     def build_tree(self, items):
         parent_level = {}
+        parent = None
         print('Build level')
         for item in items:
             parent = self.definiton_storage[item['parent_id']]
@@ -82,7 +84,7 @@ class ExpanseTreeBuilder():
                 parent.children = [item]
                 parent_level[parent.id] = parent.get_offline_dict()
 
-        if parent.parent:
+        if parent and parent.parent:
             return self.build_tree(parent_level.values())
         else:
             return parent_level

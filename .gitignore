@@ -67,8 +67,3 @@ secrets.yaml
 sentry.yaml
 
 db*.dump
-
-*.xlsx
-
-#static files
-files/

@@ -1,0 +1,39 @@
+.nav {
+    height: 40px;
+    width: 100%;
+    text-align: center;
+
+    border-bottom-color: black;
+    border-bottom-style: solid;
+}
+
+.budget-box {
+    margin: auto;
+    width: 400px;
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+.content-box {
+    text-align: center;
+    padding: 20px;
+}
+
+#footer {
+    height: 200px;
+    width: 100%;
+
+    border-top-color: black;
+    border-top-style: solid;
+}
+
+#description {
+    background-color: #e6dfdf;
+    padding: 20px;
+    text-align: center;
+}
+
+#budget {
+    text-align: center;
+}

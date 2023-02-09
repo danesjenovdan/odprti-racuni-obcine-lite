@@ -1,0 +1,19 @@
+<div id="budget">
+    <h3>Proračun {{ year }}</h3>
+    <div class="budget-box">
+        <p>
+            <h4>Prihodki</h4> </br>
+            Proračun: {{ summary.planned_revenue }} </br>
+            Dejansko stanje: {{ summary.realized_revenue }} </br>
+        </p>
+        <p>
+            <h4>Odhodki</h4> </br>
+            Proračun: {{ summary.planned_budget }} </br>
+            Dejansko stanje: {{ summary.realized_revenue }} </br>
+        <p>
+
+        {% if addLink %}
+            <a href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id year_id=request.resolver_match.kwargs.year_id %}">Podrobneje razišči letošnji proračun in dejansko stanje ---></a>
+        {% endif %}
+    </div>
+</div>
