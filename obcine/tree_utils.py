@@ -68,7 +68,7 @@ class ExpanseTreeBuilder():
             item.amount = expense['amount']
             item.children = []
             leaves.append(item.get_offline_dict())
-        return self.build_tree(leaves)
+        return list(self.build_tree(leaves).values())
 
     def build_tree(self, items):
         parent_level = {}
