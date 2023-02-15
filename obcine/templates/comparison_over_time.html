@@ -1,12 +1,23 @@
 {% extends "base.html" %}
+{% load static jsonify %}
 
 {% block description %}
     {% include "description.html" with page_title="Primerjava skozi čas" page_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." %}
 {% endblock description %}
 
 {% block content %}
-    Tukaj pride graf </br>
-    Tukaj pride tabela
+    <div>
+        <canvas width="1000" height="600" id="budget_chart1" style="margin: 0 auto;"></canvas>
+        <br>
+        <canvas width="1000" height="600" id="budget_chart2" style="margin: 0 auto;"></canvas>
+        <script>window.__BUDGET_DATA__ = JSON.parse("{{ budget|jsonify|escapejs }}");</script>
+        <script src="{% static 'js/budget_chart.js' %}"></script>
+    </div>
 
-	{{ budget }}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    Tukaj pride tabela
 {% endblock content %}

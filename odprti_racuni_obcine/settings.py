@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # third party apps
     'mptt',
     "debug_toolbar",
+    'jsonify',
     # apps
     'obcine',
 ]
