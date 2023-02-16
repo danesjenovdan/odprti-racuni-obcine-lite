@@ -149,6 +149,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'obcine.User'
 
+ENABLE_S3 = os.getenv('ENABLE_S3', False)
+
 # DJANGO STORAGE SETTINGS
 if os.getenv('ENABLE_S3', False):
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

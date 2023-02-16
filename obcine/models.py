@@ -3,10 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue
+from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue, download_image
 
 
 def document_size_validator(value): # add this to some file where you can import it from
@@ -194,7 +195,11 @@ class PlannedRevenueDocument(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         parser = XLSXAppraRevenue(self, PlannedRevenue, RevenueDefinition)
-        parser.parse_file(file_path=self.file.path)
+        if settings.ENABLE_S3:
+            image_path = download_image(self.file.url, self.file.name)
+            parser.parse_file(file_path=image_path)
+        else:
+            parser.parse_file(file_path=self.file.path)
 
 
     class Meta:
@@ -225,7 +230,11 @@ class MonthlyRevenueDocument(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         parser = XLSXAppraRevenue(self, MonthlyRevenue, RevenueDefinition, self.month)
-        parser.parse_file(file_path=self.file.path)
+        if settings.ENABLE_S3:
+            image_path = download_image(self.file.url, self.file.name)
+            parser.parse_file(file_path=image_path)
+        else:
+            parser.parse_file(file_path=self.file.path)
 
 
     class Meta:
@@ -279,7 +288,11 @@ class PlannedExpenseDocument(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         parser = XLSXAppraBudget(self, PlannedExpense)
-        parser.parse_file(file_path=self.file.path)
+        if settings.ENABLE_S3:
+            image_path = download_image(self.file.url, self.file.name)
+            parser.parse_file(file_path=image_path)
+        else:
+            parser.parse_file(file_path=self.file.path)
 
 
     class Meta:
@@ -306,7 +319,11 @@ class MonthlyExpenseDocument(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         parser = XLSXAppraBudget(self, MonthlyExpense, self.month)
-        parser.parse_file(file_path=self.file.path)
+        if settings.ENABLE_S3:
+            image_path = download_image(self.file.url, self.file.name)
+            parser.parse_file(file_path=image_path)
+        else:
+            parser.parse_file(file_path=self.file.path)
 
 
     class Meta:

@@ -1,5 +1,6 @@
 import xlrd
 import time
+import requests
 from django.db import transaction
 
 
@@ -318,3 +319,11 @@ class XLSCodesParser(object):
             self.depths[rc.id] = int(items[0][0])
             last_added = rc
             i+=1
+
+
+def download_image(url, name):
+        page = requests.get(url)
+        file_path = f'media/{name}'
+        with open(file_path, 'wb') as f:
+            f.write(page.content)
+        return file_path
