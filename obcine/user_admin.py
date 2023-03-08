@@ -4,8 +4,8 @@ from mptt.admin import MPTTModelAdmin
 from django.utils.translation import gettext_lazy as _
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
-    PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue,
-    MonthlyRevenue)
+    PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
+    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument)
 
 import json
 
@@ -50,7 +50,7 @@ class LimitedAdmin(admin.ModelAdmin):
         return inline_formsets
 
 
-class FinancialCategoryMPTTModelAdmin(MPTTModelAdmin):
+class FinancialCategoryMPTTModelAdmin(MPTTModelAdmin, LimitedAdmin):
     mptt_level_indent = 40
     list_display = ['name', 'code', 'level', 'amount', 'year']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
@@ -60,7 +60,7 @@ class FinancialCategoryMPTTModelAdmin(MPTTModelAdmin):
         return qs.prefetch_related('categories_children')
 
 
-class RevenueDefinitionAdmin(MPTTModelAdmin):
+class RevenueDefinitionAdmin(MPTTModelAdmin, LimitedAdmin):
     mptt_level_indent = 40
     list_display = ['name', 'code', 'level']
 
@@ -83,8 +83,18 @@ class MonthlyBudgetRealizationInlineAdmin(DocumentTabularInline):
     extra = 0
 
 
+class YearlyBudgetRealizationInlineAdmin(DocumentTabularInline):
+    model = YearlyExpenseDocument
+    extra = 0
+
+
 class RevenueDocumentInlineAdmin(DocumentTabularInline):
     model = PlannedRevenueDocument
+    extra = 0
+
+
+class YearlyRevenueDocumentInlineAdmin(DocumentTabularInline):
+    model = YearlyRevenueDocument
     extra = 0
 
 
@@ -99,8 +109,10 @@ class MunicipalityFinancialYearAdmin(admin.ModelAdmin):
     inlines = [
         BudgetDocumentInlineAdmin,
         MonthlyBudgetRealizationInlineAdmin,
+        YearlyBudgetRealizationInlineAdmin,
         RevenueDocumentInlineAdmin,
-        RevenueBudgetRealizationInlineAdmin
+        RevenueBudgetRealizationInlineAdmin,
+        YearlyRevenueDocumentInlineAdmin
     ]
     def year(self, obj):
         return obj.financial_year.name
@@ -123,15 +135,33 @@ class FinancialYearModelAdmin(admin.ModelAdmin):
 
 
 class BudgetAdmin(FinancialCategoryMPTTModelAdmin):
-    pass
+    list_filter = ['year']
+
 
 class MonthlyBudgetRealizatioAdmin(FinancialCategoryMPTTModelAdmin):
-    pass
+    list_filter = ['year']
+
+
+class YearlyBudgetAdmin(FinancialCategoryMPTTModelAdmin):
+    list_filter = ['year']
 
 
 class RevenueAdmin(admin.ModelAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_filter = ['year']
+
+    def status(self, obj):
+        if obj.definition:
+            return 'OK'
+        else:
+            return 'Napaka pri izbiri konta'
+
+
+class YearlyRevenueObcineAdmin(admin.ModelAdmin):
+    list_display = ['year', 'name', 'code', 'amount', 'status']
+    readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_filter = ['year']
 
     def status(self, obj):
         if obj.definition:
@@ -142,12 +172,14 @@ class RevenueAdmin(admin.ModelAdmin):
 class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
     list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_filter = ['year']
 
     def status(self, obj):
         if obj.definition:
             return 'OK'
         else:
             return 'Napaka pri izbiri konta'
+
 
 class AdminSite(admin.AdminSite):
     site_header = _('Nadzorna plošča')
@@ -156,10 +188,12 @@ admin_site = AdminSite(name='Nadzorna plošča')
 
 
 admin_site.register(PlannedExpense, BudgetAdmin)
+admin_site.register(YearlyExpense, YearlyBudgetAdmin)
 admin_site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
 
 
 admin_site.register(PlannedRevenue, RevenueAdmin)
+admin_site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
 admin_site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
 
 #admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)

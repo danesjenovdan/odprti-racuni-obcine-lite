@@ -5,7 +5,7 @@ from django.db import transaction
 
 
 class XLSXAppraBudget(object):
-    def __init__(self, document, model, month=None):
+    def __init__(self, document, model, definiton_model=None, month=None):
         self.municipality = document.municipality
         self.year = document.year
         self.model = model

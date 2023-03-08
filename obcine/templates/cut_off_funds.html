@@ -13,4 +13,13 @@
         Tukaj pride graf </br>
         Tukaj pride tabela </br>
     </div>
+
+    {% if year.is_current %}
+    Trenutno leto kaži primerjavo s planiranim in realiziranim <br>
+    {% endif %}
+
+    Revenues: {{ revenues }}
+    <br>
+    Expanses: {{ expenses }}
+
 {% endblock content %}
