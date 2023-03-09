@@ -30,7 +30,9 @@ class XLSXAppraBudget(object):
         sheet = book.sheet_by_index(0)
 
         nodes = {}
+        node_keys = []
         i=0
+        print(range(sheet.nrows))
         start_time = time.time()
         for row_i in range(sheet.nrows):
             # skip first row
@@ -43,7 +45,7 @@ class XLSXAppraBudget(object):
             ppp_id = row[2].value
             ppp_name = row[3].value
 
-            if ppp_id in nodes.keys():
+            if ppp_id in node_keys:
                 ppp = nodes[ppp_id]
             else:
                 ppp = self.prepare_moodel(
@@ -54,12 +56,13 @@ class XLSXAppraBudget(object):
                 ppp.save()
                 i+=1
                 nodes[ppp_id] = ppp
+                node_keys.append(ppp_id)
 
             # get second level data and save it
             gpr_id = row[4].value
             gpr_name = row[5].value
 
-            if gpr_id in nodes.keys():
+            if gpr_id in node_keys:
                 gpr = nodes[gpr_id]
             else:
                 gpr = self.prepare_moodel(
@@ -71,6 +74,7 @@ class XLSXAppraBudget(object):
                 gpr.save()
                 i+=1
                 nodes[gpr_id] = gpr
+                node_keys.append(gpr_id)
 
             # get third level data and save it, or update amount on existed
             ppr_id = row[6].value
@@ -78,7 +82,7 @@ class XLSXAppraBudget(object):
 
             amount = row[16].value
 
-            if ppr_id in nodes.keys():
+            if ppr_id in node_keys:
                 ppr = nodes[ppr_id]
                 #ppr.amount += amount
                 #ppr.save()
@@ -93,6 +97,7 @@ class XLSXAppraBudget(object):
                 ppr.save()
                 i+=1
                 nodes[ppr_id] = ppr
+                node_keys.append(ppr_id)
 
             # Do tuki je ok
 
@@ -100,7 +105,7 @@ class XLSXAppraBudget(object):
             pp_name = row[9].value
             ppr_pp_id = f'{ppr_id}_{pp_id}'
 
-            if ppr_pp_id in nodes.keys():
+            if ppr_pp_id in node_keys:
                 pp = nodes[ppr_pp_id]
             else:
                 pp = self.prepare_moodel(
@@ -112,13 +117,14 @@ class XLSXAppraBudget(object):
                 pp.save()
                 i+=1
                 nodes[ppr_pp_id] = pp
+                node_keys.append(ppr_pp_id)
 
             k4_id = row[10].value
             k4_name = row[11].value
             amount = row[16].value
             ppr_pp_k4_id = f'{ppr_pp_id}_{k4_id}'
 
-            if ppr_pp_k4_id in nodes.keys():
+            if ppr_pp_k4_id in node_keys:
                 k4 = nodes[ppr_pp_k4_id]
             else:
                 k4 = self.prepare_moodel(
@@ -132,6 +138,7 @@ class XLSXAppraBudget(object):
                 k4.save()
                 i+=1
                 nodes[k4_id] = k4
+                node_keys.append(k4_id)
 
         for budget_item in self.model.objects.filter(document=self.document_object, level=3, amount=None):
             budget_item.amount = sum([item.amount for item in budget_item.get_children()])

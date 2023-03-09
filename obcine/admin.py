@@ -5,7 +5,7 @@ from mptt.admin import MPTTModelAdmin
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, Municipality,
     FinancialYear, PlannedExpenseDocument, RevenueDefinition, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue,
-    MonthlyRevenue, User)
+    MonthlyRevenue, User, Task)
 
 # Register your models here.
 
@@ -90,6 +90,10 @@ class RevenueAdmin(admin.ModelAdmin):
             return 'OK'
         else:
             return 'Napaka pri izbiri konta'
+        
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ['name']
 
 class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
     list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
@@ -101,6 +105,7 @@ class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
             return 'Napaka pri izbiri konta'
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Task, TaskAdmin)
 
 admin.site.register(PlannedExpense, BudgetAdmin)
 admin.site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)

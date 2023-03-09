@@ -6,6 +6,7 @@ resources:
   - service.yaml
   - ingress.yaml
   - pvc.yaml
+  - tesk_runner_cornjob.yaml
 
 images:
   - name: odprti-racuni-obcine

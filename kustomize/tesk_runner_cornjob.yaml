@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: task-runner-cronjob
+spec:
+  schedule: "5,20,35,50 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: task-runner-cronjob
+            image: odprti-racuni-obcine
+            env:
+              - name: DJANGO_SETTINGS_MODULE
+                value: odprti_racuni_obcine.settings
+            envFrom:
+              - secretRef:
+                  name: odprti-racuni-obcine-credentials
+            command:
+              - python
+              - manage.py
+              - run_tasks
+          restartPolicy: Never

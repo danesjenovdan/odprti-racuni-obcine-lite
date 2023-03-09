@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from importlib import import_module
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -44,6 +45,76 @@ class Timestampable(models.Model):
         abstract = True
 
 
+class Task(Timestampable):
+    started_at = models.DateTimeField(
+        help_text='time when started',
+        blank=True,
+        null=True,
+        default=None
+    )
+    finished_at = models.DateTimeField(
+        help_text='time when finished',
+        blank=True,
+        null=True,
+        default=None
+    )
+    errored_at = models.DateTimeField(
+        help_text='time when errored',
+        blank=True,
+        null=True,
+        default=None
+    )
+    error_msg = models.TextField()
+    name = models.TextField(blank=False, null=False, help_text='Name of task')
+    email_msg = models.TextField(blank=False, null=False, help_text='A message sent to the administrator when the task is complete.')
+    payload = models.JSONField(help_text='Payload kwargs')
+
+
+    def run(self):
+        self.started_at = datetime.now()
+        self.save()
+        try:
+            data = self.payload
+            model = data['model']
+            parser = data['parser']
+            definition = data.get('definition', None)
+            month = data.get('month', None)
+            pk = data['pk']
+            self_model = data['self']
+
+            models_module = import_module('obcine.models')
+            parser_module = import_module('obcine.parse_utils')
+
+            models_class = getattr(models_module, model)
+            document_class = getattr(models_module, self_model)
+            parser_class = getattr(parser_module, parser)
+
+            if definition and definition != 'None':
+                definition = getattr(models_module, definition)
+
+            document = document_class.objects.get(id=pk)
+
+            parser = parser_class(
+                document,
+                model=models_class,
+                definiton_model=None,
+                month=month
+            )
+            if settings.ENABLE_S3:
+                image_path = download_image(document.file.url, document.file.name)
+                parser.parse_file(file_path=image_path)
+            else:
+                parser.parse_file(file_path=document.file.path)
+
+            self.finished_at = datetime.now()
+            self.save()
+
+        except Exception as e:
+            self.errored_at = datetime.now()
+            self.error_msg = e
+            self.save()
+
+
 class ParsableDocument(models.Model):
     municipality_year = models.ForeignKey('MunicipalityFinancialYear', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('Municipality Financial Year'))
 
@@ -59,12 +130,25 @@ class ParsableDocument(models.Model):
     )
 
     def parse(self, parser, model, definition=None, month=None):
-        parser = parser(self, model, definition, month)
-        if settings.ENABLE_S3:
-            image_path = download_image(self.file.url, self.file.name)
-            parser.parse_file(file_path=image_path)
-        else:
-            parser.parse_file(file_path=self.file.path)
+        if definition:
+            definition = definition.__name__
+        Task(
+            name='Parse xls',
+            payload={
+                'model': f'{model.__name__}',
+                'parser': f'{parser.__name__}',
+                'definition': f'{definition}',
+                'month': f'{month}',
+                'pk': self.id,
+                'self': f'{self.__class__.__name__}',
+            }
+        ).save()
+        # parser = parser(self, model, definition, month)
+        # if settings.ENABLE_S3:
+        #     image_path = download_image(self.file.url, self.file.name)
+        #     parser.parse_file(file_path=image_path)
+        # else:
+        #     parser.parse_file(file_path=self.file.path)
 
     class Meta:
         abstract = True
