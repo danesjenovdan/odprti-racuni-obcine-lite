@@ -362,28 +362,28 @@ class ExpenseDefinition(FinancialCategory):
         verbose_name_plural = _('Revenue definitions')
 
 
-class Expanse(FinancialCategory):
+class Expense(FinancialCategory):
     municipality = models.ForeignKey('Municipality', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('Organiaztion'))
     year = models.ForeignKey('FinancialYear', on_delete=models.CASCADE,null=True, blank=True, related_name='%(class)s_related', verbose_name=_('Year'))
     class Meta:
         abstract = True
 
 
-class PlannedExpense(Expanse):
+class PlannedExpense(Expense):
     document = models.ForeignKey('PlannedExpenseDocument', on_delete=models.CASCADE)
     class Meta:
         verbose_name = _('Planned expense')
         verbose_name_plural = _('Planned expense')
 
 
-class YearlyExpense(Expanse):
+class YearlyExpense(Expense):
     document = models.ForeignKey('YearlyExpenseDocument', on_delete=models.CASCADE)
     class Meta:
         verbose_name = _('Yearly expense')
         verbose_name_plural = _('Yearly expense')
 
 
-class MonthlyExpense(Expanse):
+class MonthlyExpense(Expense):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
     document = models.ForeignKey('MonthlyExpenseDocument', on_delete=models.CASCADE)
     class Meta:

@@ -73,7 +73,7 @@ class RevenueTreeBuilder():
             return parent_level
 
 
-class ExpanseTreeBuilder():
+class ExpenseTreeBuilder():
     def __init__(self, municipality, financial_year):
         self.municipality = municipality
         self.financial_year = financial_year
@@ -98,7 +98,7 @@ class ExpanseTreeBuilder():
             leaves.append(item.get_offline_dict())
         return list(self.build_tree(leaves).values())
 
-    def get_merged_expanse_tree(self, planned_data_model, realized_data_model):
+    def get_merged_expense_tree(self, planned_data_model, realized_data_model):
         planend_expenses = planned_data_model.objects.filter(municipality=self.municipality, year=self.financial_year)
         realized_expenses = realized_data_model.objects.filter(municipality=self.municipality, year=self.financial_year)
         self.definiton_storage = {expense.id: expense for expense in planend_expenses}

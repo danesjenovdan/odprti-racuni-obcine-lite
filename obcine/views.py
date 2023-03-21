@@ -1,8 +1,9 @@
 from obcine.models import (PlannedExpense, MonthlyExpense, RevenueDefinition, PlannedRevenue, MonthlyRevenue,
     Municipality, FinancialYear, YearlyRevenue, YearlyExpense)
-from obcine.tree_utils import RevenueTreeBuilder, ExpanseTreeBuilder
+from obcine.tree_utils import RevenueTreeBuilder, ExpenseTreeBuilder
 from django.http import JsonResponse
 from django.shortcuts import render
+
 
 def get_year(year_id):
     if year_id:
@@ -10,66 +11,75 @@ def get_year(year_id):
     else:
         return FinancialYear.objects.last()
 
+
+def get_summary(municipality, year, summary_type="monthly"):
+    rtb = RevenueTreeBuilder(RevenueDefinition, municipality=municipality, financial_year=year)
+    etb = ExpenseTreeBuilder(municipality=municipality, financial_year=year)
+
+    if summary_type == "monthly":
+        planned_expenses = etb.get_expense_tree(PlannedExpense)
+        planned_revenue = rtb.get_revenue_tree(PlannedRevenue)
+        monthly_expenses = etb.get_expense_tree(MonthlyExpense)
+        monthly_revenue = rtb.get_revenue_tree(MonthlyRevenue)
+
+        summary = {
+            'planned_expenses': sum([i['amount'] for i in planned_expenses]),
+            'planned_revenue': sum([i['amount'] for i in planned_revenue]),
+            'realized_expenses': sum([i['amount'] for i in monthly_expenses]),
+            'realized_revenue': sum([i['amount'] for i in monthly_revenue]),
+        }
+
+        summary_max_value = max(summary.values())
+        if summary_max_value > 0:
+            summary['planned_expenses_percentage'] = summary['planned_expenses'] / summary_max_value
+            summary['planned_revenue_percentage'] = summary['planned_revenue'] / summary_max_value
+            summary['realized_expenses_percentage'] = summary['realized_expenses'] / summary['planned_expenses']
+            summary['realized_revenue_percentage'] = summary['realized_revenue'] / summary['planned_revenue']
+
+    elif summary_type == "yearly":
+        yearly_expenses = etb.get_expense_tree(YearlyExpense)
+        yearly_revenue = rtb.get_revenue_tree(YearlyRevenue)
+
+        summary = {
+            'yearly_expenses': sum([i['amount'] for i in yearly_expenses]),
+            'yearly_revenue': sum([i['amount'] for i in yearly_revenue]),
+        }
+
+        summary_max_value = max(summary.values())
+        if summary_max_value > 0:
+            summary['yearly_expenses_percentage'] = summary['yearly_expenses'] / summary_max_value
+            summary['yearly_revenue_percentage'] = summary['yearly_revenue'] / summary_max_value
+
+    return summary
+
+
 def overview(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
 
-    rtb = RevenueTreeBuilder(RevenueDefinition, municipality=municipality, financial_year=year)
-    monthly_revenue = rtb.get_revenue_tree(MonthlyRevenue)
-    planned_revenue = rtb.get_revenue_tree(PlannedRevenue)
+    summary = get_summary(municipality, year, summary_type="monthly")
 
-    etb = ExpanseTreeBuilder(municipality=municipality, financial_year=year)
-    monhtly_expenses = etb.get_expense_tree(MonthlyExpense)
-    planned_expenses = etb.get_expense_tree(PlannedExpense)
+    return render(request, 'overview.html', {
+        'municipality': municipality,
+        'year': year,
+        'summary': summary,
+    })
 
-    summary = {
-        'planned_budget': sum([i['amount'] for i in planned_expenses]),
-        'planned_revenue': sum([i['amount'] for i in planned_revenue]),
-        'realized_budget': sum([i['amount'] for i in monhtly_expenses]),
-        'realized_revenue': sum([i['amount'] for i in monthly_revenue]),
-    }
-    summary_max_value = max(summary.values())
-    summary['planned_budget_percentage'] = summary['planned_budget'] / summary_max_value
-    summary['planned_revenue_percentage'] = summary['planned_revenue'] / summary_max_value
-    summary['realized_budget_percentage'] = summary['realized_budget'] / summary['planned_budget']
-    summary['realized_revenue_percentage'] = summary['realized_revenue'] / summary['planned_revenue']
 
-    return render(
-        request,
-        'overview.html',
-        {
-            'municipality': municipality,
-            'year': year,
-            'summary': summary,
-        }
-    )
-
-def cut_off_funds(request, municipality_id, year_id=None,):
+def cut_of_funds(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
 
     rtb = RevenueTreeBuilder(RevenueDefinition, municipality=municipality, financial_year=year)
-    etb = ExpanseTreeBuilder(municipality=municipality, financial_year=year)
+    etb = ExpenseTreeBuilder(municipality=municipality, financial_year=year)
 
     if year.is_current():
-        # create data strucutre for current year
-        monthly_revenue = rtb.get_revenue_tree(MonthlyRevenue)
-        planned_revenue = rtb.get_revenue_tree(PlannedRevenue)
-
-        monhtly_expenses = etb.get_expense_tree(MonthlyExpense)
-        planned_expenses = etb.get_expense_tree(PlannedExpense)
-
-        summary = {
-            'planned_budget': sum([i['amount'] for i in planned_expenses]),
-            'planned_revenue': sum([i['amount'] for i in planned_revenue]),
-            'realized_budget': sum([i['amount'] for i in monhtly_expenses]),
-            'realized_revenue': sum([i['amount'] for i in monthly_revenue]),
-        }
-
         merged_tree_reveues = rtb.get_merged_revenue_tree(PlannedRevenue, MonthlyRevenue)
-        merged_tree_expenses = etb.get_merged_expanse_tree(PlannedExpense, MonthlyExpense)
+        merged_tree_expenses = etb.get_merged_expense_tree(PlannedExpense, MonthlyExpense)
 
-        revenues = {
+        summary = get_summary(municipality, year, summary_type="monthly")
+
+        revenue = {
             'planned': summary['planned_revenue'],
             'realized': summary['realized_revenue'],
             'name': 'Celotni prihodki',
@@ -78,24 +88,20 @@ def cut_off_funds(request, municipality_id, year_id=None,):
         }
 
         expenses = {
-            'planned': summary['planned_budget'],
-            'realized': summary['realized_budget'],
+            'planned': summary['planned_expenses'],
+            'realized': summary['realized_expenses'],
             'name': 'Celotni odhodki',
             'code': None,
             'children': merged_tree_expenses
         }
 
     else:
-        # create data structure for past years
         yearly_revenue = rtb.get_revenue_tree(YearlyRevenue)
         yearly_expenses = etb.get_expense_tree(YearlyExpense)
 
-        summary = {
-            'yearly_revenue': sum([i['amount'] for i in yearly_revenue]),
-            'yearly_expense': sum([i['amount'] for i in yearly_expenses]),
-        }
+        summary = get_summary(municipality, year, summary_type="yearly")
 
-        revenues = {
+        revenue = {
             'yearly': summary['yearly_revenue'],
             'name': 'Celotni prihodki',
             'code': None,
@@ -103,30 +109,27 @@ def cut_off_funds(request, municipality_id, year_id=None,):
         }
 
         expenses = {
-            'yearly': summary['yearly_expense'],
+            'yearly': summary['yearly_expenses'],
             'name': 'Celotni odhodki',
             'code': None,
             'children': yearly_expenses
         }
 
-    return render(
-        request,
-        'cut_off_funds.html',
-        {
+    return render(request, 'cut_of_funds.html', {
+        'municipality': municipality,
         'year': year,
-        'revenues': revenues,
+        'summary': summary,
+        'revenue': revenue,
         'expenses': expenses,
-        'summary': summary
     })
 
 def comparison_over_time(request, municipality_id):
-
     municipality = Municipality.objects.get(id=municipality_id)
     years = FinancialYear.objects.all()
     budget_data = {}
     revenue_data = {}
     for year in years:
-        etb = ExpanseTreeBuilder(municipality=municipality, financial_year=year)
+        etb = ExpenseTreeBuilder(municipality=municipality, financial_year=year)
         rtb = RevenueTreeBuilder(RevenueDefinition, municipality=municipality, financial_year=year)
         if year.is_current:
             expenses = etb.get_expense_tree(MonthlyExpense)
@@ -155,8 +158,8 @@ def budget(request, municipality_id, year_id=None):
     monthly_revenue = rtb.get_revenue_tree(MonthlyRevenue)
     planned_revenue = rtb.get_revenue_tree(PlannedRevenue)
 
-    etb = ExpanseTreeBuilder(municipality=municipality, financial_year=year)
-    monhtly_expenses = etb.get_expense_tree(MonthlyExpense)
+    etb = ExpenseTreeBuilder(municipality=municipality, financial_year=year)
+    monthly_expenses = etb.get_expense_tree(MonthlyExpense)
     planned_expenses = etb.get_expense_tree(PlannedExpense)
 
     return render(
@@ -165,7 +168,7 @@ def budget(request, municipality_id, year_id=None):
         {
             'monthly_revenue': monthly_revenue,
             'planned_revenue': planned_revenue,
-            'monhtly_expenses': monhtly_expenses,
+            'monthly_expenses': monthly_expenses,
             'planned_expenses': planned_expenses,
         }
     )

@@ -43,22 +43,22 @@
             <div>
               <div class="budget-amount">
                 <small class="amount-description">Proračun</small>
-                <span class="amount-number">{{ summary.planned_budget|floatformat:"2g" }}</span>
+                <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
               </div>
               <div class="budget-amount">
                 <small class="amount-description">Dejansko stanje</small>
-                <span class="amount-number">{{ summary.realized_budget|floatformat:"2g" }}</span>
+                <span class="amount-number">{{ summary.realized_expenses|floatformat:"2g" }}</span>
               </div>
             </div>
             <div>
               <div class="budget-bar">
-                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_budget_percentage 1 100 %}%;">
+                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_expenses_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--1"></div>
                 </div>
               </div>
               <div class="budget-bar">
-                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_budget_percentage 1 100 %}%;">
-                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_budget_percentage 1 100 %}%;"></div>
+                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_expenses_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;"></div>
                 </div>
               </div>
             </div>
