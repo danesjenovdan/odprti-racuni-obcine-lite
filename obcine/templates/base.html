@@ -1,32 +1,62 @@
-{% load static %}
-<!DOCTYPE html>
-
-<html class="no-js" lang="pt-br">
+{% load static %}<!DOCTYPE html>
+<html lang="sl">
 <head>
-    <meta charset="UTF-8">
-    <title>Odprti računi občine</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
-      integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js"
-      integrity="sha512-Zjnjh2DCl/MrwdZ8FNp25vSbXac3yWUWoMn0CL8qQ/K11HGv7cJ9RGNUiojnSfqVtwbGf+eyqEEjiw2hlHd6iQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Odprti računi občine</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,400;1,700&amp;display=swap">
+  <link rel="stylesheet" href="{% static "fonts/metropolis/font.css" %}">
+
+  <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+  <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
+    integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js"
+    integrity="sha512-Zjnjh2DCl/MrwdZ8FNp25vSbXac3yWUWoMn0CL8qQ/K11HGv7cJ9RGNUiojnSfqVtwbGf+eyqEEjiw2hlHd6iQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
 </head>
+
 <body>
-    <div class="nav">
-        <a href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}">Pregled</a>
-        <a href="{% url 'cut_of_funds' municipality_id=request.resolver_match.kwargs.municipality_id %}">Razrez sredstev</a>
-        <a href="{% url 'comparison_over_time' municipality_id=request.resolver_match.kwargs.municipality_id %}">Primerjava skozi čas</a>
-    </div>
+  <div class="page-container">
+
+    <nav class="navbar navbar-expand-lg bg-body">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          OR LOGO - {{ municipality.name }}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}">Pregled</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cut_of_funds' municipality_id=request.resolver_match.kwargs.municipality_id %}">Razrez sredstev</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'comparison_over_time' municipality_id=request.resolver_match.kwargs.municipality_id %}">Primerjava skozi čas</a>
+            </li>
+          </ul>
+          <span class="nav-right-content">
+            <a class="nav-right-link" href="#">Kako uporabljati aplikacijo?</a>
+          </span>
+        </div>
+      </div>
+    </nav>
 
     {% block description %}
     {% endblock description %}
@@ -37,9 +67,50 @@
     {% block content %}
     {% endblock content %}
 
-    <div id="footer">
-        To je footer
+    <footer class="footer bg-body">
+      <div class="container">
+        <hr class="hr-squiggly-line">
+        <div class="row footer-max-width align-items-center justify-content-center my-5 py-2">
+          <div class="col text-left">
+            <div class="d-flex align-items-center">
+              <div class="footer-logo me-3">
+                <img src="https://participativni-proracun.djnd.si/generated/coats/coat-sveti-jurij-v-slovenskih-goricah.png" alt="Občina logo">
+              </div>
+              <div>
+                <h6>{{ municipality.name }}</h6>
+                <p>
+                  <a href="#" target="_blank">Občinsko spletno mesto</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col text-center">
+            <h6>Podatki</h6>
+            <p>
+              Podatki so pridobljeni iz XX.<br>
+              Celotno bazo podatkov si lahko prenesete <a href="#">tukaj</a>.
+            </p>
+          </div>
+          <div class="col text-center">
+            <h6>Odprti računi</h6>
+            <p>
+              Aplikacijo sta razvila <a href="https://danesjenovdan.si">Danes je nov dan</a> in
+              <a href="#">Organizacija za participatorno družbo</a>.
+            </p>
+          </div>
+        </div>
+        <hr class="hr-dotted-line">
+        <div class="row">
+          <div class="col-4">
+            <a class="footer-small-link" href="#">Pogoji uporabe</a>
+          </div>
+          <div class="col text-end">
+            <span class="footer-small-link">Projekt Odprti računi sofinancira Ministrstvo za javno upravo iz Sklada za NVO.</span>
+          </div>
+        </div>
+      </div>
     </div>
 
+  </div>
 </body>
 </html>

@@ -22,25 +22,25 @@ def overview(request, municipality_id, year_id=None):
     monhtly_expenses = etb.get_expense_tree(MonthlyExpense)
     planned_expenses = etb.get_expense_tree(PlannedExpense)
 
-    print(type(monthly_revenue))
-    print(type(planned_revenue))
-    print(type(monhtly_expenses))
-    print(type(planned_expenses))
-
     summary = {
         'planned_budget': sum([i['amount'] for i in planned_expenses]),
         'planned_revenue': sum([i['amount'] for i in planned_revenue]),
         'realized_budget': sum([i['amount'] for i in monhtly_expenses]),
         'realized_revenue': sum([i['amount'] for i in monthly_revenue]),
     }
-
-    print('summary', summary)
+    summary_max_value = max(summary.values())
+    summary['planned_budget_percentage'] = summary['planned_budget'] / summary_max_value
+    summary['planned_revenue_percentage'] = summary['planned_revenue'] / summary_max_value
+    summary['realized_budget_percentage'] = summary['realized_budget'] / summary['planned_budget']
+    summary['realized_revenue_percentage'] = summary['realized_revenue'] / summary['planned_revenue']
 
     return render(
         request,
         'overview.html',
         {
-            'summary': summary
+            'municipality': municipality,
+            'year': year,
+            'summary': summary,
         }
     )
 

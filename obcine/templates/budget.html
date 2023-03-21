@@ -1,19 +1,82 @@
-<div id="budget">
-    <h3>Proračun {{ year }}</h3>
-    <div class="budget-box">
-        <p>
-            <h4>Prihodki</h4> </br>
-            Proračun: {{ summary.planned_revenue }} </br>
-            Dejansko stanje: {{ summary.realized_revenue }} </br>
-        </p>
-        <p>
-            <h4>Odhodki</h4> </br>
-            Proračun: {{ summary.planned_budget }} </br>
-            Dejansko stanje: {{ summary.realized_revenue }} </br>
-        <p>
+{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+{% with request.resolver_match.kwargs.year_id as year_id %}
 
-        {% if addLink %}
-            <a href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id year_id=request.resolver_match.kwargs.year_id %}">Podrobneje razišči letošnji proračun in dejansko stanje ---></a>
+<section class="budget">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col">
+        <h3>Proračun {{ year }}</h3>
+        {% if not year_id and year %}
+        <a class="budget-box-link" href="{% url 'overview' municipality_id=municipality_id year_id=year.id %}">
+        {% else %}
+        <span class="budget-box-link">
         {% endif %}
+          <div class="budget-summary">
+            <div class="budget-summary-title">
+              <i class="icon icon-prihodki me-2"></i> Prihodki
+            </div>
+            <div>
+              <div class="budget-amount">
+                <small class="amount-description">Proračun</small>
+                <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
+              </div>
+              <div class="budget-amount">
+                <small class="amount-description">Dejansko stanje</small>
+                <span class="amount-number">{{ summary.realized_revenue|floatformat:"2g" }}</span>
+              </div>
+            </div>
+            <div>
+              <div class="budget-bar">
+                <div class="bar-max bar-max--1" style="width: {% widthratio summary.planned_revenue_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--1"></div>
+                </div>
+              </div>
+              <div class="budget-bar">
+                <div class="bar-max bar-max--1">
+                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="budget-summary-title">
+              <i class="icon icon-odhodki me-2"></i> Odhodki
+            </div>
+            <div>
+              <div class="budget-amount">
+                <small class="amount-description">Proračun</small>
+                <span class="amount-number">{{ summary.planned_budget|floatformat:"2g" }}</span>
+              </div>
+              <div class="budget-amount">
+                <small class="amount-description">Dejansko stanje</small>
+                <span class="amount-number">{{ summary.realized_budget|floatformat:"2g" }}</span>
+              </div>
+            </div>
+            <div>
+              <div class="budget-bar">
+                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_budget_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--1"></div>
+                </div>
+              </div>
+              <div class="budget-bar">
+                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_budget_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_budget_percentage 1 100 %}%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if not year_id and year %}
+          <div class="text-center mt-5 mb-3">
+            <span class="button-arrow-link">Podrobneje razišči letošnji proračun in dejansko stanje <i class="icon icon-squiggly-arrow ms-1"></i></span>
+          </div>
+          {% endif %}
+        {% if not year_id and year %}
+        </a>
+        {% else %}
+        </span>
+        {% endif %}
+      </div>
     </div>
-</div>
+  </div>
+</section>
+
+{% endwith %}
+{% endwith %}
