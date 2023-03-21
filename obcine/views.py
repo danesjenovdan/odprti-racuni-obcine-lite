@@ -116,6 +116,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
         }
 
     return render(request, 'cut_of_funds.html', {
+        'years': FinancialYear.objects.all(), # TODO: only show valid years for this municipality
         'municipality': municipality,
         'year': year,
         'summary': summary,
