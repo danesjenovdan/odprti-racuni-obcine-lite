@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load year_chooser tree_table %}
 
 {% block description %}
   {% include "description.html" with show_year_chooser=True page_title="Razrez sredstev" page_description="Open Budget application provides an opportunity for the public to explore and visually interact with Erie’s operating and capital expenses." %}
@@ -22,56 +23,61 @@
     </div>
     <div class="row">
       <div class="col">
-        {{revenue}}
+        {% comment %} {{revenue}} {% endcomment %}
+        {% child_max_graph_scale revenue as value_max %}
+        {% graph_scale_values value_max as scale_values %}
         <table class="table bar-chart-table my-5">
           <thead>
             <tr>
               <th>{{ revenue.name }}</th>
-              <th>{{ revenue.planned|floatformat:"2g" }} EUR</th>
-              <th><span class="bar-chart-legend"><i class="icon icon-circle icon-size-2 me-2"></i> Proračun</span></th>
+              <th>{{ revenue.realized|floatformat:"2g" }} EUR</th>
+              <th>
+                <span class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-1 icon-size-2 me-2"></i> Proračun</span>
+                <span class="bar-chart-legend ms-4"><i class="icon icon-circle icon-circle--1-2 icon-size-2 me-2"></i> Dejansko stanje</span>
+              </th>
             </tr>
           </thead>
           {% for child in revenue.children %}
           <tr>
-            <td>{{ child.name }}</td>
-            <td>{{ child.amount|floatformat:"2g" }} EUR</td>
+            <td>{{ child.name|lower|capfirst }}</td>
             <td>
+              <div>{{ child.amount|floatformat:"2g" }} EUR</div>
+              <div>{{ child.amount|floatformat:"2g" }} EUR</div>
+            </td>
+            <td class="position-relative">
+              {% for scale_value in scale_values %}
+                <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
+              {% endfor %}
               <div class="bar-chart-bar">
-                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount revenue.planned 100 %}%;">
+                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount value_max 100 %}%;">
                   <div class="bar-amount bar-amount--1"></div>
+                </div>
+              </div>
+              <div class="bar-chart-bar">
+                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount value_max 100 %}%;">
+                  <div class="bar-amount bar-amount--2"></div>
                 </div>
               </div>
             </td>
           </tr>
-          {% comment %}
-          {% for child2 in child.children %}
-          <tr><td>- {{ child2.name }}</td><td>{{ child2.amount|floatformat:"2g" }} EUR</td></tr>
-
-            {% for child3 in child2.children %}
-            <tr><td>- - {{ child3.name }}</td><td>{{ child3.amount|floatformat:"2g" }} EUR</td></tr>
-            {% endfor %}
-
           {% endfor %}
-          {% endcomment %}
-          {% endfor %}
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="position-relative">
+                {% for scale_value in scale_values %}
+                  <div class="bar-chart-value" style="left: {% line_percent scale_values|length forloop.counter0 %}%;">
+                    {{ scale_value|floatformat:"0g" }} €
+                  </div>
+                {% endfor %}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
   </div>
 </div>
-
-
-    {% comment %} <div class="content-box">
-        Tukaj pride graf </br>
-        Tukaj pride tabela </br>
-    </div>
-
-    {% if year.is_current %}
-    Trenutno leto kaži primerjavo s planiranim in realiziranim <br>
-    {% endif %}
-
-    Revenues: {{ revenues }}
-    <br>
-    Expenses: {{ expenses }} {% endcomment %}
 
 {% endblock content %}
