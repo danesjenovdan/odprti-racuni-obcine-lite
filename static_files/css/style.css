@@ -391,6 +391,10 @@ a.box-link:hover {
   text-decoration: none;
 }
 
+.tabs .tab:hover {
+  border-bottom-color: #b7b7b7;
+}
+
 .tabs .tab.active {
   border-bottom-color: #39444e;
 }
