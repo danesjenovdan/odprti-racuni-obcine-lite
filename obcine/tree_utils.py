@@ -49,6 +49,7 @@ class RevenueTreeBuilder():
             realized = realized_dict.get(temp_data['code'], 0)
             temp_data['planned'] = amount
             temp_data['realized'] = realized
+            # del temp_data['amount']
             leaves.append(temp_data)
 
         return list(self.build_tree(leaves).values())
@@ -56,7 +57,7 @@ class RevenueTreeBuilder():
     def build_tree(self, items):
         parent_level = {}
         parent = None
-        print('Build level')
+
         for item in items:
             parent = self.definiton_storage[item['parent_id']]
             if parent.id in parent_level.keys():
@@ -112,14 +113,7 @@ class ExpenseTreeBuilder():
         ).annotate(
             sum_amount=Sum('amount')
         )
-        print(list(realized_expenses.filter(
-            level=4
-        ).values(
-            'code',
-            'parent',
-            'amount',
-            'name'
-        )))
+
         realized_expenses = realized_expenses.filter(
             level=4
         ).values(
@@ -130,7 +124,6 @@ class ExpenseTreeBuilder():
             sum_amount=Sum('amount')
         )
         realized_dict = {item['code']: item['amount'] for item in realized_expenses}
-        print(realized_dict)
 
         leaves = []
         for expense in planend_expenses:
@@ -148,7 +141,7 @@ class ExpenseTreeBuilder():
     def build_tree(self, items):
         parent_level = {}
         parent = None
-        print('Build level')
+
         for item in items:
             parent = self.definiton_storage[item['parent_id']]
             if parent.id in parent_level.keys():

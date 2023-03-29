@@ -371,6 +371,106 @@ a.box-link:hover {
   font-size: 18px;
 }
 
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  border-bottom: 1px solid #b7b7b7;
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #39444e;
+}
+
+.tabs .tab {
+  padding: 6px 8px;
+  margin-bottom: -5px;
+  border-bottom: 9px solid transparent;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tabs .tab.active {
+  border-bottom-color: #39444e;
+}
+
+.bar-chart-table {
+  color: #39444e;
+}
+
+.bar-chart-table thead tr th {
+  padding: 0.75em 1rem 0.5em 1rem;
+  border-bottom: 2px solid #d1d7df;
+}
+
+.bar-chart-table th,
+.bar-chart-table td {
+  vertical-align: middle;
+  padding: 0.75em 1rem 0.5em 1rem;
+}
+
+.bar-chart-table th {
+  font-family: "Metropolis", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bar-chart-table td {
+  font-family: "Metropolis", sans-serif;
+}
+
+.bar-chart-table th:nth-child(2),
+.bar-chart-table td:nth-child(2) {
+  width: 220px;
+  text-align: right;
+}
+
+.bar-chart-table th:nth-child(3),
+.bar-chart-table td:nth-child(3) {
+  width: 45%;
+  padding-left: 0;
+}
+
+.bar-chart-table .bar-chart-legend {
+  display: inline-block;
+  margin-bottom: 0.75em;
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+}
+
+.bar-chart-table .bar-chart-bar {
+}
+
+.bar-chart-table .bar-chart-bar .bar-max {
+  height: 10px;
+}
+.bar-chart-table .bar-chart-bar .bar-max--1 {
+  border: 1px solid #293e7a;
+}
+.bar-chart-table .bar-chart-bar .bar-max--2 {
+  border: 1px solid #65517d;
+}
+
+.bar-chart-table .bar-chart-bar .bar-max .bar-amount {
+  height: 100%;
+}
+.bar-chart-table .bar-chart-bar .bar-max--1 .bar-amount--1 {
+  background-color: #3a58ae;
+}
+.bar-chart-table .bar-chart-bar .bar-max--1 .bar-amount--2 {
+  background-color: #899bce;
+}
+.bar-chart-table .bar-chart-bar .bar-max--2 .bar-amount--1 {
+  background-color: #a282c7;
+}
+.bar-chart-table .bar-chart-bar .bar-max--2 .bar-amount--2 {
+  background-color: #e5d1fc;
+}
+
 /* icons */
 
 .icon {
@@ -381,6 +481,28 @@ a.box-link:hover {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
+}
+
+.icon-size-1 {
+  width: 1em;
+  height: 1em;
+}
+
+.icon-size-2 {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.icon-size-3 {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.icon-circle {
+  margin-top: -0.25em;
+  border: 1px solid #293e7a;
+  background-color: #3a58ae;
+  border-radius: 50%;
 }
 
 .icon-prihodki {

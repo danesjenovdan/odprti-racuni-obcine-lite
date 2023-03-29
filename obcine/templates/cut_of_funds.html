@@ -9,7 +9,60 @@
 {% endblock budget %}
 
 {% block content %}
-    <div class="content-box">
+
+<section class="overview-content pt-0">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="tabs">
+          <a href="#" class="tab active"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
+          <a href="#" class="tab"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        {{revenue}}
+        <table class="table bar-chart-table my-5">
+          <thead>
+            <tr>
+              <th>{{ revenue.name }}</th>
+              <th>{{ revenue.planned|floatformat:"2g" }} || {{ revenue.realized }} || {{ revenue.amount }} EUR</th>
+              <th><span class="bar-chart-legend"><i class="icon icon-circle icon-size-2 me-2"></i> Proračun</span></th>
+            </tr>
+          </thead>
+          {% for child in revenue.children %}
+          <tr>
+            <td>{{ child.name }}</td>
+            <td>{{ child.amount|floatformat:"2g" }} EUR {{ child.planned }} || {{ child.realized }}</td>
+            <td>
+              <div class="bar-chart-bar">
+                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount revenue.planned 100 %}%;">
+                  <div class="bar-amount bar-amount--1"></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          {% for child2 in child.children %}
+          <tr><td>- {{ child2.name }}</td><td>{{ child2.amount|floatformat:"2g" }} EUR</td></tr>
+
+            {% for child3 in child2.children %}
+            <tr><td>- - {{ child3.name }}</td><td>{{ child3.amount|floatformat:"2g" }} EUR</td></tr>
+            {% endfor %}
+
+          {% endfor %}
+
+
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    {% comment %} <div class="content-box">
         Tukaj pride graf </br>
         Tukaj pride tabela </br>
     </div>
@@ -20,6 +73,6 @@
 
     Revenues: {{ revenues }}
     <br>
-    Expenses: {{ expenses }}
+    Expenses: {{ expenses }} {% endcomment %}
 
 {% endblock content %}

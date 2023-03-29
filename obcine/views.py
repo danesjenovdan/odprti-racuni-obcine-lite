@@ -73,7 +73,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
     rtb = RevenueTreeBuilder(RevenueDefinition, municipality=municipality, financial_year=year)
     etb = ExpenseTreeBuilder(municipality=municipality, financial_year=year)
 
-    if year.is_current():
+    if year.is_current() or True:
         merged_tree_reveues = rtb.get_merged_revenue_tree(PlannedRevenue, MonthlyRevenue)
         merged_tree_expenses = etb.get_merged_expense_tree(PlannedExpense, MonthlyExpense)
 
