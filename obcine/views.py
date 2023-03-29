@@ -33,8 +33,8 @@ def get_summary(municipality, year, summary_type="monthly"):
         if summary_max_value > 0:
             summary['planned_expenses_percentage'] = summary['planned_expenses'] / summary_max_value
             summary['planned_revenue_percentage'] = summary['planned_revenue'] / summary_max_value
-            summary['realized_expenses_percentage'] = summary['realized_expenses'] / summary['planned_expenses']
-            summary['realized_revenue_percentage'] = summary['realized_revenue'] / summary['planned_revenue']
+            summary['realized_expenses_percentage'] = summary['realized_expenses'] / summary_max_value
+            summary['realized_revenue_percentage'] = summary['realized_revenue'] / summary_max_value
 
     elif summary_type == "yearly":
         yearly_expenses = etb.get_expense_tree(YearlyExpense)

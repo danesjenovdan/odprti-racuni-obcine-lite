@@ -46,8 +46,8 @@
                 </div>
               </div>
               <div class="budget-bar">
-                <div class="bar-max bar-max--1">
-                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;"></div>
+                <div class="bar-max bar-max--1" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--2"></div>
                 </div>
               </div>
               {% endif %}
@@ -86,8 +86,8 @@
                 </div>
               </div>
               <div class="budget-bar">
-                <div class="bar-max bar-max--2" style="width: {% widthratio summary.planned_expenses_percentage 1 100 %}%;">
-                  <div class="bar-amount bar-amount--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;"></div>
+                <div class="bar-max bar-max--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;">
+                  <div class="bar-amount bar-amount--2"></div>
                 </div>
               </div>
               {% endif %}
