@@ -1,0 +1,86 @@
+{% load year_chooser tree_table %}
+
+{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+
+{% child_max_graph_scale tree_data as value_max %}
+{% graph_scale_values value_max as scale_values %}
+<table class="table bar-chart-table my-5">
+  <thead>
+    <tr>
+      <th>
+        <div class="bar-chart-title">
+          {% if tree_data.code != None %}
+            <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type={{ tree_type }}#tabs;{{ parent_code|default_if_none:"" }}">NAZAJ</a>
+          {% endif %}
+          {{ tree_data.name|lower|capfirst }}
+        </div>
+      </th>
+      <th>
+        {% if tree_data.planned != None %}<div>{{ tree_data.planned|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if tree_data.realized != None %}<div>{{ tree_data.realized|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if tree_data.amount != None %}<div>{{ tree_data.amount|floatformat:"2g" }} EUR</div>{% endif %}
+      </th>
+      <th>
+        {% if tree_data.planned != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i> Proračun</div>{% endif %}
+        {% if tree_data.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
+        {% if tree_data.amount != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for child in tree_data.children %}
+    <tr>
+      <td>
+        <div class="bar-chart-name"><a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type={{ tree_type }}#tabs;{{ child.code }}" title="{{ child.name|lower|capfirst }}">{{ child.name|lower|capfirst }}</a></div>
+        <i class="icon icon-puscica ms-1"></i>
+      </td>
+      <td>
+        {% if child.planned != None %}<div>{{ child.planned|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if child.realized != None %}<div>{{ child.realized|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if child.amount != None %}<div>{{ child.amount|floatformat:"2g" }} EUR</div>{% endif %}
+      </td>
+      <td class="position-relative">
+        {% for scale_value in scale_values %}
+          <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
+        {% endfor %}
+        {% if child.planned != None %}
+        <div class="bar-chart-bar">
+          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.planned value_max 100 %}%;">
+            <div class="bar-amount bar-amount--1"></div>
+          </div>
+        </div>
+        {% endif %}
+        {% if child.realized != None %}
+        <div class="bar-chart-bar">
+          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.realized value_max 100 %}%;">
+            <div class="bar-amount bar-amount--2"></div>
+          </div>
+        </div>
+        {% endif %}
+        {% if child.amount != None %}
+        <div class="bar-chart-bar">
+          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.amount value_max 100 %}%;">
+            <div class="bar-amount bar-amount--2"></div>
+          </div>
+        </div>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td class="position-relative">
+        {% for scale_value in scale_values %}
+          <div class="bar-chart-value" style="left: {% line_percent scale_values|length forloop.counter0 %}%;">
+            {{ scale_value|floatformat:"0g" }} €
+          </div>
+        {% endfor %}
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+{% endwith %}

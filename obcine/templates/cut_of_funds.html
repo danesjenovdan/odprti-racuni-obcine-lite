@@ -11,76 +11,101 @@
 
 {% block content %}
 
+{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+
 <section class="overview-content pt-0">
   <div class="container">
     <div class="row">
       <div class="col">
-        <div class="tabs">
-          <a href="#" class="tab active"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
-          <a href="#" class="tab"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
+        <a name="tabs"></a>
+        <div class="tabs" id="js-tabs">
+          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type != "expenses" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
+          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col">
-        {{revenue}}
-        {% child_max_graph_scale revenue as value_max %}
-        {% graph_scale_values value_max as scale_values %}
-        <table class="table bar-chart-table my-5">
-          <thead>
-            <tr>
-              <th>{{ revenue.name }}</th>
-              <th>
-                {% if revenue.planned != None %}<div>{{ revenue.planned|floatformat:"2g" }} EUR</div>{% endif %}
-                {% if revenue.realized != None %}<div>{{ revenue.realized|floatformat:"2g" }} EUR</div>{% endif %}
-              </th>
-              <th>
-                {% if revenue.planned != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-1 icon-size-2 me-2"></i> Proračun</div>{% endif %}
-                {% if revenue.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
-              </th>
-            </tr>
-          </thead>
-          {% for child in revenue.children %}
-          <tr>
-            <td>{{ child.name|lower|capfirst }}</td>
-            <td>
-              <div>{{ child.planned|floatformat:"2g" }} EUR</div>
-              <div>{{ child.realized|floatformat:"2g" }} EUR</div>
-            </td>
-            <td class="position-relative">
-              {% for scale_value in scale_values %}
-                <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
-              {% endfor %}
-              <div class="bar-chart-bar">
-                <div class="bar-max bar-max--1" style="width: {% widthratio child.planned value_max 100 %}%;">
-                  <div class="bar-amount bar-amount--1"></div>
-                </div>
-              </div>
-              <div class="bar-chart-bar">
-                <div class="bar-max bar-max--1" style="width: {% widthratio child.realized value_max 100 %}%;">
-                  <div class="bar-amount bar-amount--2"></div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-          <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td class="position-relative">
-                {% for scale_value in scale_values %}
-                  <div class="bar-chart-value" style="left: {% line_percent scale_values|length forloop.counter0 %}%;">
-                    {{ scale_value|floatformat:"0g" }} €
-                  </div>
-                {% endfor %}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+      <a name="table"></a>
+      <div class="col" id="js-table-container">
+        {% comment %} {% if tree_type == "expenses" %}
+          {% include "cut_of_funds_table.html" with tree_data=expenses bar_colors="2" %}
+        {% else %}
+          {% include "cut_of_funds_table.html" with tree_data=revenue bar_colors="1" %}
+        {% endif %} {% endcomment %}
       </div>
+      <script>
+        {
+          const hash = window.location.hash.slice(1);
+          const [elemName] = hash.split(';');
+
+          const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
+          if (scrollToElem) {
+            scrollToElem.scrollIntoView({ behavior: "instant", block: "start", inline: "start" });
+          }
+        }
+
+        const tableContainerElem = document.getElementById('js-table-container');
+        if (tableContainerElem) {
+          tableContainerElem.style.minHeight = '50vh';
+          tableContainerElem.addEventListener('click', onTableRowClick, true);
+          fetchTable(window.location.search, window.location.hash)
+        }
+        const tabLinkElems = document.querySelectorAll('#js-tabs a');
+        tabLinkElems.forEach(tabLink => tabLink.addEventListener('click', onTabClick));
+
+        function onTableRowClick(event) {
+          const row = event.target.closest('tbody tr');
+          if (row) {
+            const link = row.querySelector('.bar-chart-name a');
+            if (link) {
+              event.preventDefault();
+              fetchTable(link.search, link.hash);
+              return;
+            }
+          } else {
+            const backLink = event.target.closest('.bar-chart-title a');
+            if (backLink) {
+              event.preventDefault();
+              fetchTable(backLink.search, backLink.hash);
+              return;
+            }
+          }
+        }
+
+        function onTabClick(event) {
+          const link = event.currentTarget;
+          if (link.search.includes(`type={{ tree_type }}`)) {
+            event.preventDefault();
+            fetchTable(link.search, link.hash);
+          }
+        }
+
+        function fetchTable(searchString, hashString) {
+          const url = new URL("{% url 'cut_of_funds_table' municipality_id=municipality_id year_id=year.id %}", window.location.origin);
+          url.search = searchString;
+          let scrollOnLoad = false;
+
+          const [, code] = hashString.slice(1).split(';');
+          if (code) {
+            url.searchParams.set('code', code);
+            scrollOnLoad = true;
+          }
+
+          return fetch(url)
+            .then(res => res.text())
+            .then(text => {
+              tableContainerElem.innerHTML = text;
+              window.location.hash = `#tabs;${code ?? ''}`;
+              if (scrollOnLoad) {
+                tableContainerElem.scrollIntoView({ behavior: "instant", block: "start", inline: "start" });
+              }
+            });
+        }
+      </script>
     </div>
   </div>
 </div>
+
+{% endwith %}
 
 {% endblock content %}

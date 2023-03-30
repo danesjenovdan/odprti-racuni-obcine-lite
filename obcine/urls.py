@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('razrez-sredstev/<int:municipality_id>/', views.cut_of_funds, name='cut_of_funds'),
     path('razrez-sredstev/<int:municipality_id>/<int:year_id>/', views.cut_of_funds, name='cut_of_funds'),
+    path('razrez-sredstev/<int:municipality_id>/<int:year_id>/table/', views.cut_of_funds_table, name='cut_of_funds_table'),
 
     path('prikaz-sredstav-skozi-cas/<int:municipality_id>/', views.comparison_over_time, name='comparison_over_time'),
 ]
