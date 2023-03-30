@@ -7,6 +7,7 @@
   padding-block: 20px;
   font-family: "Metropolis", sans-serif;
   color: #39444e;
+  z-index: 999999;
 }
 
 .navbar {
@@ -81,6 +82,8 @@
 }
 
 section {
+  position: relative;
+  z-index: 1;
   padding-block: 76px;
 }
 
@@ -123,6 +126,30 @@ section.description p.lead {
 
 section.description .year-chooser {
   margin-top: 76px;
+}
+
+.doodle-container {
+  position: absolute;
+  inset: 0;
+}
+
+.doodle-container .doodle {
+  position: absolute;
+  width: 292px;
+  height: 227px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("/static/images/testna-ilustracija.svg");
+}
+
+.doodle-container .doodle--left {
+  bottom: -25px;
+  left: -100px;
+}
+
+.doodle-container .doodle--right {
+  top: -25px;
+  right: -100px;
 }
 
 .year-chooser {
@@ -199,6 +226,10 @@ section.description .year-chooser {
 
 .year-chooser .year-line .year-option.active .year-label {
   font-size: 14px;
+}
+
+section.budget {
+  background-color: #fff;
 }
 
 section.budget .col {
@@ -353,6 +384,10 @@ a.box-link:hover {
   border-color: #39444e;
 }
 
+.extend-bg--right .box-link .button-arrow-link {
+  background-color: #fdfcf2;
+}
+
 .box-link h4 {
   font-family: "Fraunces", serif;
   font-style: italic;
@@ -362,7 +397,7 @@ a.box-link:hover {
 }
 
 .box-link hr {
-  max-width: 78px;
+  max-width: 83px;
   margin-inline: auto;
 }
 
@@ -493,7 +528,7 @@ a.box-link:hover {
   z-index: -1;
   width: 1px;
   background-repeat: repeat-y;
-  background-image: url("/static/icons/dotted-line-vertical.png");
+  background-image: url("/static/icons/pike-graf-vertikalne.svg");
 }
 
 .bar-chart-table .bar-chart-value {
@@ -558,27 +593,27 @@ a.box-link:hover {
   background-image: url("/static/icons/odhodki.svg");
 }
 
-.icon-squiggly-arrow {
+.icon-puscica {
   margin-top: -0.3em;
   width: 3.1875em;
   height: 0.5em;
-  background-image: url("/static/icons/squiggly-arrow.png");
+  background-image: url("/static/icons/puscica.svg");
 }
 
-.hr-squiggly-line {
-  height: 7px;
+.hr-wave {
+  height: 8px;
   background-repeat: repeat-x;
-  background-position: left center;
-  background-size: auto 7px;
-  background-image: url("/static/icons/squiggly-line.png");
+  background-position: left -9px center;
+  background-size: auto 8px;
+  background-image: url("/static/icons/wave.svg");
   border-top: 0;
 }
 
-.hr-dotted-line {
+.hr-pike-footer {
   height: 2px;
   background-repeat: repeat-x;
   background-position: left center;
   background-size: auto 2px;
-  background-image: url("/static/icons/dotted-line.png");
+  background-image: url("/static/icons/pike-footer.svg");
   border-top: 0;
 }
