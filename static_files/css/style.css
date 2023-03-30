@@ -447,10 +447,13 @@ a.box-link:hover {
   position: relative;
   z-index: 1;
   background-color: #fff;
+}
+
+.bar-chart-table tbody tr.has-children {
   cursor: pointer;
 }
 
-.bar-chart-table tbody tr:hover {
+.bar-chart-table tbody tr.has-children:hover {
   background-color: #f4f4f4;
 }
 
@@ -493,6 +496,20 @@ a.box-link:hover {
 .bar-chart-table td:nth-child(3) {
   width: 45%;
   padding-left: 0;
+}
+
+.bar-chart-table .bar-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-chart-table .bar-chart-title .bar-chart-back {
+  margin-top: -4px;
+}
+
+.bar-chart-table .bar-chart-title .bar-chart-back:hover .icon {
+  background-color: #b7b7b7;
 }
 
 .bar-chart-table .bar-chart-name {
@@ -634,8 +651,7 @@ a.box-link:hover {
 
 .icon-circle {
   margin-top: -0.25em;
-  border: 1px solid #000;
-  background-color: #ccc;
+  background-color: #e8ecf1;
   border-radius: 50%;
 }
 .icon-circle--1-1 {
@@ -670,6 +686,11 @@ a.box-link:hover {
   width: 3.1875em;
   height: 0.5em;
   background-image: url("/static/icons/puscica.svg");
+}
+
+.icon-nazaj {
+  background-size: 60%;
+  background-image: url("/static/icons/nazaj.svg");
 }
 
 .hr-wave {
