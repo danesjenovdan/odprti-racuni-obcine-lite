@@ -89,17 +89,23 @@ class Task(Timestampable):
             document_class = getattr(models_module, self_model)
             parser_class = getattr(parser_module, parser)
 
-            if definition and definition != 'None':
-                definition = getattr(models_module, definition)
-
             document = document_class.objects.get(id=pk)
 
-            parser = parser_class(
-                document,
-                model=models_class,
-                definiton_model=None,
-                month=month
-            )
+            if definition and definition != 'None':
+                definiton_model = getattr(models_module, definition)
+                parser = parser_class(
+                    document,
+                    model=models_class,
+                    definiton_model=definiton_model,
+                    month=month
+                )
+            else:
+                parser = parser_class(
+                    document,
+                    model=models_class,
+                    definiton_model=None,
+                    month=month
+                )
             if settings.ENABLE_S3:
                 image_path = download_image(document.file.url, document.file.name)
                 parser.parse_file(file_path=image_path)
