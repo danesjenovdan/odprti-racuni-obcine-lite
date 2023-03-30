@@ -135,7 +135,8 @@ def overview(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
 
-    summary = get_summary(municipality, year, summary_type="monthly")
+    summary_type = "monthly" if year.is_current() else "yearly"
+    summary = get_summary(municipality, year, summary_type=summary_type)
 
     return render(
         request,

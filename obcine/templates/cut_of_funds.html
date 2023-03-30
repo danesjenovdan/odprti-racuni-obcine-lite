@@ -18,8 +18,8 @@
     <div class="row">
       <div class="col">
         <a name="tabs"></a>
-        <div class="tabs" id="js-tabs">
-          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type != "expenses" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
+        <div class="tabs">
+          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
           <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
         </div>
       </div>
@@ -40,7 +40,7 @@
 
           const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
           if (scrollToElem) {
-            scrollToElem.scrollIntoView({ behavior: "instant", block: "start", inline: "start" });
+            scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
           }
         }
 
@@ -48,36 +48,30 @@
         if (tableContainerElem) {
           tableContainerElem.style.minHeight = '50vh';
           tableContainerElem.addEventListener('click', onTableRowClick, true);
-          fetchTable(window.location.search, window.location.hash)
+          fetchTable(window.location.search, window.location.hash);
         }
-        const tabLinkElems = document.querySelectorAll('#js-tabs a');
-        tabLinkElems.forEach(tabLink => tabLink.addEventListener('click', onTabClick));
+
+        window.addEventListener('hashchange', onHashChange);
 
         function onTableRowClick(event) {
           const row = event.target.closest('tbody tr');
           if (row) {
             const link = row.querySelector('.bar-chart-name a');
             if (link) {
-              event.preventDefault();
-              fetchTable(link.search, link.hash);
+              window.location.hash = link.hash;
               return;
             }
           } else {
             const backLink = event.target.closest('.bar-chart-title a');
             if (backLink) {
-              event.preventDefault();
-              fetchTable(backLink.search, backLink.hash);
+              window.location.hash = backLink.hash;
               return;
             }
           }
         }
 
-        function onTabClick(event) {
-          const link = event.currentTarget;
-          if (link.search.includes(`type={{ tree_type }}`)) {
-            event.preventDefault();
-            fetchTable(link.search, link.hash);
-          }
+        function onHashChange(event) {
+          fetchTable(window.location.search, window.location.hash);
         }
 
         function fetchTable(searchString, hashString) {
@@ -95,9 +89,8 @@
             .then(res => res.text())
             .then(text => {
               tableContainerElem.innerHTML = text;
-              window.location.hash = `#tabs;${code ?? ''}`;
               if (scrollOnLoad) {
-                tableContainerElem.scrollIntoView({ behavior: "instant", block: "start", inline: "start" });
+                tableContainerElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
               }
             });
         }
