@@ -23,17 +23,20 @@
     </div>
     <div class="row">
       <div class="col">
-        {% comment %} {{revenue}} {% endcomment %}
+        {{revenue}}
         {% child_max_graph_scale revenue as value_max %}
         {% graph_scale_values value_max as scale_values %}
         <table class="table bar-chart-table my-5">
           <thead>
             <tr>
               <th>{{ revenue.name }}</th>
-              <th>{{ revenue.realized|floatformat:"2g" }} EUR</th>
               <th>
-                <span class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-1 icon-size-2 me-2"></i> Proračun</span>
-                <span class="bar-chart-legend ms-4"><i class="icon icon-circle icon-circle--1-2 icon-size-2 me-2"></i> Dejansko stanje</span>
+                {% if revenue.planned != None %}<div>{{ revenue.planned|floatformat:"2g" }} EUR</div>{% endif %}
+                {% if revenue.realized != None %}<div>{{ revenue.realized|floatformat:"2g" }} EUR</div>{% endif %}
+              </th>
+              <th>
+                {% if revenue.planned != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-1 icon-size-2 me-2"></i> Proračun</div>{% endif %}
+                {% if revenue.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--1-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
               </th>
             </tr>
           </thead>
@@ -41,20 +44,20 @@
           <tr>
             <td>{{ child.name|lower|capfirst }}</td>
             <td>
-              <div>{{ child.amount|floatformat:"2g" }} EUR</div>
-              <div>{{ child.amount|floatformat:"2g" }} EUR</div>
+              <div>{{ child.planned|floatformat:"2g" }} EUR</div>
+              <div>{{ child.realized|floatformat:"2g" }} EUR</div>
             </td>
             <td class="position-relative">
               {% for scale_value in scale_values %}
                 <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
               {% endfor %}
               <div class="bar-chart-bar">
-                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount value_max 100 %}%;">
+                <div class="bar-max bar-max--1" style="width: {% widthratio child.planned value_max 100 %}%;">
                   <div class="bar-amount bar-amount--1"></div>
                 </div>
               </div>
               <div class="bar-chart-bar">
-                <div class="bar-max bar-max--1" style="width: {% widthratio child.amount value_max 100 %}%;">
+                <div class="bar-max bar-max--1" style="width: {% widthratio child.realized value_max 100 %}%;">
                   <div class="bar-amount bar-amount--2"></div>
                 </div>
               </div>

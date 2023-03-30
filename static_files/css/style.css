@@ -480,13 +480,15 @@ a.box-link:hover {
 }
 
 .bar-chart-table .bar-chart-legend {
-  display: inline-block;
-  margin-bottom: 0.75em;
+  margin-bottom: 4px;
   font-family: "Fraunces", serif;
   font-style: italic;
   font-weight: 400;
   letter-spacing: 0.05em;
   font-size: 11px;
+}
+.bar-chart-table .bar-chart-legend +.bar-chart-legend {
+  margin-top: 9px;
 }
 
 .bar-chart-table .bar-chart-bar {
