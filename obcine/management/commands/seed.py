@@ -45,6 +45,12 @@ class Command(BaseCommand):
             end_date=date(day=31, month=12, year=2022)
         )
         year2022.save()
+        year2023 = models.FinancialYear(
+            name='2023',
+            start_date=date(day=1, month=1, year=2023),
+            end_date=date(day=31, month=12, year=2023)
+        )
+        year2023.save()
         my1 = models.MunicipalityFinancialYear(
             financial_year=year2021,
             municipality=municipality
@@ -55,6 +61,11 @@ class Command(BaseCommand):
             municipality=municipality
         )
         my2.save()
+        my3 = models.MunicipalityFinancialYear(
+            financial_year=year2023,
+            municipality=municipality
+        )
+        my3.save()
 
 
         with open('files/prihodki_apra.xlsx', 'rb') as fi:
@@ -87,6 +98,13 @@ class Command(BaseCommand):
                 year=year2022,
                 month=models.Months.JANUAR
             ).save()
+            models.MonthlyRevenueDocument(
+                file=my_file,
+                municipality_year=my3,
+                municipality=municipality,
+                year=year2023,
+                month=models.Months.JANUAR
+            ).save()
 
         with open('files/prihodki_plan_apra.xlsx', 'rb') as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
@@ -114,6 +132,18 @@ class Command(BaseCommand):
                 municipality=municipality,
                 year=year2022,
             ).save()
+            models.YearlyRevenueDocument(
+                file=my_file,
+                municipality_year=my2,
+                municipality=municipality,
+                year=year2022,
+            ).save()
+            models.PlannedRevenueDocument(
+                file=my_file,
+                municipality_year=my3,
+                municipality=municipality,
+                year=year2023,
+            ).save()
 
         with open('files/proracun_apra.xlsx', 'rb') as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
@@ -140,6 +170,18 @@ class Command(BaseCommand):
                 municipality_year=my2,
                 municipality=municipality,
                 year=year2022,
+            ).save()
+            models.YearlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2,
+                municipality=municipality,
+                year=year2022,
+            ).save()
+            models.PlannedExpenseDocument(
+                file=my_file,
+                municipality_year=my3,
+                municipality=municipality,
+                year=year2023,
             ).save()
 
         with open('files/realizacija_apra.xlsx', 'rb') as fi:
@@ -170,5 +212,12 @@ class Command(BaseCommand):
                 municipality_year=my2,
                 municipality=municipality,
                 year=year2022,
+                month=models.Months.JANUAR
+            ).save()
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my3,
+                municipality=municipality,
+                year=year2023,
                 month=models.Months.JANUAR
             ).save()
