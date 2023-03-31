@@ -30,3 +30,12 @@ def graph_scale_values(value_max, slice_count=6):
     value_slice = value_max / slice_count
     values = [int(value_slice * i) for i in range(slice_count + 1)]
     return values
+
+
+@register.simple_tag
+def amount_percentage(tree_type, summary, amount_type, amount):
+    amount_type = "realized" if amount_type == "amount" else amount_type
+    key = f"{amount_type}_{tree_type}"
+    if all := summary.get(key, 0):
+        return round(amount / all * 100)
+    return 0

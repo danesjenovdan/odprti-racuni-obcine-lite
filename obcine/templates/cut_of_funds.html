@@ -34,19 +34,17 @@
         {% endif %} {% endcomment %}
       </div>
       <script>
-        {
-          const hash = window.location.hash.slice(1);
-          const [elemName] = hash.split(';');
+        const hash = window.location.hash.slice(1);
+        const [elemName] = hash.split(';');
 
-          const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
-          if (scrollToElem) {
-            scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
-          }
+        const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
+        if (scrollToElem) {
+          scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
         }
 
         const tableContainerElem = document.getElementById('js-table-container');
         if (tableContainerElem) {
-          tableContainerElem.style.minHeight = '50vh';
+          tableContainerElem.style.minHeight = '60vh';
           tableContainerElem.addEventListener('click', onTableRowClick, true);
           fetchTable(window.location.search, window.location.hash);
         }
@@ -89,8 +87,8 @@
             .then(res => res.text())
             .then(text => {
               tableContainerElem.innerHTML = text;
-              if (scrollOnLoad) {
-                tableContainerElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
+              if (scrollOnLoad && scrollToElem) {
+                scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
               }
             });
         }

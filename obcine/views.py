@@ -184,42 +184,42 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
     summary = get_summary(municipality, year, summary_type=summary_type)
 
     tree_data = []
-    parent_code = None
+    tree_parents = []
 
     if tree_type == "expenses":
         tree_data = get_expense_tree(municipality, year, summary)
     else:
         tree_data = get_revenue_tree(municipality, year, summary)
 
-    def find_code(code, parent, node):
+    def find_code(code, parent_chain, node):
         if node["code"] == code:
-            return node, parent["code"]
+            return node, parent_chain
 
         if children := node.get("children", []):
             for child in children:
-                found, parent_code = find_code(code, node, child)
+                found, found_parent_chain = find_code(code, [*parent_chain, node], child)
                 if found:
-                    return found, parent_code
+                    return found, found_parent_chain
 
         return None, None
 
     code = request.GET.get("code", None)
     if code:
-        found_code_data, parent_code = find_code(code, {"code": None}, tree_data)
-        print(found_code_data)
-        print(parent_code)
+        found_code_data, found_parent_chain = find_code(code, [{"code": None}], tree_data)
         if found_code_data:
+            tree_parents = found_parent_chain[1:]
             tree_data = found_code_data
 
     return render(
         request,
         "cut_of_funds_table.html",
         {
+            "summary": summary,
             "year": year,
             "bar_colors": "2" if tree_type == "expenses" else "1",
             "tree_data": tree_data,
             "tree_type": tree_type,
-            "parent_code": parent_code,
+            "tree_parents": tree_parents,
         },
     )
 

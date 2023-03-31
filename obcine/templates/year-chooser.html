@@ -8,9 +8,7 @@
     <div class="year-line">
       {% for year_ in years %}
         <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year_.id %}" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 %}%;">
-          <div class="year-selector">
-            <div class="year-tick"></div>
-          </div>
+          <div class="year-selector"></div>
           <div class="year-label">{{ year_.name }}</div>
         </a>
       {% endfor %}

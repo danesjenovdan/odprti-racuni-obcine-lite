@@ -2,6 +2,32 @@
 
 {% with request.resolver_match.kwargs.municipality_id as municipality_id %}
 
+<div class="table-breadcrumbs-container my-5">
+  <div class="table-breadcrumbs-caption text-end mb-1 mx-3"><span>Delež in odstotek proračuna</span></div>
+  <div class="table-breadcrumbs">
+    {% for parent in tree_parents|slice:":3" %}
+      <a href="#tabs;{{ parent.code|default_if_none:"" }}" class="breadcrumb-option">
+        <div class="breadcrumb-selector"></div>
+        <div class="breadcrumb-label">
+          <div class="name">{{ parent.name|lower|capfirst }}</div>
+          {% if parent.planned != None %}<div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned %} %</div>{% endif %}
+          {% if parent.realized != None %}<div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized %} %</div>{% endif %}
+          {% if parent.amount != None %}<div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount %} %</div>{% endif %}
+        </div>
+      </a>
+    {% endfor %}
+    <a href="#tabs;{{ tree_data.code|default_if_none:"" }}" class="breadcrumb-option active">
+      <div class="breadcrumb-selector"></div>
+      <div class="breadcrumb-label">
+        <div class="name">{{ tree_data.name|lower|capfirst }}</div>
+        {% if tree_data.planned != None %}<div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned %} %</div>{% endif %}
+        {% if tree_data.realized != None %}<div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized %} %</div>{% endif %}
+        {% if tree_data.amount != None %}<div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount %} %</div>{% endif %}
+      </div>
+    </a>
+  </div>
+</div>
+
 {% child_max_graph_scale tree_data as value_max %}
 {% graph_scale_values value_max as scale_values %}
 <table class="table bar-chart-table my-5">
@@ -10,7 +36,9 @@
       <th>
         <div class="bar-chart-title">
           {% if tree_data.code != None %}
-            <a class="bar-chart-back" href="#tabs;{{ parent_code|default_if_none:"" }}"><i class="icon icon-circle icon-nazaj icon-size-2"></i></a>
+          {% with tree_parents|last as last_parent %}
+            <a class="bar-chart-back" href="#tabs;{{ last_parent.code|default_if_none:"" }}"><i class="icon icon-circle icon-nazaj icon-size-2"></i></a>
+          {% endwith %}
           {% endif %}
           {{ tree_data.name|lower|capfirst }}
         </div>
