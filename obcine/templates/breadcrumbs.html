@@ -1,0 +1,35 @@
+{% load year_chooser tree_table %}
+
+<div class="table-breadcrumbs-container my-5">
+  <div class="table-breadcrumbs-caption text-end mb-1 mx-3"><span>Delež in odstotek proračuna</span></div>
+  <div class="table-breadcrumbs">
+    {% for parent in tree_parents|slice:":3" %}
+      <a href="#tabs;{{ parent.code|default_if_none:"" }}" class="breadcrumb-option">
+        <div class="breadcrumb-selector"></div>
+        <div class="breadcrumb-label">
+          <div class="name">{{ parent.name|lower|capfirst }}</div>
+          {% if parent.planned != None and parent.realized != None %}
+            <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned %} %</div>
+          {% elif parent.realized != None %}
+            <div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized %} %</div>
+          {% elif parent.amount != None %}
+            <div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount %} %</div>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+    <a href="#tabs;{{ tree_data.code|default_if_none:"" }}" class="breadcrumb-option active">
+      <div class="breadcrumb-selector"></div>
+      <div class="breadcrumb-label">
+        <div class="name">{{ tree_data.name|lower|capfirst }}</div>
+        {% if tree_data.planned != None and tree_data.realized != None %}
+          <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned %} %</div>
+        {% elif tree_data.realized != None %}
+          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized %} %</div>
+        {% elif tree_data.amount != None %}
+          <div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount %} %</div>
+        {% endif %}
+      </div>
+    </a>
+  </div>
+</div>

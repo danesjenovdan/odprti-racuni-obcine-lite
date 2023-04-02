@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load year_chooser tree_table %}
+{% load static %}
 
 {% block description %}
   {% include "description.html" with show_year_chooser=True page_title="Razrez sredstev" page_description="Open Budget application provides an opportunity for the public to explore and visually interact with Erie’s operating and capital expenses." %}
@@ -26,76 +26,12 @@
     </div>
     <div class="row">
       <a name="table"></a>
-      <div class="col" id="js-table-container">
-        {% comment %} {% if tree_type == "expenses" %}
-          {% include "cut_of_funds_table.html" with tree_data=expenses bar_colors="2" %}
-        {% else %}
-          {% include "cut_of_funds_table.html" with tree_data=revenue bar_colors="1" %}
-        {% endif %} {% endcomment %}
-      </div>
-      <script>
-        const hash = window.location.hash.slice(1);
-        const [elemName] = hash.split(';');
-
-        const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
-        if (scrollToElem) {
-          scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
-        }
-
-        const tableContainerElem = document.getElementById('js-table-container');
-        if (tableContainerElem) {
-          tableContainerElem.style.minHeight = '60vh';
-          tableContainerElem.addEventListener('click', onTableRowClick, true);
-          fetchTable(window.location.search, window.location.hash);
-        }
-
-        window.addEventListener('hashchange', onHashChange);
-
-        function onTableRowClick(event) {
-          const row = event.target.closest('tbody tr');
-          if (row) {
-            const link = row.querySelector('.bar-chart-name a');
-            if (link) {
-              window.location.hash = link.hash;
-              return;
-            }
-          } else {
-            const backLink = event.target.closest('.bar-chart-title a');
-            if (backLink) {
-              window.location.hash = backLink.hash;
-              return;
-            }
-          }
-        }
-
-        function onHashChange(event) {
-          fetchTable(window.location.search, window.location.hash);
-        }
-
-        function fetchTable(searchString, hashString) {
-          const url = new URL("{% url 'cut_of_funds_table' municipality_id=municipality_id year_id=year.id %}", window.location.origin);
-          url.search = searchString;
-          let scrollOnLoad = false;
-
-          const [, code] = hashString.slice(1).split(';');
-          if (code) {
-            url.searchParams.set('code', code);
-            scrollOnLoad = true;
-          }
-
-          return fetch(url)
-            .then(res => res.text())
-            .then(text => {
-              tableContainerElem.innerHTML = text;
-              if (scrollOnLoad && scrollToElem) {
-                scrollToElem.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'start' });
-              }
-            });
-        }
-      </script>
+      <div class="col" id="js-table-container"></div>
+      <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'cut_of_funds_table' municipality_id=municipality_id year_id=year.id %}";</script>
+      <script src="{% static 'js/bar_chart_table.js' %}"></script>
     </div>
   </div>
-</div>
+</section>
 
 {% endwith %}
 

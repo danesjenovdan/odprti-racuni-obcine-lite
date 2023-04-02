@@ -232,6 +232,7 @@ section.description .year-chooser {
   font-size: 14px;
 }
 
+section.overview-content,
 section.budget {
   background-color: #fff;
 }
@@ -530,7 +531,8 @@ a.box-link:hover {
   cursor: pointer;
 }
 
-.bar-chart-table tbody tr.has-children:hover {
+.bar-chart-table tbody tr.has-children:hover,
+.bar-chart-table tbody tr.has-children:hover td {
   background-color: #f4f4f4;
 }
 
@@ -569,10 +571,26 @@ a.box-link:hover {
   text-align: right;
 }
 
+.bar-chart-table.no-bar th:nth-child(2),
+.bar-chart-table.no-bar td:nth-child(2) {
+  width: 280px;
+  padding-inline: 32px;
+  background-color: #faf6fe;
+  text-align: left;
+}
+
 .bar-chart-table th:nth-child(3),
 .bar-chart-table td:nth-child(3) {
   width: 45%;
   padding-left: 0;
+}
+
+.bar-chart-table.no-bar th:nth-child(3),
+.bar-chart-table.no-bar td:nth-child(3) {
+  width: 180px;
+  padding-inline: 32px;
+  background-color: #faf6fe;
+  font-style: italic;
 }
 
 .bar-chart-table .bar-chart-title {
