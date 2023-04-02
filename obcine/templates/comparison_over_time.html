@@ -1,23 +1,51 @@
 {% extends "base.html" %}
-{% load static jsonify %}
+{% load static %}
 
 {% block description %}
-    {% include "description.html" with page_title="Primerjava skozi čas" page_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." %}
+  {% include "description.html" with page_title="Primerjava skozi čas" page_description="Open Budget application provides an opportunity for the public to explore and visually interact with Erie’s operating and capital expenses." %}
 {% endblock description %}
 
 {% block content %}
-    <div>
-        <canvas width="1000" height="600" id="budget_chart1" style="margin: 0 auto;"></canvas>
-        <br>
-        <canvas width="1000" height="600" id="budget_chart2" style="margin: 0 auto;"></canvas>
-        <script>window.__BUDGET_DATA__ = JSON.parse("{{ budget|jsonify|escapejs }}");</script>
-        <script src="{% static 'js/budget_chart.js' %}"></script>
-    </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    Tukaj pride tabela
+{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+
+<section class="overview-content">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <a name="tabs"></a>
+        <div class="tabs">
+          <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
+          <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <a name="table"></a>
+      <div class="col" id="js-table-container"></div>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
+        integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      ></script>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js"
+        integrity="sha512-Zjnjh2DCl/MrwdZ8FNp25vSbXac3yWUWoMn0CL8qQ/K11HGv7cJ9RGNUiojnSfqVtwbGf+eyqEEjiw2hlHd6iQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      ></script>
+      <script>window.__COMPARISON_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_id=municipality_id year_id=year.id %}";</script>
+      <script src="{% static 'js/comparison_chart_table.js' %}"></script>
+    </div>
+  </div>
+</section>
+
+
+{% endwith %}
+
+    {% comment %} <div>
+        <script src="{% static 'js/budget_chart.js' %}"></script>
+    </div> {% endcomment %}
+
 {% endblock content %}

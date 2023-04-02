@@ -1,0 +1,76 @@
+{% load year_chooser tree_table %}
+
+{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+
+{% include "breadcrumbs.html" %}
+
+{% include "comparison_stacked_area_chart.html" %}
+
+<table class="table bar-chart-table no-bar my-5">
+  <thead>
+    <tr>
+      <th>
+        <div class="bar-chart-title">
+          {% if tree_data.code != None %}
+          {% with tree_parents|last as last_parent %}
+            <a class="bar-chart-back" href="#tabs;{{ last_parent.code|default_if_none:"" }}"><i class="icon icon-circle icon-nazaj icon-size-2"></i></a>
+          {% endwith %}
+          {% endif %}
+          {{ year.name }} &ndash; {{ tree_data.name|lower|capfirst }}
+        </div>
+      </th>
+      <th>
+        {% if tree_data.planned != None and tree_data.realized != None %}
+          <div>{{ tree_data.planned|floatformat:"2g" }} EUR</div>
+        {% elif tree_data.realized != None %}
+          <div>{{ tree_data.realized|floatformat:"2g" }} EUR</div>
+        {% elif tree_data.amount != None %}
+          <div>{{ tree_data.amount|floatformat:"2g" }} EUR</div>
+        {% endif %}
+      </th>
+      <th>
+        {% if tree_data.planned != None and tree_data.realized != None %}
+          <div>{% amount_percentage tree_type summary "planned" tree_data.planned 2 %} %</div>
+        {% elif tree_data.realized != None %}
+          <div>{% amount_percentage tree_type summary "realized" tree_data.realized 2 %} %</div>
+        {% elif tree_data.amount != None %}
+          <div>{% amount_percentage tree_type summary "amount" tree_data.amount 2 %} %</div>
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for child in tree_data.children %}
+    <tr class="{% if child.children|length %}has-children{% endif %}">
+      <td>
+        {% if child.children|length %}
+          <div class="bar-chart-name"><a href="#tabs;{{ child.code }}" title="{{ child.name|lower|capfirst }}">{{ child.name|lower|capfirst }}</a></div>
+          <i class="icon icon-puscica ms-1"></i>
+        {% else %}
+          <div class="bar-chart-name"><span title="{{ child.name|lower|capfirst }}">{{ child.name|lower|capfirst }}</span></div>
+        {% endif %}
+      </td>
+      <td>
+        {% if child.planned != None and child.realized != None %}
+          <div>{{ child.planned|floatformat:"2g" }} EUR</div>
+        {% elif child.realized != None %}
+          <div>{{ child.realized|floatformat:"2g" }} EUR</div>
+        {% elif child.amount != None %}
+          <div>{{ child.amount|floatformat:"2g" }} EUR</div>
+        {% endif %}
+      </td>
+      <td>
+        {% if child.planned != None and child.realized != None %}
+          <div>{% amount_percentage tree_type summary "planned" child.planned 2 %} %</div>
+        {% elif child.realized != None %}
+          <div>{% amount_percentage tree_type summary "realized" child.realized 2 %} %</div>
+        {% elif child.amount != None %}
+          <div>{% amount_percentage tree_type summary "amount" child.amount 2 %} %</div>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endwith %}

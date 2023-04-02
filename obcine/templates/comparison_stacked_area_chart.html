@@ -1,0 +1,8 @@
+{% load jsonify %}
+
+<div class="comparison-chart-container my-5">
+  <div class="comparison-chart">
+    <canvas id="comparison_chart"></canvas>
+  </div>
+</div>
+<script>window.__BUDGET_DATA__ = JSON.parse("{{ budget|jsonify|escapejs }}");</script>

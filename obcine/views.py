@@ -197,7 +197,9 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
 
         if children := node.get("children", []):
             for child in children:
-                found, found_parent_chain = find_code(code, [*parent_chain, node], child)
+                found, found_parent_chain = find_code(
+                    code, [*parent_chain, node], child
+                )
                 if found:
                     return found, found_parent_chain
 
@@ -205,7 +207,9 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
 
     code = request.GET.get("code", None)
     if code:
-        found_code_data, found_parent_chain = find_code(code, [{"code": None}], tree_data)
+        found_code_data, found_parent_chain = find_code(
+            code, [{"code": None}], tree_data
+        )
         if found_code_data:
             tree_parents = found_parent_chain[1:]
             tree_data = found_code_data
@@ -224,37 +228,97 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
     )
 
 
-def comparison_over_time(request, municipality_id):
+def comparison_over_time(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
+    year = get_year(year_id)
+    tree_type = get_tree_type(request.GET)
+
     years = FinancialYear.objects.all()
 
     budget_data = {}
     revenue_data = {}
 
-    for year in years:
+    for year_ in years:
         etb = ExpenseTreeBuilder(
             municipality=municipality,
-            financial_year=year,
+            financial_year=year_,
         )
         rtb = RevenueTreeBuilder(
             RevenueDefinition,
             municipality=municipality,
-            financial_year=year,
+            financial_year=year_,
         )
-        if year.is_current:
+        if year_.is_current():
             expenses = etb.get_expense_tree(MonthlyExpense)
             revenue = rtb.get_revenue_tree(MonthlyRevenue)
         else:
             expenses = etb.get_expense_tree(YearlyExpense)
             revenue = rtb.get_revenue_tree(YearlyRevenue)
-        budget_data[year.name] = expenses
-        revenue_data[year.name] = revenue
+        budget_data[year_.name] = expenses
+        revenue_data[year_.name] = revenue
 
     return render(
         request,
         "comparison_over_time.html",
         {
-            "budget": budget_data,
-            "revenue": revenue_data,
+            "years": years,
+            "municipality": municipality,
+            "year": year,
+            # "budget": budget_data,
+            # "revenue": revenue_data,
+            "tree_type": tree_type,
+        },
+    )
+
+
+def comparison_over_time_table(request, municipality_id, year_id=None):
+    municipality = Municipality.objects.get(id=municipality_id)
+    year = get_year(year_id)
+    tree_type = get_tree_type(request.GET)
+
+    summary_type = "monthly" if year.is_current() else "yearly"
+    summary = get_summary(municipality, year, summary_type=summary_type)
+
+    tree_data = []
+    tree_parents = []
+
+    if tree_type == "expenses":
+        tree_data = get_expense_tree(municipality, year, summary)
+    else:
+        tree_data = get_revenue_tree(municipality, year, summary)
+
+    def find_code(code, parent_chain, node):
+        if node["code"] == code:
+            return node, parent_chain
+
+        if children := node.get("children", []):
+            for child in children:
+                found, found_parent_chain = find_code(
+                    code, [*parent_chain, node], child
+                )
+                if found:
+                    return found, found_parent_chain
+
+        return None, None
+
+    code = request.GET.get("code", None)
+    if code:
+        found_code_data, found_parent_chain = find_code(
+            code, [{"code": None}], tree_data
+        )
+        if found_code_data:
+            tree_parents = found_parent_chain[1:]
+            tree_data = found_code_data
+
+    return render(
+        request,
+        "comparison_over_time_table.html",
+        {
+            "summary": summary,
+            "year": year,
+            "bar_colors": "2" if tree_type == "expenses" else "1",
+            "tree_data": tree_data,
+            "tree_type": tree_type,
+            "tree_parents": tree_parents,
         },
     )
