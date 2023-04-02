@@ -1,8 +1,30 @@
 {% load jsonify %}
 
 <div class="comparison-chart-container my-5">
-  <div class="comparison-chart">
-    <canvas id="comparison_chart"></canvas>
+  <div class="row">
+    <div class="col-5">
+      <div class="chart-legend">
+        <div class="chart-legend-caption">Izberi kategorije, ki jih želiš prikazati na grafu.</div>
+        <div class="chart-legend-options">
+          {% for child in tree_data.children %}
+          <div class="chart-legend-option">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="{{ child.code }}" id="checkbox_{{ child.code }}" checked>
+              <label class="form-check-label" for="checkbox_{{ child.code }}">
+                <i class="icon icon-circle"></i>
+                <span>{{ child.name|lower|capfirst }}</span>
+              </label>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-7">
+      <div class="comparison-chart">
+        <canvas id="comparison_chart"></canvas>
+      </div>
+    </div>
   </div>
 </div>
-<script>window.__BUDGET_DATA__ = JSON.parse("{{ budget|jsonify|escapejs }}");</script>
+<script>window.__CHART_DATA__ = JSON.parse("{{ years_data|jsonify|escapejs }}");</script>

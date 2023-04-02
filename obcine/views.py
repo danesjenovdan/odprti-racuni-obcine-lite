@@ -68,14 +68,14 @@ def get_summary(municipality, year, summary_type="monthly"):
     return summary
 
 
-def get_revenue_tree(municipality, year, summary):
+def get_revenue_tree(municipality, year, summary, summary_type="monthly"):
     rtb = RevenueTreeBuilder(
         RevenueDefinition,
         municipality=municipality,
         financial_year=year,
     )
 
-    if year.is_current():
+    if summary_type == "monthly":
         merged_tree_revenues = rtb.get_merged_revenue_tree(
             PlannedRevenue,
             MonthlyRevenue,
@@ -89,7 +89,7 @@ def get_revenue_tree(municipality, year, summary):
             "children": merged_tree_revenues,
         }
 
-    else:
+    elif summary_type == "yearly":
         realized_revenue = rtb.get_revenue_tree(YearlyRevenue)
 
         return {
@@ -100,13 +100,13 @@ def get_revenue_tree(municipality, year, summary):
         }
 
 
-def get_expense_tree(municipality, year, summary):
+def get_expense_tree(municipality, year, summary, summary_type="monthly"):
     etb = ExpenseTreeBuilder(
         municipality=municipality,
         financial_year=year,
     )
 
-    if year.is_current():
+    if summary_type == "monthly":
         merged_tree_expenses = etb.get_merged_expense_tree(
             PlannedExpense,
             MonthlyExpense,
@@ -120,7 +120,7 @@ def get_expense_tree(municipality, year, summary):
             "children": merged_tree_expenses,
         }
 
-    else:
+    elif summary_type == "yearly":
         realized_expenses = etb.get_expense_tree(YearlyExpense)
 
         return {
@@ -157,8 +157,8 @@ def cut_of_funds(request, municipality_id, year_id=None):
     summary_type = "monthly" if year.is_current() else "yearly"
     summary = get_summary(municipality, year, summary_type=summary_type)
 
-    revenue = get_revenue_tree(municipality, year, summary)
-    expenses = get_expense_tree(municipality, year, summary)
+    revenue = get_revenue_tree(municipality, year, summary, summary_type)
+    expenses = get_expense_tree(municipality, year, summary, summary_type)
 
     return render(
         request,
@@ -187,9 +187,9 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
     tree_parents = []
 
     if tree_type == "expenses":
-        tree_data = get_expense_tree(municipality, year, summary)
+        tree_data = get_expense_tree(municipality, year, summary, summary_type)
     else:
-        tree_data = get_revenue_tree(municipality, year, summary)
+        tree_data = get_revenue_tree(municipality, year, summary, summary_type)
 
     def find_code(code, parent_chain, node):
         if node["code"] == code:
@@ -233,39 +233,12 @@ def comparison_over_time(request, municipality_id, year_id=None):
     year = get_year(year_id)
     tree_type = get_tree_type(request.GET)
 
-    years = FinancialYear.objects.all()
-
-    budget_data = {}
-    revenue_data = {}
-
-    for year_ in years:
-        etb = ExpenseTreeBuilder(
-            municipality=municipality,
-            financial_year=year_,
-        )
-        rtb = RevenueTreeBuilder(
-            RevenueDefinition,
-            municipality=municipality,
-            financial_year=year_,
-        )
-        if year_.is_current():
-            expenses = etb.get_expense_tree(MonthlyExpense)
-            revenue = rtb.get_revenue_tree(MonthlyRevenue)
-        else:
-            expenses = etb.get_expense_tree(YearlyExpense)
-            revenue = rtb.get_revenue_tree(YearlyRevenue)
-        budget_data[year_.name] = expenses
-        revenue_data[year_.name] = revenue
-
     return render(
         request,
         "comparison_over_time.html",
         {
-            "years": years,
             "municipality": municipality,
             "year": year,
-            # "budget": budget_data,
-            # "revenue": revenue_data,
             "tree_type": tree_type,
         },
     )
@@ -276,39 +249,50 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
     year = get_year(year_id)
     tree_type = get_tree_type(request.GET)
 
-    summary_type = "monthly" if year.is_current() else "yearly"
-    summary = get_summary(municipality, year, summary_type=summary_type)
+    current_tree_data = []
+    current_tree_parents = []
+    years_data = {}
+    years = FinancialYear.objects.all()
+    for year_ in years:
+        summary_type = "monthly"  # if year_.is_current() else "yearly"
+        summary = get_summary(municipality, year_, summary_type)
 
-    tree_data = []
-    tree_parents = []
+        tree_data = []
+        tree_parents = []
 
-    if tree_type == "expenses":
-        tree_data = get_expense_tree(municipality, year, summary)
-    else:
-        tree_data = get_revenue_tree(municipality, year, summary)
+        if tree_type == "expenses":
+            tree_data = get_expense_tree(municipality, year_, summary, summary_type)
+        else:
+            tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
 
-    def find_code(code, parent_chain, node):
-        if node["code"] == code:
-            return node, parent_chain
+        def find_code(code, parent_chain, node):
+            if node["code"] == code:
+                return node, parent_chain
 
-        if children := node.get("children", []):
-            for child in children:
-                found, found_parent_chain = find_code(
-                    code, [*parent_chain, node], child
-                )
-                if found:
-                    return found, found_parent_chain
+            if children := node.get("children", []):
+                for child in children:
+                    found, found_parent_chain = find_code(
+                        code, [*parent_chain, node], child
+                    )
+                    if found:
+                        return found, found_parent_chain
 
-        return None, None
+            return None, None
 
-    code = request.GET.get("code", None)
-    if code:
-        found_code_data, found_parent_chain = find_code(
-            code, [{"code": None}], tree_data
-        )
-        if found_code_data:
-            tree_parents = found_parent_chain[1:]
-            tree_data = found_code_data
+        code = request.GET.get("code", None)
+        if code:
+            found_code_data, found_parent_chain = find_code(
+                code, [{"code": None}], tree_data
+            )
+            if found_code_data:
+                tree_parents = found_parent_chain[1:]
+                tree_data = found_code_data
+
+        years_data[year_.name] = tree_data["children"]
+        if year_ == year:
+            current_tree_data = tree_data
+            current_tree_parents = tree_parents
+    # ---
 
     return render(
         request,
@@ -317,8 +301,10 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
             "summary": summary,
             "year": year,
             "bar_colors": "2" if tree_type == "expenses" else "1",
-            "tree_data": tree_data,
+            "tree_data": current_tree_data,
             "tree_type": tree_type,
-            "tree_parents": tree_parents,
+            "tree_parents": current_tree_parents,
+            # ---
+            "years_data": years_data,
         },
     )

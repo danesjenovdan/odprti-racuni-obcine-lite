@@ -736,6 +736,103 @@ a.box-link:hover {
   transform: translateX(-50%);
 }
 
+.chart-legend {
+  padding: 16px 22px;
+  border: 1px solid #ebebeb;
+  border-radius: 20px;
+  color: #39444e;
+}
+
+.chart-legend .chart-legend-caption {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+  text-align: center;
+  border-bottom: 1px solid #d1d7df;
+}
+
+.chart-legend .chart-legend-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.chart-legend .chart-legend-option .form-check {
+  margin-bottom: 0;
+}
+
+.chart-legend .chart-legend-option .form-check-input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("/static/icons/checkbox.svg");
+}
+
+.chart-legend .chart-legend-option .form-check-input:checked {
+  background-image: url("/static/icons/checkbox-checked.svg");
+}
+
+.chart-legend .chart-legend-option label {
+  display: flex;
+  font-family: "Metropolis", sans-serif;
+  font-size: 12px;
+}
+
+.chart-legend .chart-legend-option label .icon {
+  flex-shrink: 0;
+  margin-top: 0;
+  margin-right: 0.5em;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.chart-legend .chart-legend-option .icon {
+  border: 1px solid #39444e;
+}
+
+.chart-legend .chart-legend-option:nth-child(1n) .icon {
+  background-color: #64507d;
+}
+
+.chart-legend .chart-legend-option:nth-child(2n) .icon {
+  background-color: #8c70ae;
+}
+
+.chart-legend .chart-legend-option:nth-child(3n) .icon {
+  background-color: #c9a2f9;
+}
+
+.chart-legend .chart-legend-option:nth-child(4n) .icon {
+  background-color: #efe2fd;
+}
+
+.chart-legend .chart-legend-option:nth-child(5n) .icon {
+  background-color: #101a34;
+}
+
+.chart-legend .chart-legend-option:nth-child(6n) .icon {
+  background-color: #283c78;
+}
+
+.chart-legend .chart-legend-option:nth-child(7n) .icon {
+  background-color: #3756ae;
+}
+
+.chart-legend .chart-legend-option:nth-child(8n) .icon {
+  background-color: #899acd;
+}
+
+.chart-legend .chart-legend-option:nth-child(9n) .icon {
+  background-color: #c3cce6;
+}
+
 /* icons */
 
 .icon {
