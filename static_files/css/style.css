@@ -36,6 +36,25 @@
   text-decoration: none;
 }
 
+.navbar .navbar-brand {
+  padding: 0;
+}
+
+.navbar .navbar-brand .logo {
+  min-width: 200px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-size: left center;
+  background-image: url("/static/OR-obcine-logo.svg");
+}
+
+.navbar .navbar-brand .logo .subtitle {
+  display: inline-block;
+  margin: 24px 0 0 38px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .navbar .navbar-nav {
   gap: 32px;
 }
