@@ -10,7 +10,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from datetime import datetime
 
-from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue, download_image
+from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue, download_file
 
 
 def document_size_validator(value): # add this to some file where you can import it from
@@ -107,7 +107,7 @@ class Task(Timestampable):
                     month=month
                 )
             if settings.ENABLE_S3:
-                image_path = download_image(document.file.url, document.file.name)
+                image_path = download_file(document.file.url, document.file.name)
                 parser.parse_file(file_path=image_path)
             else:
                 parser.parse_file(file_path=document.file.path)
@@ -151,7 +151,7 @@ class ParsableDocument(models.Model):
         ).save()
         # parser = parser(self, model, definition, month)
         # if settings.ENABLE_S3:
-        #     image_path = download_image(self.file.url, self.file.name)
+        #     image_path = download_file(self.file.url, self.file.name)
         #     parser.parse_file(file_path=image_path)
         # else:
         #     parser.parse_file(file_path=self.file.path)

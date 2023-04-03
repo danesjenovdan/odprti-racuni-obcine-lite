@@ -328,9 +328,9 @@ class XLSCodesParser(object):
             i+=1
 
 
-def download_image(url, name):
-        page = requests.get(url)
-        file_path = f'media/{name}'
-        with open(file_path, 'wb') as f:
-            f.write(page.content)
-        return file_path
+def download_file(url, name):
+    response = requests.get(url)
+    file_path = f'media/{name}'
+    with open(file_path, 'wb') as f:
+        f.write(response.content)
+    return file_path
