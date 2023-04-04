@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 
 from obcine.models import (
     FinancialYear,
@@ -130,7 +131,7 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
             "children": realized_expenses,
         }
 
-
+@cache_page(60 * 60 * 24)
 def overview(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -148,7 +149,7 @@ def overview(request, municipality_id, year_id=None):
         },
     )
 
-
+@cache_page(60 * 60 * 24)
 def cut_of_funds(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -174,7 +175,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
         },
     )
 
-
+@cache_page(60 * 60 * 24)
 def cut_of_funds_table(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -227,7 +228,7 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
         },
     )
 
-
+@cache_page(60 * 60 * 24)
 def comparison_over_time(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -243,7 +244,7 @@ def comparison_over_time(request, municipality_id, year_id=None):
         },
     )
 
-
+@cache_page(60 * 60 * 24)
 def comparison_over_time_table(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
