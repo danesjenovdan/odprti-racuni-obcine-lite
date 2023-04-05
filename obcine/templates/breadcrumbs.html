@@ -7,7 +7,7 @@
       <a href="#tabs;{{ parent.code|default_if_none:"" }}" class="breadcrumb-option">
         <div class="breadcrumb-selector"></div>
         <div class="breadcrumb-label">
-          <div class="name">{{ parent.name|lower|capfirst }}</div>
+          <div class="name">{{ parent.name|capfirst_if_allcaps }}</div>
           {% if parent.planned != None and parent.realized != None %}
             <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned %} %</div>
           {% elif parent.realized != None %}
@@ -21,7 +21,7 @@
     <a href="#tabs;{{ tree_data.code|default_if_none:"" }}" class="breadcrumb-option active">
       <div class="breadcrumb-selector"></div>
       <div class="breadcrumb-label">
-        <div class="name">{{ tree_data.name|lower|capfirst }}</div>
+        <div class="name">{{ tree_data.name|capfirst_if_allcaps }}</div>
         {% if tree_data.planned != None and tree_data.realized != None %}
           <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned %} %</div>
         {% elif tree_data.realized != None %}

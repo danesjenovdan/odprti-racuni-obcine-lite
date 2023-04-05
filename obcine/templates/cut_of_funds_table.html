@@ -16,7 +16,7 @@
             <a class="bar-chart-back" href="#tabs;{{ last_parent.code|default_if_none:"" }}"><i class="icon icon-circle icon-nazaj icon-size-2"></i></a>
           {% endwith %}
           {% endif %}
-          {{ tree_data.name|lower|capfirst }}
+          {{ tree_data.name|capfirst_if_allcaps }}
         </div>
       </th>
       <th>
@@ -36,10 +36,10 @@
     <tr class="{% if child.children|length %}has-children{% endif %}">
       <td>
         {% if child.children|length %}
-          <div class="bar-chart-name"><a href="#tabs;{{ child.code }}" title="{{ child.name|lower|capfirst }}">{{ child.name|lower|capfirst }}</a></div>
+          <div class="bar-chart-name"><a href="#tabs;{{ child.code }}" title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</a></div>
           <i class="icon icon-puscica ms-1"></i>
         {% else %}
-          <div class="bar-chart-name"><span title="{{ child.name|lower|capfirst }}">{{ child.name|lower|capfirst }}</span></div>
+          <div class="bar-chart-name"><span title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</span></div>
         {% endif %}
       </td>
       <td>

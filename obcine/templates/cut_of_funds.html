@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block description %}
-  {% include "description.html" with show_year_chooser=True page_title="Razrez sredstev" page_description="Open Budget application provides an opportunity for the public to explore and visually interact with Erie’s operating and capital expenses." %}
+  {% include "description.html" with show_year_chooser=True page_title="Razrez sredstev" page_description="Preverite, kje je vaša občina pridobila proračunska sredstva za različna leta in kako jih je porabila. Aplikacija vam omogoča raziskovanje posameznih proračunskih kategorij tudi v globino." %}
 {% endblock description %}
 
 {% block budget %}
@@ -19,8 +19,8 @@
       <div class="col">
         <a name="tabs"></a>
         <div class="tabs">
-          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Kje je občina pridobila sredstva?</a>
-          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Kam so šla občinska sredstva?</a>
+          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Pridobljena sredstva</a>
+          <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Porabljena sredstva</a>
         </div>
       </div>
     </div>

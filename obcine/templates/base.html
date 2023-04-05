@@ -20,7 +20,7 @@
 
     <nav class="navbar navbar-expand-lg bg-body">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}">
           <div class="logo">
             <span class="subtitle">{{ municipality.name }}</span>
           </div>

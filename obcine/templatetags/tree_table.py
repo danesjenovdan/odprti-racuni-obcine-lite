@@ -1,6 +1,7 @@
 import math
 
 from django import template
+from django.utils.text import capfirst
 
 register = template.Library()
 
@@ -39,3 +40,14 @@ def amount_percentage(tree_type, summary, amount_type, amount, precision=0):
     if all := summary.get(key, 0):
         return round(amount / all * 100, precision)
     return 0
+
+
+@register.filter
+def capfirst_if_allcaps(value):
+    if not value:
+        return value
+    if not isinstance(value, str):
+        value = str(value)
+    if value == value.upper():
+        return capfirst(value.lower())
+    return capfirst(value)
