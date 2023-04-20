@@ -38,7 +38,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://odprtiracuniobcine.lb.djnd.si']
+CSRF_TRUSTED_ORIGINS = ['https://odprtiracuniobcine.lb.djnd.si', 'https://odprtiracuni-obcine.djnd.si']
 
 if DEBUG:
     import socket  # only if you haven't already imported this
