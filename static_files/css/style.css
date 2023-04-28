@@ -28,7 +28,6 @@
 .navbar a:active,
 .navbar .navbar-nav a.active {
   color: inherit;
-  font-weight: inherit;
 }
 
 .footer a:hover,
@@ -75,6 +74,7 @@
 
 .navbar .nav-item .nav-link.active {
   background-color: #f3ecae;
+  font-weight: 600;
 }
 
 .footer .footer-small-link,
@@ -102,6 +102,11 @@
 .footer p {
   margin-bottom: 0;
   font-size: 14px;
+}
+
+.footer .mju-logo {
+  height: 28px;
+  margin-top: -4px;
 }
 
 section {
@@ -551,9 +556,16 @@ a.box-link:hover {
   cursor: pointer;
 }
 
-.bar-chart-table tbody tr.has-children:hover,
+/* .bar-chart-table tbody tr.has-children:hover, */
 .bar-chart-table tbody tr.has-children:hover td {
   background-color: #f4f4f4;
+}
+
+.bar-chart-table.no-bar tbody tr.has-children:hover th:nth-child(2),
+.bar-chart-table.no-bar tbody tr.has-children:hover td:nth-child(2),
+.bar-chart-table.no-bar tbody tr.has-children:hover th:nth-child(3),
+.bar-chart-table.no-bar tbody tr.has-children:hover td:nth-child(3) {
+  background-color: #f3ecfd;
 }
 
 .bar-chart-table thead tr th {
@@ -628,15 +640,9 @@ a.box-link:hover {
 }
 
 .bar-chart-table .bar-chart-name {
-  display: inline-block;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.bar-chart-table tr.has-children:hover .bar-chart-name {
-  max-width: calc(100% - 65px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .bar-chart-table .bar-chart-name a {
@@ -645,17 +651,48 @@ a.box-link:hover {
 }
 
 .bar-chart-table tr:hover .bar-chart-name a {
-  font-weight: 700;
   text-decoration: underline;
 }
 
-.bar-chart-table .bar-chart-name + .icon {
-  display: none;
+.bar-chart-table .bar-chart-name .bar-chart-name-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
-.bar-chart-table tr:hover .bar-chart-name + .icon {
-  margin-top: -1em;
-  display: inline-block;
+.bar-chart-table .bar-chart-name .bar-chart-name-arrow .icon {
+  opacity: 0;
+  margin-top: 0;
+}
+
+@keyframes arrowShake {
+  0% {
+    transform: translateX(0);
+  }
+  6% {
+    transform: translateX(-3px);
+  }
+  18% {
+    transform: translateX(2px);
+  }
+  31% {
+    transform: translateX(-1px);
+  }
+  43% {
+    transform: translateX(1px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+}
+
+.bar-chart-table tr:hover .bar-chart-name .bar-chart-name-arrow .icon {
+  opacity: 1;
+  animation-duration: 0.75s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-name: arrowShake;
 }
 
 .bar-chart-table .bar-chart-legend {
@@ -680,7 +717,14 @@ a.box-link:hover {
 }
 
 .budget-summary .budget-bar,
-.bar-chart-table .bar-chart-bar {
+.bar-chart-table tr .bar-chart-bar {
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.budget-summary .budget-bar,
+.bar-chart-table tr.is-revealed .bar-chart-bar {
+  opacity: 1;
   transform-origin: left center;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -903,7 +947,7 @@ a.box-link:hover {
 
 .icon-nazaj {
   background-size: 60%;
-  background-image: url("/static/icons/nazaj.svg");
+  background-image: url("/static/icons/nazaj2.svg");
 }
 
 .hr-wave {

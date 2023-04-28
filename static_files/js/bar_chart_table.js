@@ -41,6 +41,20 @@
     fetchTable(window.location.search, window.location.hash);
   }
 
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+        }
+      });
+    },
+    {
+      threshold: 1,
+      rootMargin: "-32px",
+    }
+  );
+
   function fetchTable(searchString, hashString) {
     const url = new URL(window.__BAR_CHART_TABLE_URL__, window.location.origin);
     url.search = searchString;
@@ -75,6 +89,9 @@
             inline: "start",
           });
         }
+        tableContainerElem.querySelectorAll("tr").forEach((tr) => {
+          revealObserver.observe(tr);
+        });
       });
   }
 })();
