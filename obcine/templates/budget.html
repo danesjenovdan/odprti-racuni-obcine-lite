@@ -4,12 +4,12 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col">
-        <h3>Proračun {{ year }}</h3>
         {% if request.resolver_match.url_name == 'overview' %}
         <a class="budget-box-link" href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}">
         {% else %}
         <span class="budget-box-link">
         {% endif %}
+          <h3>Proračun {{ year }}</h3>
           <div class="budget-summary">
             <div class="budget-summary-title">
               <i class="icon icon-prihodki me-2"></i> Prihodki
@@ -90,6 +90,13 @@
         {% endif %}
       </div>
     </div>
+    {% if show_year_chooser %}
+    <div class="row justify-content-center">
+      <div class="col col-year-chooser">
+        {% include "year-chooser.html" %}
+      </div>
+    </div>
+    {% endif %}
   </div>
 </section>
 

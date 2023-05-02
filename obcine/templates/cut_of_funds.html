@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block description %}
-  {% include "description.html" with show_year_chooser=True page_title="Razrez sredstev" page_description="Preverite, kje je vaša občina pridobila proračunska sredstva za različna leta in kako jih je porabila. Aplikacija vam omogoča raziskovanje posameznih proračunskih kategorij tudi v globino." %}
+  {% include "description.html" with page_title="Razrez sredstev" page_description="Preverite, kje je vaša občina pridobila proračunska sredstva za različna leta in kako jih je porabila. Aplikacija vam omogoča raziskovanje posameznih proračunskih kategorij tudi v globino." %}
 {% endblock description %}
 
 {% block budget %}
-  {% include "budget.html" %}
+  {% include "budget.html" with show_year_chooser=True %}
 {% endblock budget %}
 
 {% block content %}

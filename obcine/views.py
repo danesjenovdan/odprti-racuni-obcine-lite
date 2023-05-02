@@ -253,7 +253,7 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
     current_tree_data = []
     current_tree_parents = []
     years_data = {}
-    years = FinancialYear.objects.all()
+    years = FinancialYear.objects.all() # TODO: only show valid years for this municipality
     for year_ in years:
         summary_type = "monthly"  # if year_.is_current() else "yearly"
         summary = get_summary(municipality, year_, summary_type)
@@ -299,6 +299,7 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
         request,
         "comparison_over_time_table.html",
         {
+            "years": years,
             "summary": summary,
             "year": year,
             "bar_colors": "2" if tree_type == "expenses" else "1",
