@@ -106,7 +106,7 @@ class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
     extra = 0
 
 
-class MunicipalityFinancialYearAdmin(admin.ModelAdmin):
+class MunicipalityFinancialYearAdmin(LimitedAdmin):
     list_display = ['year', 'is_published']
     exclude = ['municipality', 'financial_year']
     inlines = [
@@ -149,7 +149,7 @@ class YearlyBudgetAdmin(FinancialCategoryMPTTModelAdmin):
     list_filter = [SimpleFinanceYearListFilter]
 
 
-class RevenueAdmin(admin.ModelAdmin):
+class RevenueAdmin(LimitedAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
     list_filter = [SimpleFinanceYearListFilter]
@@ -161,7 +161,7 @@ class RevenueAdmin(admin.ModelAdmin):
             return 'Napaka pri izbiri konta'
 
 
-class YearlyRevenueObcineAdmin(admin.ModelAdmin):
+class YearlyRevenueObcineAdmin(LimitedAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
     list_filter = [SimpleFinanceYearListFilter]
@@ -172,7 +172,7 @@ class YearlyRevenueObcineAdmin(admin.ModelAdmin):
         else:
             return 'Napaka pri izbiri konta'
 
-class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
+class MonthlyRevenueRealizatioObcineAdmin(LimitedAdmin):
     list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
     list_filter = [SimpleFinanceYearListFilter]
@@ -184,7 +184,7 @@ class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
             return 'Napaka pri izbiri konta'
 
 
-class MunicipalityModelAdmin(admin.ModelAdmin):
+class MunicipalityModelAdmin(LimitedAdmin):
     list_display = ['name']
 
     def response_change(self, request, obj):
