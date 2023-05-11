@@ -77,13 +77,15 @@ class Command(BaseCommand):
 
         # -- upload files (we need to open the file every time because s3 closes the file after upload)
 
+        ### Monthly reveues yanuar for each year
+
         with open("files/prihodki_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.MonthlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2019,
-                municipality=municipality,
-                year=year2019,
+                #municipality=municipality,
+                #year=year2019,
                 month=models.Months.JANUAR,
             ).save()
         with open("files/prihodki_apra.xlsx", "rb") as fi:
@@ -91,8 +93,8 @@ class Command(BaseCommand):
             models.MonthlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2020,
-                municipality=municipality,
-                year=year2020,
+                #municipality=municipality,
+                #year=year2020,
                 month=models.Months.JANUAR,
             ).save()
         with open("files/prihodki_apra.xlsx", "rb") as fi:
@@ -100,8 +102,8 @@ class Command(BaseCommand):
             models.MonthlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2021,
-                municipality=municipality,
-                year=year2021,
+                #municipality=municipality,
+                #year=year2021,
                 month=models.Months.JANUAR,
             ).save()
         with open("files/prihodki_apra.xlsx", "rb") as fi:
@@ -109,8 +111,8 @@ class Command(BaseCommand):
             models.MonthlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
+                #municipality=municipality,
+                #year=year2022,
                 month=models.Months.JANUAR,
             ).save()
         with open("files/prihodki_apra.xlsx", "rb") as fi:
@@ -118,151 +120,221 @@ class Command(BaseCommand):
             models.MonthlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2023,
-                municipality=municipality,
-                year=year2023,
+                #municipality=municipality,
+                #year=year2023,
                 month=models.Months.JANUAR,
             ).save()
+
+        ### Planned revenue for each year
 
         with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedRevenueDocument(
                 file=my_file,
                 municipality_year=my2019,
-                municipality=municipality,
-                year=year2019,
+                #municipality=municipality,
+                #year=year2019,
             ).save()
         with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedRevenueDocument(
                 file=my_file,
                 municipality_year=my2020,
-                municipality=municipality,
-                year=year2020,
+                #municipality=municipality,
+                #year=year2020,
             ).save()
         with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedRevenueDocument(
                 file=my_file,
                 municipality_year=my2021,
-                municipality=municipality,
-                year=year2021,
+                #municipality=municipality,
+                #year=year2021,
             ).save()
         with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedRevenueDocument(
                 file=my_file,
                 municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
-            ).save()
-        with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
-            my_file = File(fi, name=os.path.basename(fi.name))
-            models.YearlyRevenueDocument(
-                file=my_file,
-                municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
+                #municipality=municipality,
+                #year=year2022,
             ).save()
         with open("files/prihodki_plan_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedRevenueDocument(
                 file=my_file,
                 municipality_year=my2023,
-                municipality=municipality,
-                year=year2023,
+                #municipality=municipality,
+                #year=year2023,
             ).save()
+
+        # Planned expanse
 
         with open("files/proracun_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedExpenseDocument(
                 file=my_file,
                 municipality_year=my2019,
-                municipality=municipality,
-                year=year2019,
+                #municipality=municipality,
+                #year=year2019,
             ).save()
         with open("files/proracun_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedExpenseDocument(
                 file=my_file,
                 municipality_year=my2020,
-                municipality=municipality,
-                year=year2020,
+                #municipality=municipality,
+                # year=year2020,
             ).save()
         with open("files/proracun_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedExpenseDocument(
                 file=my_file,
                 municipality_year=my2021,
-                municipality=municipality,
-                year=year2021,
+                #municipality=municipality,
+                #year=year2021,
             ).save()
         with open("files/proracun_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.PlannedExpenseDocument(
                 file=my_file,
                 municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
+                #municipality=municipality,
+                #year=year2022,
             ).save()
+        with open("files/proracun_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.PlannedExpenseDocument(
+                file=my_file,
+                municipality_year=my2023,
+                #municipality=municipality,
+                #year=year2023,
+            ).save()
+
+        # Monthly expanse
+
+        with open("files/realizacija_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2019,
+                #municipality=municipality,
+                # year=year2019,
+                month=models.Months.JANUAR,
+            ).save()
+        with open("files/realizacija_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2020,
+                #municipality=municipality,
+                #year=year2020,
+                month=models.Months.JANUAR,
+            ).save()
+        with open("files/realizacija_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2021,
+                #municipality=municipality,
+                #year=year2021,
+                month=models.Months.JANUAR,
+            ).save()
+        with open("files/realizacija_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2022,
+                #municipality=municipality,
+                #year=year2022,
+                month=models.Months.JANUAR,
+            ).save()
+        with open("files/realizacija_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.MonthlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2023,
+                #municipality=municipality,
+                #year=year2023,
+                month=models.Months.JANUAR,
+            ).save()
+
+        ## yearly expanse
+
+        # TODO fix files when come
+        #files/real-zr-2020-apra-odhodki.xlsx
+        #files/real-zr-2021-apra-odhodki.xlsx
+
+        with open("files/proracun_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.YearlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2019,
+                #municipality=municipality,
+                # year=year2019,
+            ).save()
+
+        with open("files/proracun_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.YearlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2020,
+                #municipality=municipality,
+                #year=year2020,
+            ).save()
+
+        with open("files/proracun_apra.xlsx", "rb") as fi:
+            my_file = File(fi, name=os.path.basename(fi.name))
+            models.YearlyExpenseDocument(
+                file=my_file,
+                municipality_year=my2021,
+                #municipality=municipality,
+                #year=year2021,
+            ).save()
+
         with open("files/proracun_apra.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
             models.YearlyExpenseDocument(
                 file=my_file,
                 municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
-            ).save()
-        with open("files/proracun_apra.xlsx", "rb") as fi:
-            my_file = File(fi, name=os.path.basename(fi.name))
-            models.PlannedExpenseDocument(
-                file=my_file,
-                municipality_year=my2023,
-                municipality=municipality,
-                year=year2023,
+                #municipality=municipality,
+                #year=year2022,
             ).save()
 
-        with open("files/realizacija_apra.xlsx", "rb") as fi:
+        ## yearly revenue
+
+        with open("files/real-zr-2020-apra-prihodki.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
-            models.MonthlyExpenseDocument(
+            models.YearlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2019,
-                municipality=municipality,
-                year=year2019,
-                month=models.Months.JANUAR,
+                #municipality=municipality,
+                #year=year2019,
             ).save()
-        with open("files/realizacija_apra.xlsx", "rb") as fi:
+
+        with open("files/real-zr-2021-apra-prihodki.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
-            models.MonthlyExpenseDocument(
+            models.YearlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2020,
-                municipality=municipality,
-                year=year2020,
-                month=models.Months.JANUAR,
+                #municipality=municipality,
+                #year=year2020,
             ).save()
-        with open("files/realizacija_apra.xlsx", "rb") as fi:
+
+        with open("files/real-zr-2020-apra-prihodki.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
-            models.MonthlyExpenseDocument(
+            models.YearlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2021,
-                municipality=municipality,
-                year=year2021,
-                month=models.Months.JANUAR,
+                #municipality=municipality,
+                #year=year2021,
             ).save()
-        with open("files/realizacija_apra.xlsx", "rb") as fi:
+
+        with open("files/real-zr-2021-apra-prihodki.xlsx", "rb") as fi:
             my_file = File(fi, name=os.path.basename(fi.name))
-            models.MonthlyExpenseDocument(
+            models.YearlyRevenueDocument(
                 file=my_file,
                 municipality_year=my2022,
-                municipality=municipality,
-                year=year2022,
-                month=models.Months.JANUAR,
-            ).save()
-        with open("files/realizacija_apra.xlsx", "rb") as fi:
-            my_file = File(fi, name=os.path.basename(fi.name))
-            models.MonthlyExpenseDocument(
-                file=my_file,
-                municipality_year=my2023,
-                municipality=municipality,
-                year=year2023,
-                month=models.Months.JANUAR,
+                #municipality=municipality,
+                #year=year2022,
             ).save()

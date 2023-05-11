@@ -253,9 +253,9 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
     current_tree_data = []
     current_tree_parents = []
     years_data = {}
-    years = FinancialYear.objects.all() # TODO: only show valid years for this municipality
+    years = municipality.financial_years.filter(municipalityfinancialyears__is_published=True)
     for year_ in years:
-        summary_type = "monthly"  # if year_.is_current() else "yearly"
+        summary_type = "monthly"  if year_.is_current() else "yearly"
         summary = get_summary(municipality, year_, summary_type)
 
         tree_data = []
@@ -266,34 +266,37 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
         else:
             tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
 
-        def find_code(code, parent_chain, node):
-            if node["code"] == code:
-                return node, parent_chain
+        # #TODO Tole probi deprecatat
 
-            if children := node.get("children", []):
-                for child in children:
-                    found, found_parent_chain = find_code(
-                        code, [*parent_chain, node], child
-                    )
-                    if found:
-                        return found, found_parent_chain
+        # def find_code(code, parent_chain, node):
+        #     if node["code"] == code:
+        #         return node, parent_chain
 
-            return None, None
+        #     if children := node.get("children", []):
+        #         for child in children:
+        #             found, found_parent_chain = find_code(
+        #                 code, [*parent_chain, node], child
+        #             )
+        #             if found:
+        #                 return found, found_parent_chain
 
-        code = request.GET.get("code", None)
-        if code:
-            found_code_data, found_parent_chain = find_code(
-                code, [{"code": None}], tree_data
-            )
-            if found_code_data:
-                tree_parents = found_parent_chain[1:]
-                tree_data = found_code_data
+        #     return None, None
+
+        # code = request.GET.get("code", None)
+        # if code:
+        #     found_code_data, found_parent_chain = find_code(
+        #         code, [{"code": None}], tree_data
+        #     )
+        #     if found_code_data:
+        #         tree_parents = found_parent_chain[1:]
+        #         tree_data = found_code_data
+
+        #print(tree_data)
 
         years_data[year_.name] = tree_data["children"]
         if year_ == year:
             current_tree_data = tree_data
             current_tree_parents = tree_parents
-    # ---
 
     return render(
         request,

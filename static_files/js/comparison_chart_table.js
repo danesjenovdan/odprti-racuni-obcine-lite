@@ -136,7 +136,7 @@
       const dataValues = [];
 
       codeData.forEach((d) => {
-        dataValues[years.indexOf(d.year)] = Number(d.planned);
+        dataValues[years.indexOf(d.year)] = Number(d.planned) || Number(d.amount);
       });
 
       data.push({

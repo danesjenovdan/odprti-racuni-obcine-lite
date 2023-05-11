@@ -1,13 +1,16 @@
 from django.contrib import admin, messages
-from mptt.admin import MPTTModelAdmin
-
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
     PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
-    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument)
+    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument, Municipality)
+from obcine.filters import SimpleFinanceYearListFilter
+
 
 import json
+
+from mptt.admin import MPTTModelAdmin
 
 # Register your models here.
 
@@ -70,7 +73,7 @@ class RevenueDefinitionAdmin(MPTTModelAdmin, LimitedAdmin):
 
 
 class DocumentTabularInline(admin.TabularInline):
-    exclude = ['municipality']
+    exclude = ['municipality', 'year']
 
 
 class BudgetDocumentInlineAdmin(DocumentTabularInline):
@@ -104,7 +107,7 @@ class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
 
 
 class MunicipalityFinancialYearAdmin(admin.ModelAdmin):
-    list_display = ['year']
+    list_display = ['year', 'is_published']
     exclude = ['municipality', 'financial_year']
     inlines = [
         BudgetDocumentInlineAdmin,
@@ -135,21 +138,21 @@ class FinancialYearModelAdmin(admin.ModelAdmin):
 
 
 class BudgetAdmin(FinancialCategoryMPTTModelAdmin):
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
 
 class MonthlyBudgetRealizatioAdmin(FinancialCategoryMPTTModelAdmin):
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
 
 class YearlyBudgetAdmin(FinancialCategoryMPTTModelAdmin):
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
 
 class RevenueAdmin(admin.ModelAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
@@ -161,7 +164,7 @@ class RevenueAdmin(admin.ModelAdmin):
 class YearlyRevenueObcineAdmin(admin.ModelAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
@@ -172,7 +175,7 @@ class YearlyRevenueObcineAdmin(admin.ModelAdmin):
 class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
     list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
-    list_filter = ['year']
+    list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
@@ -181,20 +184,42 @@ class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
             return 'Napaka pri izbiri konta'
 
 
+class MunicipalityModelAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+    def response_change(self, request, obj):
+        return redirect('/admin/')
+
+
 class AdminSite(admin.AdminSite):
     site_header = _('Nadzorna plošča')
 
+    def get_app_list(self, request, app_label=None):
+        app_list = list(self._build_app_dict(request, app_label).values())
+
+        # Sort the models alphabetically within each app.
+        for app in app_list:
+            if not request.user.is_superuser:
+                for idx, model in enumerate(app['models']):
+                    # add id of users municipality to municipality url
+                    if model['object_name'] == 'Municipality':
+                        user_municipality_id = request.user.municipality_id
+                        model['admin_url'] = model['admin_url'] + str(user_municipality_id)
+
+        return app_list
+
 admin_site = AdminSite(name='Nadzorna plošča')
 
+admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 
 admin_site.register(PlannedExpense, BudgetAdmin)
-admin_site.register(YearlyExpense, YearlyBudgetAdmin)
 admin_site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
-
+admin_site.register(YearlyExpense, YearlyBudgetAdmin)
 
 admin_site.register(PlannedRevenue, RevenueAdmin)
-admin_site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
 admin_site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
+admin_site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
+admin_site.register(Municipality, MunicipalityModelAdmin)
 
 #admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)
-admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
+

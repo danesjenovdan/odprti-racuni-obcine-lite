@@ -136,20 +136,20 @@ class ExpenseTreeBuilder:
             year=self.financial_year,
         )
         self.definiton_storage = {expense.id: expense for expense in expenses}
-        expenses = (
-            expenses.filter(level=4)
-            .values("code", "parent", "amount")
-            .annotate(sum_amount=Sum("amount"))
-        )
+        # expenses = (
+        #     expenses.filter(level=4)
+        #     .values("code", "parent", "amount")
+        #     .annotate(sum_amount=Sum("amount"))
+        # )
 
-        leaves = []
-        for expense in expenses:
-            item = self.definiton_storage[expense["parent"]]
-            item.amount = expense["sum_amount"]
-            item.children = []
-            leaves.append(item.get_offline_dict())
+        # leaves = []
+        # for expense in expenses:
+        #     item = self.definiton_storage[expense["parent"]]
+        #     item.amount = expense["sum_amount"]
+        #     item.children = []
+        #     leaves.append(item.get_offline_dict())
 
-        return list(build_tree(self.definiton_storage, leaves).values())
+        return list(build_tree(self.definiton_storage, [expanse.get_offline_dict() for expanse in expenses.filter(level=4)]).values())
 
     def get_merged_expense_tree(self, planned_data_model, realized_data_model):
         planned_expenses = planned_data_model.objects.filter(
@@ -157,11 +157,11 @@ class ExpenseTreeBuilder:
             year=self.financial_year,
         )
         self.definiton_storage = {expense.id: expense for expense in planned_expenses}
-        planned_expenses = (
-            planned_expenses.filter(level=4)
-            .values("code", "parent", "amount")
-            .annotate(sum_amount=Sum("amount"))
-        )
+        # planned_expenses = (
+        #     planned_expenses.filter(level=4)
+        #     .values("code", "parent", "amount")
+        #     .annotate(sum_amount=Sum("amount"))
+        # )
 
         realized_expenses = realized_data_model.objects.filter(
             municipality=self.municipality,
@@ -174,14 +174,23 @@ class ExpenseTreeBuilder:
         )
         realized_dict = {item["code"]: item["amount"] for item in realized_expenses}
 
+        # leaves = []
+        # for expense in planned_expenses:
+        #     item = self.definiton_storage[expense["parent"]]
+        #     item.amount = expense["sum_amount"]
+        #     item.children = []
+        #     item_dict = item.get_offline_dict()
+        #     item_dict["planned"] = item_dict.pop("amount")
+        #     item_dict["realized"] = realized_dict.get(item_dict["code"], 0)
+        #     leaves.append(item_dict)
+
+
         leaves = []
-        for expense in planned_expenses:
-            item = self.definiton_storage[expense["parent"]]
-            item.amount = expense["sum_amount"]
-            item.children = []
-            item_dict = item.get_offline_dict()
+        for planned in planned_expenses.filter(level=4):
+            item_dict = planned.get_offline_dict()
             item_dict["planned"] = item_dict.pop("amount")
             item_dict["realized"] = realized_dict.get(item_dict["code"], 0)
             leaves.append(item_dict)
+
 
         return list(build_merged_tree(self.definiton_storage, leaves).values())

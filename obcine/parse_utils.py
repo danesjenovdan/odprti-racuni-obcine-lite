@@ -6,11 +6,12 @@ from django.db import transaction
 
 class XLSXAppraBudget(object):
     def __init__(self, document, model, definiton_model=None, month=None):
-        self.municipality = document.municipality
-        self.year = document.year
+        self.municipality = document.municipality_year.municipality
+        self.year = document.municipality_year.financial_year
         self.model = model
         self.document_object = document
         self.month = month
+        self.municipality_year = document.municipality_year
 
     def prepare_moodel(self, name, code, order):
         obj = self.model(
@@ -19,7 +20,8 @@ class XLSXAppraBudget(object):
                     order=order,
                     municipality=self.municipality,
                     year=self.year,
-                    document=self.document_object
+                    document=self.document_object,
+                    #municipality_year=self.municipality_year
                 )
         if self.month:
             obj.month = self.month
@@ -161,8 +163,8 @@ class XLSXAppraBudget(object):
 
 class XLSXAppraRevenue(object):
     def __init__(self, document, model, definiton_model, month=None):
-        self.municipality = document.municipality
-        self.year = document.year
+        self.municipality = document.municipality_year.municipality
+        self.year = document.municipality_year.financial_year
         self.model = model
         self.document_object = document
         self.month = month

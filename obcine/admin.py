@@ -5,7 +5,7 @@ from mptt.admin import MPTTModelAdmin
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, Municipality,
     FinancialYear, PlannedExpenseDocument, RevenueDefinition, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue,
-    MonthlyRevenue, User, Task)
+    MonthlyRevenue, User, Task, YearlyExpenseDocument, YearlyRevenueDocument)
 
 # Register your models here.
 
@@ -64,10 +64,10 @@ class MunicipalityModelAdmin(admin.ModelAdmin):
     list_display = ['name']
 
     inlines = [
-        BudgetDocumentInlineAdmin,
-        MonthlyBudgetRealizationInlineAdmin,
-        RevenueDocumentInlineAdmin,
-        RevenueBudgetRealizationInlineAdmin
+        #BudgetDocumentInlineAdmin,
+        #MonthlyBudgetRealizationInlineAdmin,
+        #RevenueDocumentInlineAdmin,
+        #RevenueBudgetRealizationInlineAdmin
     ]
 
 
@@ -116,3 +116,6 @@ admin.site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
 admin.site.register(FinancialYear, FinancialYearModelAdmin)
 admin.site.register(Municipality, MunicipalityModelAdmin)
 admin.site.register(RevenueDefinition, RevenueDefinitionAdmin)
+
+admin.site.register(YearlyExpenseDocument)
+admin.site.register(YearlyRevenueDocument)

@@ -3,7 +3,7 @@
 <div class="table-breadcrumbs-container my-5">
   <div class="table-breadcrumbs-caption text-end mb-1 mx-3"><span>Delež in odstotek proračuna</span></div>
   <div class="table-breadcrumbs">
-    {% for parent in tree_parents|slice:":3" %}
+    {% for parent in tree_parents|slice:":4" %}
       <a href="#tabs;{{ parent.code|default_if_none:"" }}" class="breadcrumb-option">
         <div class="breadcrumb-selector"></div>
         <div class="breadcrumb-label">

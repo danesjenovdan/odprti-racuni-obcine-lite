@@ -121,12 +121,9 @@ class Task(Timestampable):
             self.save()
 
 
-class ParsableDocument(models.Model):
+class ParsableDocument(Timestampable):
     municipality_year = models.ForeignKey('MunicipalityFinancialYear', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('Municipality Financial Year'))
 
-    # TODO maybe remove next two fields
-    municipality = models.ForeignKey('Municipality', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('Municipality'))
-    year = models.ForeignKey('FinancialYear', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('Year'))
     file = models.FileField(
         verbose_name=_('File'),
         validators=[
@@ -162,9 +159,14 @@ class ParsableDocument(models.Model):
 
 class Municipality(Timestampable):
     name = models.TextField(verbose_name=_('Nemo of municipality'))
+    financial_years = models.ManyToManyField('FinancialYear', through='MunicipalityFinancialYear')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('Municipality')
+        verbose_name_plural = _('Municipality')
 
 
 class User(AbstractUser, Timestampable):
@@ -198,8 +200,11 @@ class FinancialYear(models.Model):
         ordering = ['name']
 
 class MunicipalityFinancialYear(models.Model):
-    financial_year = models.ForeignKey('FinancialYear', on_delete=models.PROTECT)
-    municipality = models.ForeignKey('Municipality', on_delete=models.PROTECT)
+    financial_year = models.ForeignKey('FinancialYear', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
+    municipality = models.ForeignKey('Municipality', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
+    adoption_date_of_budget = models.DateField(verbose_name=_('Datum sprejetja proračuna'), null=True, blank=True)
+    rebalans_date_of_budget = models.DateField(verbose_name=_('Datum rebalansa proračuna'), null=True, blank=True)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.municipality.name}: {self.financial_year.name}'
@@ -214,7 +219,7 @@ class FinancialCategory(MPTTModel):
     code = models.TextField(verbose_name=_('Code'))
 
     def __str__(self):
-        return self.name + ' ' + self.year.name
+        return self.name + ' ' #+ self.year.name
 
     def get_json_tree(self):
         return {
@@ -237,7 +242,7 @@ class FinancialCategory(MPTTModel):
         return {
             'name': self.name,
             'code': self.code,
-            'children': self.children,
+            'children': self.children if hasattr(self, 'children') else [],
             'amount': self.amount,
             'parent_id': self.parent_id
         }
@@ -291,7 +296,7 @@ class Revenue(models.Model):
 
 
 class PlannedRevenue(Revenue):
-    document = models.ForeignKey('PlannedRevenueDocument', on_delete=models.CASCADE)
+    document = models.ForeignKey('PlannedRevenueDocument', on_delete=models.CASCADE, related_name='children')
 
 
 class YearlyRevenue(Revenue):
@@ -305,10 +310,12 @@ class MonthlyRevenue(Revenue):
 
 class PlannedRevenueDocument(ParsableDocument):
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        # delete data if file reupload
+        self.children.all().delete()
         self.parse(
             parser=XLSXAppraRevenue,
             model=PlannedRevenue,
@@ -316,14 +323,14 @@ class PlannedRevenueDocument(ParsableDocument):
         )
 
     class Meta:
-        unique_together = ('municipality', 'year')
+        unique_together = ['municipality_year']
         verbose_name = _('Planned revenue document')
         verbose_name_plural = _('Planned revenue documents')
 
 
 class YearlyRevenueDocument(ParsableDocument):
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -334,7 +341,7 @@ class YearlyRevenueDocument(ParsableDocument):
         )
 
     class Meta:
-        unique_together = ('municipality', 'year')
+        unique_together = ['municipality_year']
         verbose_name = _('Yearly revenue document')
         verbose_name_plural = _('Yearly revenue documents')
 
@@ -343,7 +350,7 @@ class MonthlyRevenueDocument(ParsableDocument):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
 
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -355,7 +362,7 @@ class MonthlyRevenueDocument(ParsableDocument):
         )
 
     class Meta:
-        unique_together = ('municipality', 'year', 'month')
+        unique_together = ['municipality_year', 'month']
         verbose_name = _('Monthly revenue realization document')
         verbose_name_plural = _('Monthly revenue realization documents')
 
@@ -376,7 +383,7 @@ class Expense(FinancialCategory):
 
 
 class PlannedExpense(Expense):
-    document = models.ForeignKey('PlannedExpenseDocument', on_delete=models.CASCADE)
+    document = models.ForeignKey('PlannedExpenseDocument', on_delete=models.CASCADE, related_name='children')
     class Meta:
         verbose_name = _('Planned expense')
         verbose_name_plural = _('Planned expense')
@@ -399,17 +406,19 @@ class MonthlyExpense(Expense):
 
 class PlannedExpenseDocument(ParsableDocument):
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        # delete data if file reupload
+        self.children.all().delete()
         self.parse(
             parser=XLSXAppraBudget,
             model=PlannedExpense,
         )
 
     class Meta:
-        unique_together = ('municipality', 'year')
+        unique_together = ['municipality_year']
         verbose_name = _('Planned expense document')
         verbose_name_plural = _('Planned expense documents')
 
@@ -418,7 +427,7 @@ class MonthlyExpenseDocument(ParsableDocument):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
 
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -429,14 +438,14 @@ class MonthlyExpenseDocument(ParsableDocument):
         )
 
     class Meta:
-        unique_together = ('municipality', 'year', 'month')
+        unique_together = ['municipality_year', 'month']
         verbose_name = _('Monthly expense realization document')
         verbose_name_plural = _('Monthly expense realization documents')
 
 
 class YearlyExpenseDocument(ParsableDocument):
     def __str__(self):
-        return f'{self.year.name}'
+        return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -446,6 +455,6 @@ class YearlyExpenseDocument(ParsableDocument):
         )
 
     class Meta:
-        unique_together = ('municipality', 'year')
+        unique_together = ['municipality_year']
         verbose_name = _('Yearly expense document')
         verbose_name_plural = _('Yearly expense documents')
