@@ -18,6 +18,17 @@ def document_size_validator(value): # add this to some file where you can import
     if value.size > limit:
         raise ValidationError('Datoteka je prevelika. Največja možna velikost je 10 MB.')
 
+def image_validator(image):
+    limit = 1 * 1024 * 1024
+    if image.size > limit:
+        raise ValidationError('Slika je prevelika. Največja možna velikost je 1 MB.')
+
+def validate_image_extension(value):
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.jpg', '.jpeg', '.png']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Format slike ni veljaven ali pa je slika poškodovana.')
+
 class Months(models.IntegerChoices):
         JANUAR = 1
         FEBRUAR = 2
@@ -160,6 +171,11 @@ class ParsableDocument(Timestampable):
 class Municipality(Timestampable):
     name = models.TextField(verbose_name=_('Nemo of municipality'))
     financial_years = models.ManyToManyField('FinancialYear', through='MunicipalityFinancialYear')
+    link = models.URLField(null=True, blank=True, verbose_name=_('Organization\'s link'))
+    logo = models.ImageField(
+        null=True, blank=True,
+        verbose_name=_('Logo'),
+        validators=[image_validator, validate_image_extension])
 
     def __str__(self):
         return self.name

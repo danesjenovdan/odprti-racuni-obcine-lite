@@ -184,11 +184,17 @@ class MonthlyRevenueRealizatioObcineAdmin(LimitedAdmin):
             return 'Napaka pri izbiri konta'
 
 
-class MunicipalityModelAdmin(LimitedAdmin):
+class MunicipalityModelAdmin(admin.ModelAdmin):
     list_display = ['name']
 
     def response_change(self, request, obj):
         return redirect('/admin/')
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if not request.user.municipality or request.user.is_superuser:
+            return qs
+        return qs.filter(id=request.user.municipality.id)
 
 
 class AdminSite(admin.AdminSite):
