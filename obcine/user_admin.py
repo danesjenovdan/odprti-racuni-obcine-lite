@@ -1,6 +1,7 @@
 from django.contrib import admin, messages
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
     PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
@@ -109,6 +110,8 @@ class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
 class MunicipalityFinancialYearAdmin(LimitedAdmin):
     list_display = ['year', 'is_published']
     exclude = ['municipality', 'financial_year']
+    fields = ['adoption_date_of_budget', 'rebalans_date_of_budget', 'is_published', 'page_url']
+    readonly_fields = ['page_url']
     inlines = [
         BudgetDocumentInlineAdmin,
         MonthlyBudgetRealizationInlineAdmin,
@@ -119,6 +122,10 @@ class MunicipalityFinancialYearAdmin(LimitedAdmin):
     ]
     def year(self, obj):
         return obj.financial_year.name
+
+    def page_url(self, obj):
+        return mark_safe(f'<a href="/pregled/{obj.municipality.id}/">Povezava do spletnega mesta</a>')
+
 
     def save_formset(self, request, form, formset, change):
         """
@@ -131,6 +138,9 @@ class MunicipalityFinancialYearAdmin(LimitedAdmin):
             instance.municipality = request.user.municipality
             instance.save()
         formset.save_m2m()
+
+    page_url.allow_tags = True
+    page_url.short_description = _("Povezava")
 
 
 class FinancialYearModelAdmin(admin.ModelAdmin):
