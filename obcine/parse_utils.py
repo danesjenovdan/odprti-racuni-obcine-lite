@@ -158,6 +158,7 @@ class XLSXAppraBudget(object):
             budget_item.amount = sum([item.amount for item in budget_item.get_children()])
             budget_item.save()
 
+        self.municipality_year.save()
         print("--- %s seconds ---" % (time.time() - start_time))
 
 
@@ -165,6 +166,7 @@ class XLSXAppraRevenue(object):
     def __init__(self, document, model, definiton_model, month=None):
         self.municipality = document.municipality_year.municipality
         self.year = document.municipality_year.financial_year
+        self.municipality_year = document.municipality_year
         self.model = model
         self.document_object = document
         self.month = month
@@ -213,6 +215,8 @@ class XLSXAppraRevenue(object):
                 amount=k6_amount
             )
             k6.save()
+
+        self.municipality_year.save()
 
 # class XLSParser(object):
 #     def __init__(self):

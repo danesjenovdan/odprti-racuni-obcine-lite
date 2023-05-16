@@ -215,7 +215,7 @@ class FinancialYear(models.Model):
         verbose_name_plural = _('Financial years')
         ordering = ['name']
 
-class MunicipalityFinancialYear(models.Model):
+class MunicipalityFinancialYear(Timestampable):
     financial_year = models.ForeignKey('FinancialYear', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
     municipality = models.ForeignKey('Municipality', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
     adoption_date_of_budget = models.DateField(verbose_name=_('Datum sprejetja proračuna'), null=True, blank=True)
@@ -299,7 +299,7 @@ class RevenueDefinition(MPTTModel):
         }
 
 
-class Revenue(models.Model):
+class Revenue(Timestampable):
     name = models.CharField(max_length=256, verbose_name=_('Name'))
     code = models.TextField(verbose_name=_('Code'))
     definition = models.ForeignKey('RevenueDefinition', on_delete=models.CASCADE, related_name='%(class)s_related', verbose_name=_('RevenueDefinition'), null=True)

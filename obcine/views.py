@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from obcine.models import (
     FinancialYear,
@@ -11,6 +12,7 @@ from obcine.models import (
     RevenueDefinition,
     YearlyExpense,
     YearlyRevenue,
+    MunicipalityFinancialYear,
 )
 from obcine.tree_utils import ExpenseTreeBuilder, RevenueTreeBuilder
 
@@ -21,12 +23,24 @@ def get_year(year_id):
     else:
         return FinancialYear.objects.last()
 
-
 def get_tree_type(query_dict):
     return "expenses" if query_dict.get("type", "") == "expenses" else "revenue"
 
+def get_cache_key(municipality, year, endpoint, type):
+    mfy = MunicipalityFinancialYear.objects.filter(
+        financial_year=year,
+        municipality=municipality
+    ).first()
+    cache_key = f'{endpoint}_{type}_{municipality.id}_{year.id}_{mfy.updated_at.isoformat()}'
+    return cache_key
 
 def get_summary(municipality, year, summary_type="monthly"):
+    summary_cache_key = get_cache_key(municipality, year, 'summary', summary_type)
+
+    data = cache.get(summary_cache_key)
+    if data:
+        return data
+
     rtb = RevenueTreeBuilder(
         RevenueDefinition,
         municipality=municipality,
@@ -66,10 +80,17 @@ def get_summary(municipality, year, summary_type="monthly"):
             summary[key] / summary_max_value if summary_max_value > 0 else 0
         )
 
+    cache.set(summary_cache_key, summary)
+
     return summary
 
-
 def get_revenue_tree(municipality, year, summary, summary_type="monthly"):
+    revenue_tree_cache_key = get_cache_key(municipality, year, 'revenue_tree', summary_type)
+
+    data = cache.get(revenue_tree_cache_key)
+    if data:
+        return data
+
     rtb = RevenueTreeBuilder(
         RevenueDefinition,
         municipality=municipality,
@@ -82,7 +103,7 @@ def get_revenue_tree(municipality, year, summary, summary_type="monthly"):
             MonthlyRevenue,
         )
 
-        return {
+        data = {
             "planned": summary["planned_revenue"],
             "realized": summary["realized_revenue"],
             "name": "Celotni prihodki",
@@ -93,15 +114,24 @@ def get_revenue_tree(municipality, year, summary, summary_type="monthly"):
     elif summary_type == "yearly":
         realized_revenue = rtb.get_revenue_tree(YearlyRevenue)
 
-        return {
+        data = {
             "realized": summary["realized_revenue"],
             "name": "Celotni prihodki",
             "code": None,
             "children": realized_revenue,
         }
+    else:
+        raise TypeError
 
+    cache.set(revenue_tree_cache_key, data)
+    return data
 
 def get_expense_tree(municipality, year, summary, summary_type="monthly"):
+    expense_tree_cache_key = get_cache_key(municipality, year, 'expense_tree', summary_type)
+    data = cache.get(expense_tree_cache_key)
+    if data:
+        return data
+
     etb = ExpenseTreeBuilder(
         municipality=municipality,
         financial_year=year,
@@ -113,7 +143,7 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
             MonthlyExpense,
         )
 
-        return {
+        data = {
             "planned": summary["planned_expenses"],
             "realized": summary["realized_expenses"],
             "name": "Celotni odhodki",
@@ -124,14 +154,18 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
     elif summary_type == "yearly":
         realized_expenses = etb.get_expense_tree(YearlyExpense)
 
-        return {
+        data = {
             "realized": summary["realized_expenses"],
             "name": "Celotni odhodki",
             "code": None,
             "children": realized_expenses,
         }
+    else:
+        raise TypeError
 
-@cache_page(60 * 60 * 24)
+    cache.set(expense_tree_cache_key, data)
+    return data
+
 def overview(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -149,7 +183,6 @@ def overview(request, municipality_id, year_id=None):
         },
     )
 
-@cache_page(60 * 60 * 24)
 def cut_of_funds(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -175,7 +208,6 @@ def cut_of_funds(request, municipality_id, year_id=None):
         },
     )
 
-@cache_page(60 * 60 * 24)
 def cut_of_funds_table(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -228,7 +260,6 @@ def cut_of_funds_table(request, municipality_id, year_id=None):
         },
     )
 
-@cache_page(60 * 60 * 24)
 def comparison_over_time(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
@@ -244,11 +275,11 @@ def comparison_over_time(request, municipality_id, year_id=None):
         },
     )
 
-@cache_page(60 * 60 * 24)
 def comparison_over_time_table(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
     year = get_year(year_id)
     tree_type = get_tree_type(request.GET)
+    summary = []
 
     current_tree_data = []
     current_tree_parents = []
