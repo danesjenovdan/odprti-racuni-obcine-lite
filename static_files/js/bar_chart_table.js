@@ -11,10 +11,11 @@
     });
   }
 
-  const tableContainerElem = document.getElementById("js-table-container");
-  if (tableContainerElem) {
-    tableContainerElem.style.minHeight = "60vh";
-    tableContainerElem.addEventListener("click", onTableRowClick, true);
+  const breadcrumbsElem = document.getElementById("js-breadcrumbs-container");
+  const tableElem = document.getElementById("js-table-container");
+  if (tableElem) {
+    tableElem.style.minHeight = "60vh";
+    tableElem.addEventListener("click", onTableRowClick, true);
     fetchTable(window.location.search, window.location.hash);
   }
 
@@ -81,7 +82,23 @@
         }
       )
       .then((text) => {
-        tableContainerElem.innerHTML = text;
+        const template = document.createElement("template");
+        template.innerHTML = text;
+
+        const breadcrumbs = template.content.querySelector(
+          ".table-breadcrumbs-container"
+        );
+        if (breadcrumbs) {
+          breadcrumbsElem.innerText = "";
+          breadcrumbsElem.appendChild(breadcrumbs);
+        }
+
+        const table = template.content.querySelector(".bar-chart-table");
+        if (table) {
+          tableElem.innerText = "";
+          tableElem.appendChild(table);
+        }
+
         if (scrollOnLoad && scrollToElem) {
           scrollToElem.scrollIntoView({
             behavior: "instant",
@@ -89,7 +106,7 @@
             inline: "start",
           });
         }
-        tableContainerElem.querySelectorAll("tr").forEach((tr) => {
+        tableElem.querySelectorAll("tr").forEach((tr) => {
           revealObserver.observe(tr);
         });
       });
