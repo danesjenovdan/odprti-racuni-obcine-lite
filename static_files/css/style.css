@@ -528,6 +528,12 @@ a.box-link:hover {
   color: inherit;
   text-decoration: none;
 }
+.table-breadcrumbs-container .table-breadcrumbs--1 .breadcrumb-option {
+  flex-basis: 25%;
+}
+.table-breadcrumbs-container .table-breadcrumbs--2 .breadcrumb-option {
+  flex-basis: 20%;
+}
 
 .breadcrumb-option + .breadcrumb-option::before {
   content: "";
