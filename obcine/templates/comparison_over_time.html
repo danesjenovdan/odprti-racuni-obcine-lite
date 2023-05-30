@@ -24,6 +24,7 @@
       <a name="table"></a>
       <div class="col">
         <div id="js-breadcrumbs-container"></div>
+        {% include "comparison_stacked_area_chart.html" %}
         <div id="js-table-container"></div>
       </div>
       <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_id=municipality_id year_id=year.id %}";</script>

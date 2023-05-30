@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
+from django.http import JsonResponse
 
 from obcine.models import (
     FinancialYear,
@@ -220,6 +221,7 @@ def comparison_over_time(request, municipality_id, year_id=None):
             "municipality": municipality,
             "year": year,
             "tree_type": tree_type,
+            "years": FinancialYear.objects.all(),  # TODO: only show valid years for this municipality
         },
     )
 
@@ -285,51 +287,28 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
         get_context_for_table_code(request, municipality_id, year_id),
     )
 
+def comparison_over_time_chart_data(request, municipality_id, year_id=None):
+    municipality = Municipality.objects.get(id=municipality_id)
+    year = get_year(year_id)
+    tree_type = get_tree_type(request.GET)
 
- # current_tree_data = []
-    # current_tree_parents = []
-    # years_data = {}
+    years_data = {}
+    years = FinancialYear.objects.all()  # TODO: only show valid years for this municipality
     # years = municipality.financial_years.filter(municipalityfinancialyears__is_published=True)
-    # for year_ in years:
-    #     summary_type = "monthly"  if year_.is_current() else "yearly"
-    #     summary = get_summary(municipality, year_, summary_type)
 
-    #     tree_data = []
-    #     tree_parents = []
+    for year_ in years:
+        summary_type = "monthly" if year_.is_current() else "yearly"
+        summary = get_summary(municipality, year_, summary_type=summary_type)
 
-    #     if tree_type == "expenses":
-    #         tree_data = get_expense_tree(municipality, year_, summary, summary_type)
-    #     else:
-    #         tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
+        if tree_type == "expenses":
+            tree_data = get_expense_tree(municipality, year_, summary, summary_type)
+        else:
+            tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
 
-        # #TODO Tole probi deprecatat
+        years_data[year_.name] = tree_data["children"]
 
-        # def find_code(code, parent_chain, node):
-        #     if node["code"] == code:
-        #         return node, parent_chain
-
-        #     if children := node.get("children", []):
-        #         for child in children:
-        #             found, found_parent_chain = find_code(
-        #                 code, [*parent_chain, node], child
-        #             )
-        #             if found:
-        #                 return found, found_parent_chain
-
-        #     return None, None
-
-        # code = request.GET.get("code", None)
-        # if code:
-        #     found_code_data, found_parent_chain = find_code(
-        #         code, [{"code": None}], tree_data
-        #     )
-        #     if found_code_data:
-        #         tree_parents = found_parent_chain[1:]
-        #         tree_data = found_code_data
-
-        #print(tree_data)
-
-        # years_data[year_.name] = tree_data["children"]
-        # if year_ == year:
-        #     current_tree_data = tree_data
-        #     current_tree_parents = tree_parents
+    return JsonResponse({
+        "year": year.name,
+        "years_data": years_data,
+        "tree_type": tree_type,
+    })
