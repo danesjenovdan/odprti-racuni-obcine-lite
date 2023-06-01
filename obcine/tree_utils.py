@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from mptt.utils import get_cached_trees
 
 
 def build_tree(definiton_storage, items):
@@ -44,6 +45,29 @@ def build_merged_tree(definiton_storage, items):
     else:
         return parent_level
 
+
+def get_nested_dictionary_from_tree(queryset, remove_amount):
+        roots = get_cached_trees(queryset)
+
+        def form_a_tree(objects):
+            tree = dict()
+
+            for obj in objects:
+                children = obj.get_children()
+                dictionary_category_tree = obj.get_offline_dict_keyed_children()
+                if remove_amount:
+                    dictionary_category_tree['realized'] = 0
+                    dictionary_category_tree['planned'] = dictionary_category_tree['amount']
+                    dictionary_category_tree.pop('amount')
+
+                if children:
+                    dictionary_category_tree.update({'children': form_a_tree(children)})
+
+                tree[dictionary_category_tree['code']] = dictionary_category_tree
+
+            return tree
+
+        return form_a_tree(roots)
 
 class RevenueTreeBuilder:
     def __init__(
@@ -136,19 +160,6 @@ class ExpenseTreeBuilder:
             year=self.financial_year,
         )
         self.definiton_storage = {expense.id: expense for expense in expenses}
-        # expenses = (
-        #     expenses.filter(level=4)
-        #     .values("code", "parent", "amount")
-        #     .annotate(sum_amount=Sum("amount"))
-        # )
-
-        # leaves = []
-        # for expense in expenses:
-        #     item = self.definiton_storage[expense["parent"]]
-        #     item.amount = expense["sum_amount"]
-        #     item.children = []
-        #     leaves.append(item.get_offline_dict())
-
         return list(build_tree(self.definiton_storage, [expanse.get_offline_dict() for expanse in expenses.filter(level=4)]).values())
 
     def get_merged_expense_tree(self, planned_data_model, realized_data_model):
@@ -156,41 +167,31 @@ class ExpenseTreeBuilder:
             municipality=self.municipality,
             year=self.financial_year,
         )
-        self.definiton_storage = {expense.id: expense for expense in planned_expenses}
-        # planned_expenses = (
-        #     planned_expenses.filter(level=4)
-        #     .values("code", "parent", "amount")
-        #     .annotate(sum_amount=Sum("amount"))
-        # )
-
         realized_expenses = realized_data_model.objects.filter(
             municipality=self.municipality,
             year=self.financial_year,
         )
-        realized_expenses = (
-            realized_expenses.filter(level=4)
-            .values("code", "parent", "amount")
-            .annotate(sum_amount=Sum("amount"))
-        )
-        realized_dict = {item["code"]: item["amount"] for item in realized_expenses}
-
-        # leaves = []
-        # for expense in planned_expenses:
-        #     item = self.definiton_storage[expense["parent"]]
-        #     item.amount = expense["sum_amount"]
-        #     item.children = []
-        #     item_dict = item.get_offline_dict()
-        #     item_dict["planned"] = item_dict.pop("amount")
-        #     item_dict["realized"] = realized_dict.get(item_dict["code"], 0)
-        #     leaves.append(item_dict)
+        planned_tree = get_nested_dictionary_from_tree(planned_expenses, remove_amount=True)
+        realized_tree = get_nested_dictionary_from_tree(realized_expenses, remove_amount=False)
 
 
-        leaves = []
-        for planned in planned_expenses.filter(level=4):
-            item_dict = planned.get_offline_dict()
-            item_dict["planned"] = item_dict.pop("amount")
-            item_dict["realized"] = realized_dict.get(item_dict["code"], 0)
-            leaves.append(item_dict)
+        def update_realized(subtree, realized_subtree):
+            for item in subtree.values():
+                if item['code'] in realized_subtree.keys():
+                    item['realized'] = realized_subtree[item['code']]['amount']
+                    if 'children' in item.keys():
+                        update_realized(item['children'], realized_subtree[item['code']]['children'])
 
 
-        return list(build_merged_tree(self.definiton_storage, leaves).values())
+        def listify_children(tree):
+            print('listify')
+            tree = list(tree.values())
+            for item in tree:
+                if 'children' in item.keys():
+                    item['children'] = listify_children(item['children'])
+            return list(tree)
+
+        update_realized(planned_tree, realized_tree)
+
+        planned_tree = listify_children(planned_tree)
+        return planned_tree

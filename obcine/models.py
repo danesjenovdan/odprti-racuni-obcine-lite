@@ -262,6 +262,17 @@ class FinancialCategory(MPTTModel):
             'amount': self.amount,
             'parent_id': self.parent_id
         }
+    def get_offline_dict_keyed_children(self):
+        """
+        This method is used for generate modifed revenue dictionary
+        """
+        return {
+            'name': self.name,
+            'code': self.code,
+            'children': {i['code']: i for i in self.children} if hasattr(self, 'children') else {},
+            'amount': self.amount,
+            'parent_id': self.parent_id
+        }
 
     class Meta:
         abstract = True
@@ -294,6 +305,18 @@ class RevenueDefinition(MPTTModel):
             'name': self.name,
             'code': self.code,
             'children': self.children,
+            'amount': self.amount,
+            'parent_id': self.parent_id
+        }
+
+    def get_offline_dict_keyed_children(self):
+        """
+        This method is used for generate modifed revenue dictionary
+        """
+        return {
+            'name': self.name,
+            'code': self.code,
+            'children': {i['code']: i for i in self.children},
             'amount': self.amount,
             'parent_id': self.parent_id
         }

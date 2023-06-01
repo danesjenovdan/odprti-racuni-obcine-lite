@@ -31,6 +31,18 @@ class XLSXAppraBudget(object):
         book = xlrd.open_workbook(file_path)
         sheet = book.sheet_by_index(0)
 
+        if self.month != 'None':
+            # delete previous monthly data
+            self.model.objects.filter(
+                year=self.year,
+                municipality=self.municipality
+            ).delete()
+
+            # delete previous montly documents
+            self.document_object.__class__.objects.filter(
+                municipality_year=self.municipality_year,
+            ).exclude(month=self.month).delete()
+
         nodes = {}
         node_keys = []
         i=0
@@ -190,6 +202,19 @@ class XLSXAppraRevenue(object):
         return obj
 
     def parse_file(self, file_path='files/proracun_apra.xlsx'):
+
+        if self.month != 'None':
+            # delete previous monthly data
+            self.model.objects.filter(
+                year=self.year,
+                municipality=self.municipality
+            ).delete()
+
+            # delete previous montly documents
+            self.document_object.__class__.objects.filter(
+                municipality_year=self.municipality_year,
+            ).exclude(month=self.month).delete()
+
         book = xlrd.open_workbook(file_path)
         sheet = book.sheet_by_index(0)
 
