@@ -26,7 +26,10 @@
     </div>
     <div class="row">
       <a name="table"></a>
-      <div class="col" id="js-table-container"></div>
+      <div class="col">
+        <div id="js-breadcrumbs-container"></div>
+        <div id="js-table-container"></div>
+      </div>
       <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'cut_of_funds_table' municipality_id=municipality_id year_id=year.id %}";</script>
       <script src="{% static 'js/bar_chart_table.js' %}"></script>
     </div>

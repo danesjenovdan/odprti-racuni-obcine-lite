@@ -13,4 +13,5 @@ urlpatterns = [
     path('prikaz-sredstav-skozi-cas/<int:municipality_id>/', views.comparison_over_time, name='comparison_over_time'),
     path('prikaz-sredstav-skozi-cas/<int:municipality_id>/<int:year_id>/', views.comparison_over_time, name='comparison_over_time'),
     path('prikaz-sredstav-skozi-cas/<int:municipality_id>/<int:year_id>/table/', views.comparison_over_time_table, name='comparison_over_time_table'),
+    path('prikaz-sredstav-skozi-cas/<int:municipality_id>/<int:year_id>/chart_data/', views.comparison_over_time_chart_data, name='comparison_over_time_chart_data'),
 ]

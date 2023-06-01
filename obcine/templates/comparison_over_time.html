@@ -22,21 +22,13 @@
     </div>
     <div class="row">
       <a name="table"></a>
-      <div class="col" id="js-table-container"></div>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js"
-        integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-      ></script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.min.js"
-        integrity="sha512-Zjnjh2DCl/MrwdZ8FNp25vSbXac3yWUWoMn0CL8qQ/K11HGv7cJ9RGNUiojnSfqVtwbGf+eyqEEjiw2hlHd6iQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-      ></script>
-      <script>window.__COMPARISON_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_id=municipality_id year_id=year.id %}";</script>
-      <script src="{% static 'js/comparison_chart_table.js' %}"></script>
+      <div class="col">
+        <div id="js-breadcrumbs-container"></div>
+        {% include "comparison_stacked_area_chart.html" %}
+        <div id="js-table-container"></div>
+      </div>
+      <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_id=municipality_id year_id=year.id %}";</script>
+      <script src="{% static 'js/bar_chart_table.js' %}"></script>
     </div>
   </div>
 </section>
