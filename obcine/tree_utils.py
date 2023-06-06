@@ -90,7 +90,6 @@ class RevenueTreeBuilder:
         revenues = revenues.values(
             "code",
             self.leaf_parent_key,
-            "amount",
         ).annotate(
             sum_amount=Sum("amount"),
         )
@@ -115,7 +114,6 @@ class RevenueTreeBuilder:
         planned_revenues = planned_revenues.values(
             "code",
             self.leaf_parent_key,
-            "amount",
         ).annotate(
             sum_amount=Sum("amount"),
         )
@@ -127,11 +125,10 @@ class RevenueTreeBuilder:
         realized_revenues = realized_revenues.values(
             "code",
             self.leaf_parent_key,
-            "amount",
         ).annotate(
             sum_amount=Sum("amount"),
         )
-        realized_dict = {item["code"]: item["amount"] for item in realized_revenues}
+        realized_dict = {item["code"]: item["sum_amount"] for item in realized_revenues}
 
         leaves = []
         definiton_keys = self.definiton_storage.keys()

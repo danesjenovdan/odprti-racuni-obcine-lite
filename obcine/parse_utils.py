@@ -187,14 +187,15 @@ class XLSXAppraRevenue(object):
         self.definitons = {d.code: d for d in definitons_qeryset}
 
 
-    def prepare_moodel(self, name, code,amount):
+    def prepare_moodel(self, name, code, amount):
+        konto_6 = code[:6]
         obj = self.model(
                     name=name,
-                    code=code,
+                    code=konto_6,
                     municipality=self.municipality,
                     year=self.year,
                     document=self.document_object,
-                    definition=self.definitons.get(code, None),
+                    definition=self.definitons.get(konto_6, None),
                     amount=amount,
                 )
         if self.month:
