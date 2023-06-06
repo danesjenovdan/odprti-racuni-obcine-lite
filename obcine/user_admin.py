@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
     PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
-    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument, Municipality)
+    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument, Municipality, Instructions)
 from obcine.filters import SimpleFinanceYearListFilter
 
 
@@ -209,6 +209,55 @@ class MunicipalityModelAdmin(admin.ModelAdmin):
 
 class AdminSite(admin.AdminSite):
     site_header = _('Nadzorna plošča')
+
+    def each_context(self, request):
+        url_attrs = []
+        preview = ''
+
+        # show misisng data as error
+        try:
+            organization = request.user.organization
+        except:
+            organization = None
+
+        url_name = request.resolver_match.url_name
+        url_attrs = url_name.split('_')
+
+        context = super().each_context(request)
+
+        # insert instructions
+        instructions = ''
+        if url_attrs[0] == 'login':
+            pass
+        elif url_attrs[0] == 'logout':
+            pass
+        elif len(url_attrs) == 1:
+            if request.user and request.user.organization:
+                preview = f'/{request.user.organization.id}/'
+            instructions = Instructions.objects.filter(model=None).first()
+            if instructions and instructions.list_instructions:
+                instructions = instructions.list_instructions
+            else:
+                instructions = ''
+        elif len(url_attrs) == 3:
+            instructions = Instructions.objects.filter(
+                model__model__iexact=url_attrs[1]
+            )
+            if instructions:
+                if url_attrs[2] == 'change':
+                    instructions = instructions[0].edit_instructions
+                elif url_attrs[2] == 'add':
+                    instructions = instructions[0].add_instructions
+                else:
+                    instructions = instructions[0].list_instructions
+            else:
+                instructions = ''
+
+        context.update({
+            'instructions': instructions,
+            'preview': preview
+        })
+        return context
 
     def get_app_list(self, request, app_label=None):
         app_list = list(self._build_app_dict(request, app_label).values())

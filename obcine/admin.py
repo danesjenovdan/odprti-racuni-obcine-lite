@@ -6,8 +6,7 @@ from mptt.admin import MPTTModelAdmin
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, Municipality,
     FinancialYear, PlannedExpenseDocument, RevenueDefinition, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue,
     MonthlyRevenue, User, Task, YearlyExpenseDocument, YearlyRevenueDocument, YearlyExpense, YearlyRevenue,
-    MunicipalityFinancialYear)
-
+    MunicipalityFinancialYear, Instructions)
 
 # Register your models here.
 
@@ -45,32 +44,40 @@ class RevenueDefinitionAdmin(MPTTModelAdmin):
 class DocumentTabularInline(admin.TabularInline):
     exclude = ['municipality', 'year']
 
-class BudgetDocumentInlineAdmin(DocumentTabularInline):
+class ExpenseDocumentTabularInline(DocumentTabularInline):
+    pass
+
+class RevenueTabularInline(DocumentTabularInline):
+    pass
+
+
+class BudgetDocumentInlineAdmin(ExpenseDocumentTabularInline):
     model = PlannedExpenseDocument
     extra = 0
 
 
-class MonthlyBudgetRealizationInlineAdmin(DocumentTabularInline):
+class MonthlyBudgetRealizationInlineAdmin(ExpenseDocumentTabularInline):
     model = MonthlyExpenseDocument
     extra = 0
 
 
-class RevenueDocumentInlineAdmin(DocumentTabularInline):
+class YearlyBudgetRealizationInlineAdmin(ExpenseDocumentTabularInline):
+    model = YearlyExpenseDocument
+    extra = 0
+
+
+class RevenueDocumentInlineAdmin(RevenueTabularInline):
     model = PlannedRevenueDocument
     extra = 0
 
 
-class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
+class RevenueRealizationInlineAdmin(RevenueTabularInline):
     model = MonthlyRevenueDocument
     extra = 0
 
 
-class YearlyRevenueDocumentInlineAdmin(DocumentTabularInline):
+class YearlyRevenueDocumentInlineAdmin(RevenueTabularInline):
     model = YearlyRevenueDocument
-    extra = 0
-
-class YearlyBudgetRealizationInlineAdmin(DocumentTabularInline):
-    model = YearlyExpenseDocument
     extra = 0
 
 
@@ -139,7 +146,7 @@ class MunicipalityFinancialYearAdmin(admin.ModelAdmin):
         MonthlyBudgetRealizationInlineAdmin,
         YearlyBudgetRealizationInlineAdmin,
         RevenueDocumentInlineAdmin,
-        RevenueBudgetRealizationInlineAdmin,
+        RevenueRealizationInlineAdmin,
         YearlyRevenueDocumentInlineAdmin
     ]
     def year(self, obj):
@@ -156,6 +163,14 @@ class MunicipalityFinancialYearAdmin(admin.ModelAdmin):
             instance.municipality = request.user.municipality
             instance.save()
         formset.save_m2m()
+
+class InstructionsAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        # TODO
+        # if Instructions.objects.filter(model=obj.model):
+        #     messages.add_message(request, messages.ERROR, 'Instrucations for this model alredy exists')
+        # else:
+        super().save_model(request, obj, form, change)
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Task, TaskAdmin)
@@ -174,3 +189,5 @@ admin.site.register(Municipality, MunicipalityModelAdmin)
 admin.site.register(RevenueDefinition, RevenueDefinitionAdmin)
 
 admin.site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
+
+admin.site.register(Instructions, InstructionsAdmin)

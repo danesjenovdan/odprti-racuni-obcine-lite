@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'mptt',
     "debug_toolbar",
     'jsonify',
+    'martor',
     # apps
     'obcine',
 ]
@@ -78,7 +79,9 @@ ROOT_URLCONF = 'odprti_racuni_obcine.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,6 +126,7 @@ TIME_ZONE = 'Europe/Ljubljana'
 USE_I18N = True
 
 USE_TZ = True
+
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale')

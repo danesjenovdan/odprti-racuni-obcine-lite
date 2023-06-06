@@ -2,32 +2,24 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+
 from importlib import import_module
 
 from mptt.models import MPTTModel, TreeForeignKey
+from martor.models import MartorField
 
 from datetime import datetime
 
 from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue, download_file
-
-
-def document_size_validator(value): # add this to some file where you can import it from
-    limit = 10 * 1024 * 1024
-    if value.size > limit:
-        raise ValidationError('Datoteka je prevelika. Največja možna velikost je 10 MB.')
-
-def image_validator(image):
-    limit = 1 * 1024 * 1024
-    if image.size > limit:
-        raise ValidationError('Slika je prevelika. Največja možna velikost je 1 MB.')
-
-def validate_image_extension(value):
-    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
-    valid_extensions = ['.jpg', '.jpeg', '.png']
-    if not ext.lower() in valid_extensions:
-        raise ValidationError('Format slike ni veljaven ali pa je slika poškodovana.')
+from obcine.validators import (
+    document_size_validator,
+    image_validator,
+    validate_image_extension,
+    validate_expanse_file,
+    validate_revenue_file
+)
 
 class Months(models.IntegerChoices):
         JANUAR = 1
@@ -167,6 +159,31 @@ class ParsableDocument(Timestampable):
     class Meta:
         abstract = True
 
+class RevenueParsableDocument(ParsableDocument):
+    file = models.FileField(
+        verbose_name=_('File'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=['xlsx']),
+            document_size_validator,
+            validate_revenue_file
+        ]
+    )
+
+    class Meta:
+        abstract = True
+
+class ExpenseParsableDocument(ParsableDocument):
+    file = models.FileField(
+        verbose_name=_('File'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=['xlsx']),
+            document_size_validator,
+            validate_expanse_file
+        ]
+    )
+
+    class Meta:
+        abstract = True
 
 class Municipality(Timestampable):
     name = models.TextField(verbose_name=_('Nemo of municipality'))
@@ -347,7 +364,7 @@ class MonthlyRevenue(Revenue):
     document = models.ForeignKey('MonthlyRevenueDocument', on_delete=models.CASCADE)
 
 
-class PlannedRevenueDocument(ParsableDocument):
+class PlannedRevenueDocument(RevenueParsableDocument):
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -367,7 +384,7 @@ class PlannedRevenueDocument(ParsableDocument):
         verbose_name_plural = _('Planned revenue documents')
 
 
-class YearlyRevenueDocument(ParsableDocument):
+class YearlyRevenueDocument(RevenueParsableDocument):
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -385,7 +402,7 @@ class YearlyRevenueDocument(ParsableDocument):
         verbose_name_plural = _('Yearly revenue documents')
 
 
-class MonthlyRevenueDocument(ParsableDocument):
+class MonthlyRevenueDocument(RevenueParsableDocument):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
 
     def __str__(self):
@@ -443,7 +460,7 @@ class MonthlyExpense(Expense):
         verbose_name_plural = _('Monthly expense')
 
 
-class PlannedExpenseDocument(ParsableDocument):
+class PlannedExpenseDocument(ExpenseParsableDocument):
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -462,7 +479,7 @@ class PlannedExpenseDocument(ParsableDocument):
         verbose_name_plural = _('Planned expense documents')
 
 
-class MonthlyExpenseDocument(ParsableDocument):
+class MonthlyExpenseDocument(ExpenseParsableDocument):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
 
     def __str__(self):
@@ -482,7 +499,7 @@ class MonthlyExpenseDocument(ParsableDocument):
         verbose_name_plural = _('Monthly expense realization documents')
 
 
-class YearlyExpenseDocument(ParsableDocument):
+class YearlyExpenseDocument(ExpenseParsableDocument):
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -497,3 +514,20 @@ class YearlyExpenseDocument(ParsableDocument):
         unique_together = ['municipality_year']
         verbose_name = _('Yearly expense document')
         verbose_name_plural = _('Yearly expense documents')
+
+
+class Instructions(models.Model):
+    model = models.ForeignKey(ContentType, null=True, blank=True, on_delete=models.CASCADE, verbose_name=_('Model'))
+    list_instructions = MartorField(null=True, blank=True, verbose_name=_('Instructions for list of objects'))
+    add_instructions = MartorField(null=True, blank=True, verbose_name=_('Instructions for adding object'))
+    edit_instructions = MartorField(null=True, blank=True, verbose_name=_('Instructions for edit single object'))
+
+    def __str__(self):
+        if self.model:
+            return f'{self.model}'
+        else:
+            return 'Landing'
+
+    class Meta:
+        verbose_name = _('Instructions')
+        verbose_name_plural = _('Instructions')
