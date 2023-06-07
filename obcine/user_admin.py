@@ -214,12 +214,6 @@ class AdminSite(admin.AdminSite):
         url_attrs = []
         preview = ''
 
-        # show misisng data as error
-        try:
-            organization = request.user.organization
-        except:
-            organization = None
-
         url_name = request.resolver_match.url_name
         url_attrs = url_name.split('_')
 
@@ -232,8 +226,6 @@ class AdminSite(admin.AdminSite):
         elif url_attrs[0] == 'logout':
             pass
         elif len(url_attrs) == 1:
-            if request.user and request.user.organization:
-                preview = f'/{request.user.organization.id}/'
             instructions = Instructions.objects.filter(model=None).first()
             if instructions and instructions.list_instructions:
                 instructions = instructions.list_instructions
