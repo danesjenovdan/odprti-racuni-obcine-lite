@@ -20,7 +20,6 @@ from obcine.user_admin import admin_site
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('obcine-admin/', admin_site.urls),
-    path('__debug__/', include('debug_toolbar.urls')),
     path('martor/', include('martor.urls')),
     path('', include('obcine.urls')),
 ]

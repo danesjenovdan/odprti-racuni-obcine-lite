@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party apps
     'mptt',
-    "debug_toolbar",
     'jsonify',
     'martor',
     # apps
@@ -71,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'odprti_racuni_obcine.urls'
@@ -188,3 +186,17 @@ if sentry_url := os.getenv('DJANGO_SENTRY_URL', False):
         traces_sample_rate=0.1,
         send_default_pii=True,
     )
+
+# Global martor settings
+# Input: string boolean, `true/false`
+MARTOR_ENABLE_CONFIGS = {
+    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
+    'living': 'true',       # to enable/disable live updates in preview
+}
+
+MARTOR_ENABLE_LABEL = True
+
+MARTOR_TOOLBAR_BUTTONS = [
+    'bold', 'italic', 'unordered-list', 'ordered-list',
+    'link', 'toggle-maximize', 'help'
+]
