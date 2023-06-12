@@ -7,18 +7,18 @@ import xlrd
 def document_size_validator(value): # add this to some file where you can import it from
     limit = 10 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError('Datoteka je prevelika. Največja možna velikost je 10 MB.')
+        raise ValidationError(_('Datoteka je prevelika. Največja možna velikost je 10 MB.'))
 
 def image_validator(image):
     limit = 1 * 1024 * 1024
     if image.size > limit:
-        raise ValidationError('Slika je prevelika. Največja možna velikost je 1 MB.')
+        raise ValidationError(_('Slika je prevelika. Največja možna velikost je 1 MB.'))
 
 def validate_image_extension(value):
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
     valid_extensions = ['.jpg', '.jpeg', '.png']
     if not ext.lower() in valid_extensions:
-        raise ValidationError('Format slike ni veljaven ali pa je slika poškodovana.')
+        raise ValidationError(_('Format slike ni veljaven ali pa je slika poškodovana.'))
 
 def validate_expanse_file(value):
     book = xlrd.open_workbook(file_contents=value.read())

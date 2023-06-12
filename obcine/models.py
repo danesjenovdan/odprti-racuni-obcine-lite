@@ -242,6 +242,10 @@ class MunicipalityFinancialYear(Timestampable):
     def __str__(self):
         return f'{self.municipality.name}: {self.financial_year.name}'
 
+    class Meta:
+        verbose_name = _('Municipality financial year')
+        verbose_name_plural = _('Municipality financial year')
+
 
 class FinancialCategory(MPTTModel):
     name = models.CharField(max_length=256, verbose_name=_('Name'))
