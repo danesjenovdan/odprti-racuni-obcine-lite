@@ -172,22 +172,36 @@ class InstructionsAdmin(admin.ModelAdmin):
         # else:
         super().save_model(request, obj, form, change)
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Task, TaskAdmin)
+class SuperAdminSite(admin.AdminSite):
+    site_header = 'Odprti računi občine'
+    site_title = 'Odprti računi občine'
+    index_title = 'Odprti računi občine'
 
-admin.site.register(PlannedExpense, BudgetAdmin)
-admin.site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
+    def has_permission(self, request):
+        """
+        Prevent municipality users to login to superadmin site
+        """
+        return request.user.is_superuser
 
-admin.site.register(PlannedRevenue, RevenueAdmin)
-admin.site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
 
-admin.site.register(YearlyExpense, YearlyBudgetAdmin)
-admin.site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
+superadmin = SuperAdminSite(name='Nadzorna plošča')
 
-admin.site.register(FinancialYear, FinancialYearModelAdmin)
-admin.site.register(Municipality, MunicipalityModelAdmin)
-admin.site.register(RevenueDefinition, RevenueDefinitionAdmin)
+superadmin.register(User, UserAdmin)
+superadmin.register(Task, TaskAdmin)
 
-admin.site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
+superadmin.register(PlannedExpense, BudgetAdmin)
+superadmin.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
 
-admin.site.register(Instructions, InstructionsAdmin)
+superadmin.register(PlannedRevenue, RevenueAdmin)
+superadmin.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
+
+superadmin.register(YearlyExpense, YearlyBudgetAdmin)
+superadmin.register(YearlyRevenue, YearlyRevenueObcineAdmin)
+
+superadmin.register(FinancialYear, FinancialYearModelAdmin)
+superadmin.register(Municipality, MunicipalityModelAdmin)
+superadmin.register(RevenueDefinition, RevenueDefinitionAdmin)
+
+superadmin.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
+
+superadmin.register(Instructions, InstructionsAdmin)

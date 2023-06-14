@@ -124,7 +124,7 @@ class MunicipalityFinancialYearAdmin(LimitedAdmin):
         return obj.financial_year.name
 
     def page_url(self, obj):
-        return mark_safe(f'<a href="/pregled/{obj.municipality.id}/">Povezava do spletnega mesta</a>')
+        return mark_safe(f'<a href="/pregled/{obj.municipality.id}/" target="_blank">Povezava do spletnega mesta</a>')
 
 
     def save_formset(self, request, form, formset, change):
@@ -258,6 +258,7 @@ class AdminSite(admin.AdminSite):
         for app in app_list:
             if not request.user.is_superuser:
                 for idx, model in enumerate(app['models']):
+                    model['admin_url'] = model['admin_url'].replace('admin', 'obcine-admin')
                     # add id of users municipality to municipality url
                     if model['object_name'] == 'Municipality':
                         user_municipality_id = request.user.municipality_id
@@ -269,13 +270,14 @@ admin_site = AdminSite(name='Nadzorna plošča')
 
 admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 
-admin_site.register(PlannedExpense, BudgetAdmin)
-admin_site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
-admin_site.register(YearlyExpense, YearlyBudgetAdmin)
+# admin_site.register(PlannedExpense, BudgetAdmin)
+# admin_site.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
+# admin_site.register(YearlyExpense, YearlyBudgetAdmin)
 
-admin_site.register(PlannedRevenue, RevenueAdmin)
-admin_site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
-admin_site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
+# admin_site.register(PlannedRevenue, RevenueAdmin)
+# admin_site.register(MonthlyRevenue, MonthlyRevenueRealizatioObcineAdmin)
+# admin_site.register(YearlyRevenue, YearlyRevenueObcineAdmin)
+
 admin_site.register(Municipality, MunicipalityModelAdmin)
 
 #admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)

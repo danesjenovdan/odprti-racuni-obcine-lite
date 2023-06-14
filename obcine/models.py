@@ -365,6 +365,7 @@ class YearlyRevenue(Revenue):
 
 class MonthlyRevenue(Revenue):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     document = models.ForeignKey('MonthlyRevenueDocument', on_delete=models.CASCADE)
 
 
@@ -458,6 +459,7 @@ class YearlyExpense(Expense):
 
 class MonthlyExpense(Expense):
     month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     document = models.ForeignKey('MonthlyExpenseDocument', on_delete=models.CASCADE)
     class Meta:
         verbose_name = _('Monthly expense')

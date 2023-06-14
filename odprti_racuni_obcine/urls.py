@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from obcine.user_admin import admin_site
+from obcine.admin import superadmin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', superadmin.urls),
     path('obcine-admin/', admin_site.urls),
     path('martor/', include('martor.urls')),
     path('', include('obcine.urls')),
