@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-12 13:16+0200\n"
+"POT-Creation-Date: 2023-06-14 15:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3);\n"
 
-#: obcine/admin.py:20
+#: obcine/admin.py:21
 msgid "Personal info"
 msgstr ""
 
-#: obcine/admin.py:21
+#: obcine/admin.py:22
 msgid "Permissions"
 msgstr ""
 
@@ -31,201 +31,200 @@ msgstr ""
 msgid "By financial year"
 msgstr ""
 
-#: obcine/models.py:128
+#: obcine/models.py:111
 msgid "Municipality Financial Year"
 msgstr ""
 
-#: obcine/models.py:131 obcine/models.py:164 obcine/models.py:177
+#: obcine/models.py:114 obcine/models.py:148 obcine/models.py:163
 msgid "File"
 msgstr ""
 
-#: obcine/models.py:189
+#: obcine/models.py:177
 msgid "Nemo of municipality"
 msgstr ""
 
-#: obcine/models.py:191
+#: obcine/models.py:179
 msgid "Organization's link"
 msgstr ""
 
-#: obcine/models.py:194
+#: obcine/models.py:182
 msgid "Logo"
 msgstr ""
 
-#: obcine/models.py:201 obcine/models.py:202 obcine/models.py:212
+#: obcine/models.py:189 obcine/models.py:190 obcine/models.py:200
 msgid "Municipality"
 msgstr ""
 
-#: obcine/models.py:215
+#: obcine/models.py:203
 msgid "User"
 msgstr ""
 
-#: obcine/models.py:216
+#: obcine/models.py:204
 msgid "Users"
 msgstr ""
 
-#: obcine/models.py:220 obcine/models.py:251 obcine/models.py:310
-#: obcine/models.py:347
+#: obcine/models.py:208 obcine/models.py:239 obcine/models.py:298
+#: obcine/models.py:335
 msgid "Name"
 msgstr ""
 
-#: obcine/models.py:221
+#: obcine/models.py:209
 msgid "Start date"
 msgstr ""
 
-#: obcine/models.py:222
+#: obcine/models.py:210
 msgid "End date"
 msgstr ""
 
-#: obcine/models.py:231
+#: obcine/models.py:219
 msgid "Financial year"
 msgstr ""
 
-#: obcine/models.py:232
+#: obcine/models.py:220
 msgid "Financial years"
 msgstr ""
 
-#: obcine/models.py:238
+#: obcine/models.py:226
 msgid "Datum sprejetja proračuna"
 msgstr ""
 
-#: obcine/models.py:239
+#: obcine/models.py:227
 msgid "Datum rebalansa proračuna"
 msgstr ""
 
-#: obcine/models.py:246 obcine/models.py:247
+#: obcine/models.py:234 obcine/models.py:235
 msgid "Municipality financial year"
 msgstr ""
 
-#: obcine/models.py:252 obcine/models.py:309
+#: obcine/models.py:240 obcine/models.py:297
 msgid "Parent"
 msgstr ""
 
-#: obcine/models.py:253 obcine/models.py:352
+#: obcine/models.py:241 obcine/models.py:340
 msgid "Amount"
 msgstr ""
 
-#: obcine/models.py:254 obcine/models.py:312
+#: obcine/models.py:242 obcine/models.py:300
 msgid "Order"
 msgstr ""
 
-#: obcine/models.py:255 obcine/models.py:536 obcine/models.py:537
+#: obcine/models.py:243 obcine/models.py:527 obcine/models.py:528
 msgid "Instructions"
 msgstr ""
 
-#: obcine/models.py:256 obcine/models.py:311 obcine/models.py:348
+#: obcine/models.py:244 obcine/models.py:299 obcine/models.py:336
 msgid "Code"
 msgstr ""
 
-#: obcine/models.py:349
+#: obcine/models.py:337
 msgid "RevenueDefinition"
 msgstr ""
 
-#: obcine/models.py:350 obcine/models.py:439
+#: obcine/models.py:338 obcine/models.py:428
 msgid "Organiaztion"
 msgstr ""
 
-#: obcine/models.py:351 obcine/models.py:440
+#: obcine/models.py:339 obcine/models.py:429
 msgid "Year"
 msgstr ""
 
-#: obcine/models.py:367 obcine/models.py:410 obcine/models.py:460
-#: obcine/models.py:487
-msgid "Month"
-msgstr ""
-
-#: obcine/models.py:387
+#: obcine/models.py:376
 msgid "Planned revenue document"
 msgstr ""
 
-#: obcine/models.py:388
+#: obcine/models.py:377
 msgid "Planned revenue documents"
 msgstr ""
 
-#: obcine/models.py:405
+#: obcine/models.py:395
 msgid "Yearly revenue document"
 msgstr ""
 
-#: obcine/models.py:406
+#: obcine/models.py:396
 msgid "Yearly revenue documents"
 msgstr ""
 
-#: obcine/models.py:426
+#: obcine/models.py:400 obcine/models.py:449 obcine/models.py:478
+msgid "Datum obdelave podatkov"
+msgstr ""
+
+#: obcine/models.py:415
 msgid "Monthly revenue realization document"
 msgstr ""
 
-#: obcine/models.py:427
+#: obcine/models.py:416
 msgid "Monthly revenue realization documents"
 msgstr ""
 
-#: obcine/models.py:434
+#: obcine/models.py:423
 msgid "Revenue definition"
 msgstr ""
 
-#: obcine/models.py:435
+#: obcine/models.py:424
 msgid "Revenue definitions"
 msgstr ""
 
-#: obcine/models.py:448 obcine/models.py:449
+#: obcine/models.py:437 obcine/models.py:438
 msgid "Planned expense"
 msgstr ""
 
-#: obcine/models.py:455 obcine/models.py:456
+#: obcine/models.py:444 obcine/models.py:445
 msgid "Yearly expense"
 msgstr ""
 
-#: obcine/models.py:463 obcine/models.py:464
+#: obcine/models.py:452 obcine/models.py:453
 msgid "Monthly expense"
 msgstr ""
 
-#: obcine/models.py:482
+#: obcine/models.py:473
 msgid "Planned expense document"
 msgstr ""
 
-#: obcine/models.py:483
+#: obcine/models.py:474
 msgid "Planned expense documents"
 msgstr ""
 
-#: obcine/models.py:502
+#: obcine/models.py:492
 msgid "Monthly expense realization document"
 msgstr ""
 
-#: obcine/models.py:503
+#: obcine/models.py:493
 msgid "Monthly expense realization documents"
 msgstr ""
 
-#: obcine/models.py:519
+#: obcine/models.py:510
 msgid "Yearly expense document"
 msgstr ""
 
-#: obcine/models.py:520
+#: obcine/models.py:511
 msgid "Yearly expense documents"
 msgstr ""
 
-#: obcine/models.py:524
+#: obcine/models.py:515
 msgid "Model"
 msgstr ""
 
-#: obcine/models.py:525
+#: obcine/models.py:516
 msgid "Instructions for list of objects"
 msgstr ""
 
-#: obcine/models.py:526
+#: obcine/models.py:517
 msgid "Instructions for adding object"
 msgstr ""
 
-#: obcine/models.py:527
+#: obcine/models.py:518
 msgid "Instructions for edit single object"
 msgstr ""
 
-#: obcine/user_admin.py:37
+#: obcine/user_admin.py:40
 msgid "Changes are successful saved"
 msgstr ""
 
-#: obcine/user_admin.py:143
+#: obcine/user_admin.py:146
 msgid "Povezava"
 msgstr ""
 
-#: obcine/user_admin.py:211
+#: obcine/user_admin.py:214 obcine/user_admin.py:215 obcine/user_admin.py:216
 msgid "Nadzorna plošča"
 msgstr ""
 
@@ -242,5 +241,9 @@ msgid "Format slike ni veljaven ali pa je slika poškodovana."
 msgstr ""
 
 #: obcine/validators.py:46 obcine/validators.py:53
-msgid "Datoteka ni pravilno oblikovana."
+msgid "Datoteka ni pravilno izvozena iz sitema APRA."
+msgstr ""
+
+#: obcine/views.py:38
+msgid "No published financial year found"
 msgstr ""
