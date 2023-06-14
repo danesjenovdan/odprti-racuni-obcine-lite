@@ -5,12 +5,11 @@ from django.db import transaction
 
 
 class XLSXAppraBudget(object):
-    def __init__(self, document, model, definiton_model=None, month=None):
+    def __init__(self, document, model, definiton_model=None):
         self.municipality = document.municipality_year.municipality
         self.year = document.municipality_year.financial_year
         self.model = model
         self.document_object = document
-        self.month = month
         self.municipality_year = document.municipality_year
 
     def prepare_moodel(self, name, code, order):
@@ -23,25 +22,17 @@ class XLSXAppraBudget(object):
                     document=self.document_object,
                     #municipality_year=self.municipality_year
                 )
-        if self.month:
-            obj.month = self.month
         return obj
 
     def parse_file(self, file_path='files/proracun_apra.xlsx'):
         book = xlrd.open_workbook(file_path)
         sheet = book.sheet_by_index(0)
 
-        if self.month != 'None':
-            # delete previous monthly data
-            self.model.objects.filter(
-                year=self.year,
-                municipality=self.municipality
-            ).delete()
-
-            # delete previous montly documents
-            self.document_object.__class__.objects.filter(
-                municipality_year=self.municipality_year,
-            ).exclude(month=self.month).delete()
+        # delete previous data
+        self.model.objects.filter(
+            year=self.year,
+            municipality=self.municipality
+        ).delete()
 
         nodes = {}
         node_keys = []
@@ -175,13 +166,12 @@ class XLSXAppraBudget(object):
 
 
 class XLSXAppraRevenue(object):
-    def __init__(self, document, model, definiton_model, month=None):
+    def __init__(self, document, model, definiton_model):
         self.municipality = document.municipality_year.municipality
         self.year = document.municipality_year.financial_year
         self.municipality_year = document.municipality_year
         self.model = model
         self.document_object = document
-        self.month = month
         self.definiton_model = definiton_model
         definitons_qeryset = definiton_model.objects.all()
         self.definitons = {d.code: d for d in definitons_qeryset}
@@ -198,23 +188,15 @@ class XLSXAppraRevenue(object):
                     definition=self.definitons.get(konto_6, None),
                     amount=amount,
                 )
-        if self.month:
-            obj.month = self.month
         return obj
 
     def parse_file(self, file_path='files/proracun_apra.xlsx'):
 
-        if self.month != 'None':
-            # delete previous monthly data
-            self.model.objects.filter(
-                year=self.year,
-                municipality=self.municipality
-            ).delete()
-
-            # delete previous montly documents
-            self.document_object.__class__.objects.filter(
-                municipality_year=self.municipality_year,
-            ).exclude(month=self.month).delete()
+        # delete previous data
+        self.model.objects.filter(
+            year=self.year,
+            municipality=self.municipality
+        ).delete()
 
         book = xlrd.open_workbook(file_path)
         sheet = book.sheet_by_index(0)

@@ -1,7 +1,10 @@
 from django.contrib import admin, messages
 from django.shortcuts import redirect
+from django.urls import NoReverseMatch, reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.apps import apps
+from django.utils.text import capfirst
 
 from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
     PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
@@ -183,7 +186,7 @@ class YearlyRevenueObcineAdmin(LimitedAdmin):
             return 'Napaka pri izbiri konta'
 
 class MonthlyRevenueRealizatioObcineAdmin(LimitedAdmin):
-    list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
+    list_display = ['year', 'name', 'code', 'amount', 'status']
     readonly_fields = ['document', 'year', 'amount', 'municipality']
     list_filter = [SimpleFinanceYearListFilter]
 
@@ -209,6 +212,8 @@ class MunicipalityModelAdmin(admin.ModelAdmin):
 
 class AdminSite(admin.AdminSite):
     site_header = _('Nadzorna plošča')
+    site_title = _('Nadzorna plošča')
+    index_title = _('Nadzorna plošča')
 
     def each_context(self, request):
         url_attrs = []
@@ -256,17 +261,16 @@ class AdminSite(admin.AdminSite):
 
         # Sort the models alphabetically within each app.
         for app in app_list:
-            if not request.user.is_superuser:
-                for idx, model in enumerate(app['models']):
-                    model['admin_url'] = model['admin_url'].replace('admin', 'obcine-admin')
-                    # add id of users municipality to municipality url
-                    if model['object_name'] == 'Municipality':
-                        user_municipality_id = request.user.municipality_id
-                        model['admin_url'] = model['admin_url'] + str(user_municipality_id)
+            for idx, model in enumerate(app['models']):
+                # add id of users municipality to municipality url
+                if model['object_name'] == 'Municipality':
+                    user_municipality_id = request.user.municipality_id
+                    model['admin_url'] = model['admin_url'] + str(user_municipality_id)
+            #print(app['app_url'])
 
         return app_list
 
-admin_site = AdminSite(name='Nadzorna plošča')
+admin_site = AdminSite(name='obcine-admin')
 
 admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 

@@ -21,20 +21,6 @@ from obcine.validators import (
     validate_revenue_file
 )
 
-class Months(models.IntegerChoices):
-        JANUAR = 1
-        FEBRUAR = 2
-        MAREC = 3
-        APRIL = 4
-        MAJ = 5
-        JUNIJ = 6
-        JULIJ = 7
-        AVGUST = 8
-        SEPTEMBER = 9
-        OKTOBER = 10
-        NOVEMBER = 11
-        DECEMBER = 12
-
 
 class Timestampable(models.Model):
     """
@@ -81,7 +67,6 @@ class Task(Timestampable):
             model = data['model']
             parser = data['parser']
             definition = data.get('definition', None)
-            month = data.get('month', None)
             pk = data['pk']
             self_model = data['self']
 
@@ -99,15 +84,13 @@ class Task(Timestampable):
                 parser = parser_class(
                     document,
                     model=models_class,
-                    definiton_model=definiton_model,
-                    month=month
+                    definiton_model=definiton_model
                 )
             else:
                 parser = parser_class(
                     document,
                     model=models_class,
-                    definiton_model=None,
-                    month=month
+                    definiton_model=None
                 )
             if settings.ENABLE_S3:
                 image_path = download_file(document.file.url, document.file.name)
@@ -129,13 +112,15 @@ class ParsableDocument(Timestampable):
 
     file = models.FileField(
         verbose_name=_('File'),
+        blank=True,
+        null=True,
         validators=[
             FileExtensionValidator(allowed_extensions=['xlsx']),
             document_size_validator
         ]
     )
 
-    def parse(self, parser, model, definition=None, month=None):
+    def parse(self, parser, model, definition=None):
         if definition:
             definition = definition.__name__
         Task(
@@ -144,12 +129,11 @@ class ParsableDocument(Timestampable):
                 'model': f'{model.__name__}',
                 'parser': f'{parser.__name__}',
                 'definition': f'{definition}',
-                'month': f'{month}',
                 'pk': self.id,
                 'self': f'{self.__class__.__name__}',
             }
         ).save()
-        # parser = parser(self, model, definition, month)
+        # parser = parser(self, model, definition)
         # if settings.ENABLE_S3:
         #     image_path = download_file(self.file.url, self.file.name)
         #     parser.parse_file(file_path=image_path)
@@ -162,6 +146,8 @@ class ParsableDocument(Timestampable):
 class RevenueParsableDocument(ParsableDocument):
     file = models.FileField(
         verbose_name=_('File'),
+        blank=True,
+        null=True,
         validators=[
             FileExtensionValidator(allowed_extensions=['xlsx']),
             document_size_validator,
@@ -175,6 +161,8 @@ class RevenueParsableDocument(ParsableDocument):
 class ExpenseParsableDocument(ParsableDocument):
     file = models.FileField(
         verbose_name=_('File'),
+        blank=True,
+        null=True,
         validators=[
             FileExtensionValidator(allowed_extensions=['xlsx']),
             document_size_validator,
@@ -364,8 +352,6 @@ class YearlyRevenue(Revenue):
 
 
 class MonthlyRevenue(Revenue):
-    month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
-    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     document = models.ForeignKey('MonthlyRevenueDocument', on_delete=models.CASCADE)
 
 
@@ -375,13 +361,15 @@ class PlannedRevenueDocument(RevenueParsableDocument):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        # TODO check if its needed
         # delete data if file reupload
-        self.children.all().delete()
-        self.parse(
-            parser=XLSXAppraRevenue,
-            model=PlannedRevenue,
-            definition=RevenueDefinition
-        )
+        # self.children.all().delete()
+        if self.file:
+            self.parse(
+                parser=XLSXAppraRevenue,
+                model=PlannedRevenue,
+                definition=RevenueDefinition
+            )
 
     class Meta:
         unique_together = ['municipality_year']
@@ -395,11 +383,12 @@ class YearlyRevenueDocument(RevenueParsableDocument):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.parse(
-            parser=XLSXAppraRevenue,
-            model=YearlyRevenue,
-            definition=RevenueDefinition
-        )
+        if self.file:
+            self.parse(
+                parser=XLSXAppraRevenue,
+                model=YearlyRevenue,
+                definition=RevenueDefinition
+            )
 
     class Meta:
         unique_together = ['municipality_year']
@@ -408,22 +397,21 @@ class YearlyRevenueDocument(RevenueParsableDocument):
 
 
 class MonthlyRevenueDocument(RevenueParsableDocument):
-    month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
-
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.parse(
-            parser=XLSXAppraRevenue,
-            model=MonthlyRevenue,
-            definition=RevenueDefinition,
-            month=self.month
-        )
+        if self.file:
+            self.parse(
+                parser=XLSXAppraRevenue,
+                model=MonthlyRevenue,
+                definition=RevenueDefinition,
+            )
 
     class Meta:
-        unique_together = ['municipality_year', 'month']
+        unique_together = ['municipality_year']
         verbose_name = _('Monthly revenue realization document')
         verbose_name_plural = _('Monthly revenue realization documents')
 
@@ -458,7 +446,6 @@ class YearlyExpense(Expense):
 
 
 class MonthlyExpense(Expense):
-    month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
     timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     document = models.ForeignKey('MonthlyExpenseDocument', on_delete=models.CASCADE)
     class Meta:
@@ -472,12 +459,14 @@ class PlannedExpenseDocument(ExpenseParsableDocument):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        # TODO check if its needed
         # delete data if file reupload
-        self.children.all().delete()
-        self.parse(
-            parser=XLSXAppraBudget,
-            model=PlannedExpense,
-        )
+        #self.children.all().delete()
+        if self.file:
+            self.parse(
+                parser=XLSXAppraBudget,
+                model=PlannedExpense,
+            )
 
     class Meta:
         unique_together = ['municipality_year']
@@ -486,21 +475,20 @@ class PlannedExpenseDocument(ExpenseParsableDocument):
 
 
 class MonthlyExpenseDocument(ExpenseParsableDocument):
-    month = models.IntegerField(choices=Months.choices, verbose_name=_('Month'))
-
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.parse(
-            parser=XLSXAppraBudget,
-            model=MonthlyExpense,
-            month=self.month
-        )
+        if self.file:
+            self.parse(
+                parser=XLSXAppraBudget,
+                model=MonthlyExpense,
+            )
 
     class Meta:
-        unique_together = ['municipality_year', 'month']
+        unique_together = ['municipality_year']
         verbose_name = _('Monthly expense realization document')
         verbose_name_plural = _('Monthly expense realization documents')
 
@@ -511,10 +499,11 @@ class YearlyExpenseDocument(ExpenseParsableDocument):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.parse(
-            parser=XLSXAppraBudget,
-            model=YearlyExpense
-        )
+        if self.file:
+            self.parse(
+                parser=XLSXAppraBudget,
+                model=YearlyExpense
+            )
 
     class Meta:
         unique_together = ['municipality_year']

@@ -127,7 +127,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 class MonthlyRevenueRealizatioObcineAdmin(admin.ModelAdmin):
-    list_display = ['year', 'month', 'name', 'code', 'amount', 'status']
+    list_display = ['year', 'name', 'code', 'amount', 'status']
     list_filter = ['year', 'municipality']
 
     def status(self, obj):
@@ -184,7 +184,7 @@ class SuperAdminSite(admin.AdminSite):
         return request.user.is_superuser
 
 
-superadmin = SuperAdminSite(name='Nadzorna plošča')
+superadmin = SuperAdminSite(name='admin')
 
 superadmin.register(User, UserAdmin)
 superadmin.register(Task, TaskAdmin)
