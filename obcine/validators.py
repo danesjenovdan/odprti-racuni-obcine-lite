@@ -43,11 +43,11 @@ def validate_expanse_file(value):
         'F3'
     ]
     if sheet.row_values(0) != requierd_rows:
-        raise ValidationError(_('Datoteka ni pravilno oblikovana.'))
+        raise ValidationError(_('Datoteka ni pravilno izvozena iz sitema APRA.'))
 
 def validate_revenue_file(value):
     book = xlrd.open_workbook(file_contents=value.read())
     sheet = book.sheet_by_index(0)
     requierd_rows = ['BLC_ID', 'K6_ID', 'K6_OPIS', 'VREDNOST_PRI']
     if sheet.row_values(0) != requierd_rows:
-        raise ValidationError(_('Datoteka ni pravilno oblikovana.'))
+        raise ValidationError(_('Datoteka ni pravilno izvozena iz sitema APRA.'))
