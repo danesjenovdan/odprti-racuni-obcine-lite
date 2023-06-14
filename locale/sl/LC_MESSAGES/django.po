@@ -3,86 +3,87 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 15:48+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-06-14 14:07+0000\n"
+"Last-Translator: Matic Primc <tech+matic@danesjenovdan.si>\n"
+"Language-Team: Slovenian <http://weblate.lb.djnd.si/projects/"
+"odprti-racuni-obcine/django/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: obcine/admin.py:21
 msgid "Personal info"
-msgstr ""
+msgstr "Osebni podatki"
 
 #: obcine/admin.py:22
 msgid "Permissions"
-msgstr ""
+msgstr "Dovoljenja"
 
 #: obcine/filters.py:6
 msgid "By financial year"
-msgstr ""
+msgstr "Po finančnem letu"
 
 #: obcine/models.py:111
 msgid "Municipality Financial Year"
-msgstr ""
+msgstr "Finančno leto občine"
 
 #: obcine/models.py:114 obcine/models.py:148 obcine/models.py:163
 msgid "File"
-msgstr ""
+msgstr "Datoteka"
 
 #: obcine/models.py:177
 msgid "Nemo of municipality"
-msgstr ""
+msgstr "Ime občine"
 
 #: obcine/models.py:179
 msgid "Organization's link"
-msgstr ""
+msgstr "Povezava do spletnega mesta občine"
 
 #: obcine/models.py:182
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: obcine/models.py:189 obcine/models.py:190 obcine/models.py:200
 msgid "Municipality"
-msgstr ""
+msgstr "Občina"
 
 #: obcine/models.py:203
 msgid "User"
-msgstr ""
+msgstr "Uporabnik"
 
 #: obcine/models.py:204
 msgid "Users"
-msgstr ""
+msgstr "Uporabniki"
 
 #: obcine/models.py:208 obcine/models.py:239 obcine/models.py:298
 #: obcine/models.py:335
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: obcine/models.py:209
 msgid "Start date"
-msgstr ""
+msgstr "Datum začetka"
 
 #: obcine/models.py:210
 msgid "End date"
-msgstr ""
+msgstr "Datum konca"
 
 #: obcine/models.py:219
 msgid "Financial year"
-msgstr ""
+msgstr "Finančno leto"
 
 #: obcine/models.py:220
 msgid "Financial years"
-msgstr ""
+msgstr "Finančna leta"
 
 #: obcine/models.py:226
 msgid "Datum sprejetja proračuna"
@@ -94,55 +95,55 @@ msgstr ""
 
 #: obcine/models.py:234 obcine/models.py:235
 msgid "Municipality financial year"
-msgstr ""
+msgstr "Finančno leto občine"
 
 #: obcine/models.py:240 obcine/models.py:297
 msgid "Parent"
-msgstr ""
+msgstr "Starš"
 
 #: obcine/models.py:241 obcine/models.py:340
 msgid "Amount"
-msgstr ""
+msgstr "Znesek"
 
 #: obcine/models.py:242 obcine/models.py:300
 msgid "Order"
-msgstr ""
+msgstr "Vrstni red"
 
 #: obcine/models.py:243 obcine/models.py:527 obcine/models.py:528
 msgid "Instructions"
-msgstr ""
+msgstr "Navodila"
 
 #: obcine/models.py:244 obcine/models.py:299 obcine/models.py:336
 msgid "Code"
-msgstr ""
+msgstr "Šifra"
 
 #: obcine/models.py:337
 msgid "RevenueDefinition"
-msgstr ""
+msgstr "Definicija konta"
 
 #: obcine/models.py:338 obcine/models.py:428
 msgid "Organiaztion"
-msgstr ""
+msgstr "Občina"
 
 #: obcine/models.py:339 obcine/models.py:429
 msgid "Year"
-msgstr ""
+msgstr "Leto"
 
 #: obcine/models.py:376
 msgid "Planned revenue document"
-msgstr ""
+msgstr "Dokument proračuna prihodkov"
 
 #: obcine/models.py:377
 msgid "Planned revenue documents"
-msgstr ""
+msgstr "Dokumenti proračuna prihodkov"
 
 #: obcine/models.py:395
 msgid "Yearly revenue document"
-msgstr ""
+msgstr "Datoteka letne realizacije"
 
 #: obcine/models.py:396
 msgid "Yearly revenue documents"
-msgstr ""
+msgstr "Datoteke letnih realizacij"
 
 #: obcine/models.py:400 obcine/models.py:449 obcine/models.py:478
 msgid "Datum obdelave podatkov"
@@ -150,55 +151,55 @@ msgstr ""
 
 #: obcine/models.py:415
 msgid "Monthly revenue realization document"
-msgstr ""
+msgstr "Dokument mesečne realizacije prihodkov"
 
 #: obcine/models.py:416
 msgid "Monthly revenue realization documents"
-msgstr ""
+msgstr "Dokumenti mesečne realizacije prihodkov"
 
 #: obcine/models.py:423
 msgid "Revenue definition"
-msgstr ""
+msgstr "Definicje kotov prihodkov"
 
 #: obcine/models.py:424
 msgid "Revenue definitions"
-msgstr ""
+msgstr "Definicije kontov prihodkov"
 
 #: obcine/models.py:437 obcine/models.py:438
 msgid "Planned expense"
-msgstr ""
+msgstr "Proračun odhodkov"
 
 #: obcine/models.py:444 obcine/models.py:445
 msgid "Yearly expense"
-msgstr ""
+msgstr "Letni odhodki"
 
 #: obcine/models.py:452 obcine/models.py:453
 msgid "Monthly expense"
-msgstr ""
+msgstr "Mesečni odhodki"
 
 #: obcine/models.py:473
 msgid "Planned expense document"
-msgstr ""
+msgstr "Dokument proračuna odhodkov"
 
 #: obcine/models.py:474
 msgid "Planned expense documents"
-msgstr ""
+msgstr "Dokumenti proračuna odhodkov"
 
 #: obcine/models.py:492
 msgid "Monthly expense realization document"
-msgstr ""
+msgstr "Dokument mesečne realizacije odhodkov"
 
 #: obcine/models.py:493
 msgid "Monthly expense realization documents"
-msgstr ""
+msgstr "Dokument mesečne realizacije odhodkov"
 
 #: obcine/models.py:510
 msgid "Yearly expense document"
-msgstr ""
+msgstr "Dokument letne realzacije odhodkov"
 
 #: obcine/models.py:511
 msgid "Yearly expense documents"
-msgstr ""
+msgstr "Dokumenti letne realizacije odhodkov"
 
 #: obcine/models.py:515
 msgid "Model"
@@ -206,19 +207,19 @@ msgstr ""
 
 #: obcine/models.py:516
 msgid "Instructions for list of objects"
-msgstr ""
+msgstr "Navodila za seznam objektov"
 
 #: obcine/models.py:517
 msgid "Instructions for adding object"
-msgstr ""
+msgstr "Navodila za dodajanje objekta"
 
 #: obcine/models.py:518
 msgid "Instructions for edit single object"
-msgstr ""
+msgstr "Navodila za urejanje objekta"
 
 #: obcine/user_admin.py:40
 msgid "Changes are successful saved"
-msgstr ""
+msgstr "Spremembe so bile uspešno shranjene"
 
 #: obcine/user_admin.py:146
 msgid "Povezava"
@@ -246,4 +247,4 @@ msgstr ""
 
 #: obcine/views.py:38
 msgid "No published financial year found"
-msgstr ""
+msgstr "Ni objavlenega finančnega leta za izbrano občino."
