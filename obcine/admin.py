@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import MPTTModelAdmin
@@ -190,7 +190,7 @@ superadmin = SuperAdminSite(name='admin')
 superadmin.register(User, UserAdmin)
 superadmin.register(Task, TaskAdmin)
 
-superadmin.register(Group)
+superadmin.register(Group, GroupAdmin)
 
 superadmin.register(PlannedExpense, BudgetAdmin)
 superadmin.register(MonthlyExpense, MonthlyBudgetRealizatioAdmin)
