@@ -181,7 +181,6 @@ class ExpenseTreeBuilder:
 
 
         def listify_children(tree):
-            print('listify')
             tree = list(tree.values())
             for item in tree:
                 if 'children' in item.keys():

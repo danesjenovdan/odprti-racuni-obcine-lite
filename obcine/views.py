@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from django.utils.translation import gettext_lazy as _
 
 from obcine.models import (
     FinancialYear,
@@ -18,11 +19,30 @@ from obcine.models import (
 from obcine.tree_utils import ExpenseTreeBuilder, RevenueTreeBuilder
 
 
-def get_year(year_id):
-    if year_id:
-        return FinancialYear.objects.get(id=year_id)
+def get_year(year_id, municipality):
+    municipality_financial_year = MunicipalityFinancialYear.objects.filter(
+        financial_year_id=year_id,
+        municipality=municipality,
+        is_published=True
+    )
+    if municipality_financial_year:
+        return municipality_financial_year.first().financial_year
     else:
-        return FinancialYear.objects.last()
+        municipality_financial_year = MunicipalityFinancialYear.objects.filter(
+            municipality=municipality,
+            is_published=True
+        ).order_by('-financial_year__name').first()
+        if municipality_financial_year:
+            return municipality_financial_year.financial_year
+        else:
+            raise Http404(_("No published financial year found"))
+
+def get_municipality_published_years(municipality):
+    municipality_financial_year = [i.financial_year for i in MunicipalityFinancialYear.objects.filter(
+        municipality=municipality,
+        is_published=True
+    ).order_by('financial_year__name')]
+    return municipality_financial_year
 
 def get_tree_type(query_dict):
     return "expenses" if query_dict.get("type", "") == "expenses" else "revenue"
@@ -169,7 +189,7 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
 
 def overview(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
-    year = get_year(year_id)
+    year = get_year(year_id, municipality)
 
     summary_type = "monthly" if year.is_current() else "yearly"
     summary = get_summary(municipality, year, summary_type=summary_type)
@@ -186,7 +206,7 @@ def overview(request, municipality_id, year_id=None):
 
 def cut_of_funds(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
-    year = get_year(year_id)
+    year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
     summary_type = "monthly" if year.is_current() else "yearly"
@@ -199,7 +219,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
         request,
         "cut_of_funds.html",
         {
-            "years": FinancialYear.objects.all(),  # TODO: only show valid years for this municipality
+            "years": get_municipality_published_years(municipality),
             "municipality": municipality,
             "year": year,
             "summary": summary,
@@ -211,7 +231,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
 
 def comparison_over_time(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
-    year = get_year(year_id)
+    year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
     return render(
@@ -221,13 +241,13 @@ def comparison_over_time(request, municipality_id, year_id=None):
             "municipality": municipality,
             "year": year,
             "tree_type": tree_type,
-            "years": FinancialYear.objects.all(),  # TODO: only show valid years for this municipality
+            "years": get_municipality_published_years(municipality),
         },
     )
 
 def get_context_for_table_code(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
-    year = get_year(year_id)
+    year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
     summary_type = "monthly" if year.is_current() else "yearly"
@@ -289,12 +309,11 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
 
 def comparison_over_time_chart_data(request, municipality_id, year_id=None):
     municipality = Municipality.objects.get(id=municipality_id)
-    year = get_year(year_id)
+    year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
     years_data = {}
-    years = FinancialYear.objects.all()  # TODO: only show valid years for this municipality
-    # years = municipality.financial_years.filter(municipalityfinancialyears__is_published=True)
+    years = get_municipality_published_years(municipality)
 
     for year_ in years:
         summary_type = "monthly" if year_.is_current() else "yearly"

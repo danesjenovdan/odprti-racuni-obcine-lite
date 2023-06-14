@@ -285,4 +285,3 @@ admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 admin_site.register(Municipality, MunicipalityModelAdmin)
 
 #admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)
-
