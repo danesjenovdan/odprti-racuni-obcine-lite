@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-#RUN python3 manage.py compilemessages
+RUN python3 manage.py compilemessages
 
 EXPOSE 8000
 
