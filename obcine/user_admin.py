@@ -201,7 +201,7 @@ class MunicipalityModelAdmin(admin.ModelAdmin):
     list_display = ['name']
 
     def response_change(self, request, obj):
-        return redirect('/admin/')
+        return redirect(f'/obcine-admin/obcine/municipality/{obj.id}/change/')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
