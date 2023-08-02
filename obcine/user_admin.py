@@ -214,6 +214,7 @@ class AdminSite(admin.AdminSite):
     site_header = _('Nadzorna plošča')
     site_title = _('Nadzorna plošča')
     index_title = _('Nadzorna plošča')
+    site_url = None
 
     def each_context(self, request):
         url_attrs = []
@@ -258,13 +259,18 @@ class AdminSite(admin.AdminSite):
 
     def get_app_list(self, request, app_label=None):
         app_list = list(self._build_app_dict(request, app_label).values())
+        try:
+            user_municipality_id = request.user.municipality_id
+            self.site_url = reverse('overview', kwargs={'municipality_id': user_municipality_id})
+        except:
+            pass
+
 
         # Sort the models alphabetically within each app.
         for app in app_list:
             for idx, model in enumerate(app['models']):
                 # add id of users municipality to municipality url
                 if model['object_name'] == 'Municipality':
-                    user_municipality_id = request.user.municipality_id
                     model['admin_url'] = model['admin_url'] + str(user_municipality_id)
             #print(app['app_url'])
 
