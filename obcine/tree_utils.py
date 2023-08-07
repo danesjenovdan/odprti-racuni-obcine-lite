@@ -157,7 +157,11 @@ class ExpenseTreeBuilder:
             year=self.financial_year,
         )
         self.definiton_storage = {expense.id: expense for expense in expenses}
-        return list(build_tree(self.definiton_storage, [expanse.get_offline_dict() for expanse in expenses.filter(level=4)]).values())
+        try:
+            data = list(build_tree(self.definiton_storage, [expanse.get_offline_dict() for expanse in expenses.filter(level=4)]).values())
+        except KeyError:
+            data = []
+        return data
 
     def get_merged_expense_tree(self, planned_data_model, realized_data_model):
         planned_expenses = planned_data_model.objects.filter(
