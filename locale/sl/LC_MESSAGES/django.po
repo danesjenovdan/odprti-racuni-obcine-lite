@@ -54,7 +54,7 @@ msgstr "Logo"
 
 #: obcine/models.py:189 obcine/models.py:190 obcine/models.py:200
 msgid "Municipality"
-msgstr "Občina"
+msgstr "Osnovne informacije o občini"
 
 #: obcine/models.py:203
 msgid "User"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: obcine/models.py:234 obcine/models.py:235
 msgid "Municipality financial year"
-msgstr "Finančno leto občine"
+msgstr "Dodajanje podatkov za finančna leta"
 
 #: obcine/models.py:240 obcine/models.py:297
 msgid "Parent"
@@ -123,7 +123,7 @@ msgstr "Definicija konta"
 
 #: obcine/models.py:338 obcine/models.py:428
 msgid "Organiaztion"
-msgstr "Občina"
+msgstr "Osnovne informacije o občini"
 
 #: obcine/models.py:339 obcine/models.py:429
 msgid "Year"
@@ -135,7 +135,7 @@ msgstr "Dokument proračuna prihodkov"
 
 #: obcine/models.py:377
 msgid "Planned revenue documents"
-msgstr "Dokumenti proračuna prihodkov"
+msgstr "Veljavni proračun - prihodki"
 
 #: obcine/models.py:395
 msgid "Yearly revenue document"
@@ -143,7 +143,7 @@ msgstr "Datoteka letne realizacije"
 
 #: obcine/models.py:396
 msgid "Yearly revenue documents"
-msgstr "Datoteke letnih realizacij"
+msgstr "Zaključni račun - prihodki"
 
 #: obcine/models.py:400 obcine/models.py:449 obcine/models.py:478
 msgid "Datum obdelave podatkov"
@@ -155,7 +155,7 @@ msgstr "Dokument mesečne realizacije prihodkov"
 
 #: obcine/models.py:416
 msgid "Monthly revenue realization documents"
-msgstr "Dokumenti mesečne realizacije prihodkov"
+msgstr "Tekoča realizacija - prihodki"
 
 #: obcine/models.py:423
 msgid "Revenue definition"
@@ -183,15 +183,15 @@ msgstr "Dokument proračuna odhodkov"
 
 #: obcine/models.py:474
 msgid "Planned expense documents"
-msgstr "Dokumenti proračuna odhodkov"
+msgstr "Veljavni proračun - odhodki"
 
 #: obcine/models.py:492
 msgid "Monthly expense realization document"
-msgstr "Dokument mesečne realizacije odhodkov"
+msgstr "Tekoča realizacija - odhodki"
 
 #: obcine/models.py:493
 msgid "Monthly expense realization documents"
-msgstr "Dokument mesečne realizacije odhodkov"
+msgstr "Tekoča realizacija - odhodki"
 
 #: obcine/models.py:510
 msgid "Yearly expense document"
@@ -199,7 +199,7 @@ msgstr "Dokument letne realzacije odhodkov"
 
 #: obcine/models.py:511
 msgid "Yearly expense documents"
-msgstr "Dokumenti letne realizacije odhodkov"
+msgstr "Zaključni račun - odhodki"
 
 #: obcine/models.py:515
 msgid "Model"

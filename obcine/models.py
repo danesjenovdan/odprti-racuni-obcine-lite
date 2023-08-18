@@ -221,11 +221,11 @@ class FinancialYear(models.Model):
         ordering = ['name']
 
 class MunicipalityFinancialYear(Timestampable):
-    financial_year = models.ForeignKey('FinancialYear', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
+    financial_year = models.ForeignKey('FinancialYear', verbose_name=_('Leto'),  related_name='municipalityfinancialyears', on_delete=models.PROTECT)
     municipality = models.ForeignKey('Municipality', related_name='municipalityfinancialyears', on_delete=models.PROTECT)
     adoption_date_of_budget = models.DateField(verbose_name=_('Datum sprejetja proračuna'), null=True, blank=True)
     rebalans_date_of_budget = models.DateField(verbose_name=_('Datum rebalansa proračuna'), null=True, blank=True)
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False, verbose_name=_('Javno prikazano leto'))
 
     def __str__(self):
         return f'{self.municipality.name}: {self.financial_year.name}'
