@@ -572,7 +572,7 @@ a.box-link:hover {
 }
 
 .breadcrumb-option .breadcrumb-label {
-  padding-top: 4px;
+  padding: 4px 5px 0 5px;
   font-family: "Metropolis", sans-serif;
   font-size: 12px;
   line-height: 1.4;
