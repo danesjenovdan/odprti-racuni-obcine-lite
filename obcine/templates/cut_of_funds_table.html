@@ -26,8 +26,8 @@
       </th>
       <th>
         {% if tree_data.planned != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i> Proračun</div>{% endif %}
-        {% if tree_data.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
-        {% if tree_data.amount != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Dejansko stanje</div>{% endif %}
+        {% if tree_data.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija</div>{% endif %}
+        {% if tree_data.amount != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija</div>{% endif %}
       </th>
     </tr>
   </thead>
