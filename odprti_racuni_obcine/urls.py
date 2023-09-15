@@ -13,19 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from obcine.user_admin import admin_site
-from obcine.admin import superadmin
 from django.conf import settings
-from django.conf.urls.static import static
+from django.templatetags.static import static
+from django.urls import include, path
+from django.views.generic.base import RedirectView
+
+from obcine.admin import superadmin
+from obcine.user_admin import admin_site
 
 urlpatterns = [
-    path('admin/', superadmin.urls),
-    path('obcine-admin/', admin_site.urls),
-    path('martor/', include('martor.urls')),
-    path('', include('obcine.urls')),
+    path("favicon.ico", RedirectView.as_view(url=static("favicons/favicon.ico"))),
+    path("admin/", superadmin.urls),
+    path("obcine-admin/", admin_site.urls),
+    path("martor/", include("martor.urls")),
+    path("", include("obcine.urls")),
 ]
 
 if settings.DEBUG:
+    from django.conf.urls.static import static
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
