@@ -75,12 +75,12 @@
           <div class="col text-left">
             <div class="d-flex align-items-center">
               <div class="footer-logo me-3">
-                <img src="https://participativni-proracun.djnd.si/generated/coats/coat-sveti-jurij-v-slovenskih-goricah.png" alt="Občina logo">
+                <img src="{{ municipality.logo.url }}" alt="Logo {{ municipality.name }}">
               </div>
               <div>
                 <h6>{{ municipality.name }}</h6>
                 <p>
-                  <a href="#" target="_blank">Občinsko spletno mesto</a>
+                  <a href="{{ municipality.link }}" target="_blank">Občinsko spletno mesto</a>
                 </p>
               </div>
             </div>
