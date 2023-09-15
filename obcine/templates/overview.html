@@ -1,7 +1,10 @@
 {% extends "base.html" %}
+{% load tree_table %}
 
 {% block description %}
-  {% include "description.html" with page_title="Odprti računi za enostaven in razumljiv vpogled v občinski proračun" page_description="S pomočjo aplikacije Odprti računi lahko vidite, kako velik je proračun vaše občine, bolje razumete razporeditev občinskih sredstev ali pa se poglobite v posamezne proračunske kategorije." %}
+  {% with municipality.name|remove_obcina_from_name as m_name %}
+    {% include "description.html" with page_title="Grafični prikaz proračuna občine "|add:m_name page_description="S pomočjo interaktivnega vmesnika preglejte proračun ter načrtovane, kot tudi realizirane, prihodke ter odhodke občine." %}
+  {% endwith %}
 {% endblock description %}
 
 {% block budget %}

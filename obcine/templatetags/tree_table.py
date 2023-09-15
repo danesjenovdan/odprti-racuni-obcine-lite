@@ -1,4 +1,5 @@
 import math
+import re
 
 from django import template
 from django.utils.text import capfirst
@@ -51,3 +52,8 @@ def capfirst_if_allcaps(value):
     if value == value.upper():
         return capfirst(value.lower())
     return capfirst(value)
+
+
+@register.filter
+def remove_obcina_from_name(name):
+    return re.sub(r"^\s*Občina\s+", "", name, flags=re.IGNORECASE)
