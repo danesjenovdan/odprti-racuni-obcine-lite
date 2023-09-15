@@ -9,11 +9,11 @@
         <div class="breadcrumb-label">
           <div class="name">{{ parent.name|capfirst_if_allcaps }}</div>
           {% if parent.planned != None and parent.realized != None %}
-            <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned %} %</div>
+            <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned 2 %} %</div>
           {% elif parent.realized != None %}
-            <div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized %} %</div>
+            <div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized 2 %} %</div>
           {% elif parent.amount != None %}
-            <div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount %} %</div>
+            <div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount 2 %} %</div>
           {% endif %}
         </div>
       </a>
@@ -23,11 +23,11 @@
       <div class="breadcrumb-label">
         <div class="name">{{ tree_data.name|capfirst_if_allcaps }}</div>
         {% if tree_data.planned != None and tree_data.realized != None %}
-          <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned %} %</div>
+          <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned 2 %} %</div>
         {% elif tree_data.realized != None %}
-          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized %} %</div>
+          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized 2 %} %</div>
         {% elif tree_data.amount != None %}
-          <div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount %} %</div>
+          <div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount 2 %} %</div>
         {% endif %}
       </div>
     </a>
