@@ -17,7 +17,14 @@
             <div>
               {% if summary.planned_revenue != None %}
               <div class="budget-amount">
-                <small class="amount-description">Proračun</small>
+                <small class="amount-description">
+                  Proračun
+                  {% if municipality_financial_year.rebalans_date_of_budget %}
+                  (rebalans sprejet {{ municipality_financial_year.rebalans_date_of_budget|date:"j. n. Y" }})
+                  {% elif municipality_financial_year.adoption_date_of_budget %}
+                  (sprejet {{ municipality_financial_year.adoption_date_of_budget|date:"j. n. Y" }})
+                  {% endif %}
+                </small>
                 <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
               </div>
               {% endif %}
@@ -50,7 +57,14 @@
             <div>
               {% if summary.planned_expenses != None %}
               <div class="budget-amount">
-                <small class="amount-description">Proračun</small>
+                <small class="amount-description">
+                  Proračun
+                  {% if municipality_financial_year.rebalans_date_of_budget %}
+                  (rebalans sprejet {{ municipality_financial_year.rebalans_date_of_budget|date:"j. n. Y" }})
+                  {% elif municipality_financial_year.adoption_date_of_budget %}
+                  (sprejet {{ municipality_financial_year.adoption_date_of_budget|date:"j. n. Y" }})
+                  {% endif %}
+                </small>
                 <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
               </div>
               {% endif %}
