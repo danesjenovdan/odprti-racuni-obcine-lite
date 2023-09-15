@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from obcine.user_admin import admin_site
 from obcine.admin import superadmin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', superadmin.urls),
@@ -24,3 +26,6 @@ urlpatterns = [
     path('martor/', include('martor.urls')),
     path('', include('obcine.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
