@@ -67,6 +67,18 @@ def get_cache_key(municipality, year, endpoint, type):
     return cache_key
 
 
+def get_document_date(data_model, municipality, year):
+    obj = (
+        data_model.objects.filter(municipality=municipality, year=year)
+        .filter(document__timestamp__isnull=False)
+        .order_by("-document__timestamp")
+        .first()
+    )
+    if obj:
+        return obj.document.timestamp
+    return None
+
+
 def get_summary(municipality, year, summary_type="monthly"):
     summary_cache_key = get_cache_key(municipality, year, "summary", summary_type)
 
@@ -95,6 +107,8 @@ def get_summary(municipality, year, summary_type="monthly"):
             "planned_revenue": sum([i["amount"] for i in planned_revenue]),
             "realized_expenses": sum([i["amount"] for i in realized_expenses]),
             "realized_revenue": sum([i["amount"] for i in realized_revenue]),
+            "realized_expenses_date": get_document_date(MonthlyExpense, municipality, year),
+            "realized_revenue_date": get_document_date(MonthlyRevenue, municipality, year),
         }
 
     elif summary_type == "yearly":
@@ -104,10 +118,12 @@ def get_summary(municipality, year, summary_type="monthly"):
         summary = {
             "realized_expenses": sum([i["amount"] for i in realized_expenses]),
             "realized_revenue": sum([i["amount"] for i in realized_revenue]),
+            "realized_expenses_date": get_document_date(YearlyExpense, municipality, year),
+            "realized_revenue_date": get_document_date(YearlyRevenue, municipality, year),
         }
 
-    summary_keys = list(summary.keys())
-    summary_max_value = max(summary.values())
+    summary_keys = list(filter(lambda k: not k.endswith("_date"), summary.keys()))
+    summary_max_value = max([summary[k] for k in summary_keys])
     for key in summary_keys:
         summary[f"{key}_percentage"] = (
             summary[key] / summary_max_value if summary_max_value > 0 else 0

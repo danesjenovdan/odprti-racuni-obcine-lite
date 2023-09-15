@@ -30,7 +30,12 @@
               {% endif %}
               {% if summary.realized_revenue != None %}
               <div class="budget-amount">
-                <small class="amount-description">Realizacija</small>
+                <small class="amount-description">
+                  Realizacija
+                  {% if summary.realized_revenue_date %}
+                  ({{ summary.realized_revenue_date|date:"j. n. Y" }})
+                  {% endif %}
+                </small>
                 <span class="amount-number">{{ summary.realized_revenue|floatformat:"2g" }}</span>
               </div>
               {% endif %}
@@ -70,7 +75,12 @@
               {% endif %}
               {% if summary.realized_expenses != None %}
               <div class="budget-amount">
-                <small class="amount-description">Realizacija</small>
+                <small class="amount-description">
+                  Realizacija
+                  {% if summary.realized_expenses_date %}
+                  ({{ summary.realized_expenses_date|date:"j. n. Y" }})
+                  {% endif %}
+                </small>
                 <span class="amount-number">{{ summary.realized_expenses|floatformat:"2g" }}</span>
               </div>
               {% endif %}

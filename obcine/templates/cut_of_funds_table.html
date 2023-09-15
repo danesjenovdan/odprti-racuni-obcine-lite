@@ -35,7 +35,20 @@
           {% endif %}
         </div>
         {% endif %}
-        {% if tree_data.realized != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija</div>{% endif %}
+        {% if tree_data.realized != None %}
+        <div class="bar-chart-legend">
+          <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija
+          {% if tree_type == "expenses" %}
+          {% if summary.realized_expenses_date %}
+          ({{ summary.realized_expenses_date|date:"j. n. Y" }})
+          {% endif %}
+          {% else %}
+          {% if summary.realized_revenue_date %}
+          ({{ summary.realized_revenue_date|date:"j. n. Y" }})
+          {% endif %}
+          {% endif %}
+        </div>
+        {% endif %}
         {% if tree_data.amount != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija</div>{% endif %}
       </th>
     </tr>

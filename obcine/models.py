@@ -378,6 +378,8 @@ class PlannedRevenueDocument(RevenueParsableDocument):
 
 
 class YearlyRevenueDocument(RevenueParsableDocument):
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
+
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -398,6 +400,7 @@ class YearlyRevenueDocument(RevenueParsableDocument):
 
 class MonthlyRevenueDocument(RevenueParsableDocument):
     timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
+
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -446,7 +449,6 @@ class YearlyExpense(Expense):
 
 
 class MonthlyExpense(Expense):
-    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
     document = models.ForeignKey('MonthlyExpenseDocument', on_delete=models.CASCADE)
     class Meta:
         verbose_name = _('Monthly expense')
@@ -476,6 +478,7 @@ class PlannedExpenseDocument(ExpenseParsableDocument):
 
 class MonthlyExpenseDocument(ExpenseParsableDocument):
     timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
+
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
@@ -494,6 +497,8 @@ class MonthlyExpenseDocument(ExpenseParsableDocument):
 
 
 class YearlyExpenseDocument(ExpenseParsableDocument):
+    timestamp = models.DateField(verbose_name=_('Datum obdelave podatkov'), null=True, blank=True)
+
     def __str__(self):
         return f'{self.municipality_year.financial_year.name}'
 
