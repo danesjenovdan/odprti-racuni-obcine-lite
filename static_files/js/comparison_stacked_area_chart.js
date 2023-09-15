@@ -74,7 +74,7 @@
             codeToName[codeKey] = d.name;
           }
           return {
-            [codeKey]: Number(d.amount || d.realized || 0),
+            [codeKey]: Number(d.amount || d.planned || 0),
           };
         })
         .reduce((acc, cur) => {
