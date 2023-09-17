@@ -906,6 +906,37 @@ a.box-link:hover {
   background-color: magenta;
 }
 
+.comparison-chart-tooltip {
+  width: 200px;
+  position: fixed;
+  border: 1px solid #39444e;
+  background: #fff;
+  transform: translateX(-50%) translateY(-100%);
+  padding: 8px;
+}
+
+.comparison-chart-tooltip .tooltip-name {
+  font-family: "Metropolis", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.comparison-chart-tooltip .tooltip-year {
+  font-family: "Metropolis", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.comparison-chart-tooltip .tooltip-value {
+  font-family: "Metropolis", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
 /* icons */
 
 .icon {

@@ -345,6 +345,7 @@
           const dot = dots[columnIndex].filter((d, i) => i === valueIndex);
 
           if (lastHoveredDot !== dot.node()) {
+            updateTooltip(dot);
             lastHoveredDot = dot.node();
 
             dots.forEach((dotsCol, index) => {
@@ -366,6 +367,7 @@
           }
         })
         .on("mouseleave", (e) => {
+          updateTooltip(null);
           lastHoveredDot = null;
 
           dots.forEach((dotsCol, index) => {
@@ -449,6 +451,49 @@
       `;
       newElem.insertAdjacentHTML("beforeend", template);
     });
+  }
+
+  function updateTooltip(dot) {
+    const chart = document.querySelector("#js-comparison-chart");
+    const tooltip = document.querySelector("#js-comparison-chart-tooltip");
+
+    if (!dot) {
+      tooltip.style.display = "none";
+      return;
+    }
+
+    if (dot && dot._groups[0].length > 0) {
+      tooltip.style.display = "block";
+      svg = chart.querySelector("svg");
+      const point = svg.createSVGPoint();
+      point.x = dot.attr("cx");
+      point.y = dot.attr("cy");
+      const matrix = dot.node().getScreenCTM();
+      const inverse = matrix.inverse();
+      const cursorPoint = point.matrixTransform(matrix);
+      tooltip.style.left = `${cursorPoint.x}px`;
+      tooltip.style.top = `${cursorPoint.y - 16}px`;
+
+      const d = dot.datum();
+      const codeKey = d.key;
+      const name = codeToName[codeKey];
+      const columnIndex = dot._parents[0].classList[0].split("-")[1];
+      const year = data[columnIndex].year;
+      const value = data[columnIndex][d.key];
+
+      const formattedName = capFirstIfAllCaps(name);
+
+      const formatter = new Intl.NumberFormat("sl-SI", {
+        style: "currency",
+        currency: "EUR",
+        currencyDisplay: "code",
+      });
+      const formattedValue = formatter.format(value);
+
+      tooltip.querySelector(".tooltip-name").innerText = formattedName;
+      tooltip.querySelector(".tooltip-year").innerText = year;
+      tooltip.querySelector(".tooltip-value").innerText = formattedValue;
+    }
   }
 
   window.addEventListener("hashchange", () => {
