@@ -903,42 +903,7 @@ a.box-link:hover {
 
 .chart-legend .chart-legend-option .icon {
   border: 1px solid #39444e;
-}
-
-.chart-legend .chart-legend-option:nth-child(1n) .icon {
-  background-color: #64507d;
-}
-
-.chart-legend .chart-legend-option:nth-child(2n) .icon {
-  background-color: #8c70ae;
-}
-
-.chart-legend .chart-legend-option:nth-child(3n) .icon {
-  background-color: #c9a2f9;
-}
-
-.chart-legend .chart-legend-option:nth-child(4n) .icon {
-  background-color: #efe2fd;
-}
-
-.chart-legend .chart-legend-option:nth-child(5n) .icon {
-  background-color: #101a34;
-}
-
-.chart-legend .chart-legend-option:nth-child(6n) .icon {
-  background-color: #283c78;
-}
-
-.chart-legend .chart-legend-option:nth-child(7n) .icon {
-  background-color: #3756ae;
-}
-
-.chart-legend .chart-legend-option:nth-child(8n) .icon {
-  background-color: #899acd;
-}
-
-.chart-legend .chart-legend-option:nth-child(9n) .icon {
-  background-color: #c3cce6;
+  background-color: magenta;
 }
 
 /* icons */

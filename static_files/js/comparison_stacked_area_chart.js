@@ -102,6 +102,7 @@
     const width = 640 - margin.left - margin.right;
     const height = 480 - margin.top - margin.bottom;
 
+    let hiddenKeys = {};
     let stackedData = d3.stack().keys(Array.from(codeKeys))(data);
 
     // Define the scales for the x and y axes
@@ -335,7 +336,7 @@
               dotsCol
                 .interrupt("hoverDot")
                 .attr("r", 3)
-                .attr("fill", (d, i) => colors[i % colors.length])
+                .attr("fill", (d, i) => getColor(i))
                 .attr("stroke", "none");
             });
 
@@ -345,7 +346,7 @@
               .duration(150)
               .attr("r", 6)
               .attr("fill", "white")
-              .attr("stroke", (d, i) => colors[valueIndex % colors.length])
+              .attr("stroke", (d, i) => getColor(valueIndex))
               .attr("stroke-width", 2);
           }
         })
@@ -356,17 +357,62 @@
             dotsCol
               .interrupt("hoverDot")
               .attr("r", 3)
-              .attr("fill", (d, i) => colors[i % colors.length])
+              .attr("fill", (d, i) => getColor(i))
               .attr("stroke", "none");
           });
         });
     }
+
+    // ---
+
+    const optionsElem = document.querySelector("#js-comparison-options");
+    optionsElem.addEventListener("change", (e) => {
+      console.log(e.target);
+      console.log(e.target.checked);
+
+      const code = e.target.value;
+      const checked = e.target.checked;
+
+      if (!checked) {
+        hiddenKeys[`code_${code}`] = {};
+      }
+
+      data.forEach((v) => {
+        if (checked) {
+          v[`code_${code}`] = hiddenKeys[`code_${code}`][v.year];
+        } else {
+          hiddenKeys[`code_${code}`][v.year] = v[`code_${code}`];
+          v[`code_${code}`] = 0;
+        }
+      });
+
+      if (checked) {
+        delete hiddenKeys[`code_${code}`];
+      }
+
+      stackedData = d3.stack().keys(Array.from(codeKeys))(data);
+
+      d3.selectAll(`[data-key]`).attr("opacity", 1);
+
+      Object.keys(hiddenKeys).forEach((key) => {
+        d3.selectAll(`[data-key="${key}"]`)
+          .transition()
+          .delay(1750)
+          .duration(150)
+          .attr("opacity", 0);
+      });
+
+      updateArea();
+      updateLines();
+      updateDots();
+      updateSelectedOutline();
+    });
   }
 
   function populateLegendOptions() {
     const elem = document.querySelector("#js-comparison-options");
 
-    [...codeKeys].sort().forEach((codeKey) => {
+    [...codeKeys].forEach((codeKey, i) => {
       const code = codeKey.replace("code_", "");
       const name = codeToName[codeKey];
       const template = `
@@ -374,7 +420,7 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="${code}" id="checkbox_${code}" checked>
             <label class="form-check-label" for="checkbox_${code}">
-              <i class="icon icon-circle"></i>
+              <i class="icon icon-circle" style="background-color: ${getColor(i)};"></i>
               <span>${capFirstIfAllCaps(name)}</span>
             </label>
           </div>
