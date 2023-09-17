@@ -359,6 +359,22 @@ def comparison_over_time_chart_data(request, municipality_id, year_id=None):
     year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
+    code = request.GET.get("code", None)
+
+    def find_code(code, parent_chain, node):
+        if node["code"] == code:
+            return node, parent_chain
+
+        if children := node.get("children", []):
+            for child in children:
+                found, found_parent_chain = find_code(
+                    code, [*parent_chain, node], child
+                )
+                if found:
+                    return found, found_parent_chain
+
+        return None, None
+
     years_data = {}
     years = get_municipality_published_years(municipality)
 
@@ -370,6 +386,13 @@ def comparison_over_time_chart_data(request, municipality_id, year_id=None):
             tree_data = get_expense_tree(municipality, year_, summary, summary_type)
         else:
             tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
+
+        if code:
+            found_code_data, found_parent_chain = find_code(
+                code, [{"code": None}], tree_data
+            )
+            if found_code_data:
+                tree_data = found_code_data
 
         years_data[year_.name] = tree_data["children"]
 

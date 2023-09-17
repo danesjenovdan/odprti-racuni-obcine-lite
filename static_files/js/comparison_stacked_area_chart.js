@@ -1,10 +1,4 @@
 (function () {
-  const url = new URL(
-    window.__COMPARISON_CHART_DATA_URL__,
-    window.location.origin
-  );
-  url.search = window.location.search;
-
   let codeToName = {};
   let codeKeys = new Set();
   let data = [];
@@ -36,25 +30,40 @@
     return string;
   }
 
-  fetch(url)
-    .then(
-      (res) => {
-        if (!res.ok) {
-          console.error(res);
-          return { error: res.status };
+  function fetchChartData(searchString, hashString) {
+    const url = new URL(
+      window.__COMPARISON_CHART_DATA_URL__,
+      window.location.origin
+    );
+    url.search = searchString;
+
+    const [, code] = hashString.slice(1).split(";");
+    if (code) {
+      url.searchParams.set("code", code);
+    }
+
+    fetch(url)
+      .then(
+        (res) => {
+          if (!res.ok) {
+            console.error(res);
+            return { error: res.status };
+          }
+          return res.json();
+        },
+        (error) => {
+          console.error(error);
+          return { error: error.message };
         }
-        return res.json();
-      },
-      (error) => {
-        console.error(error);
-        return { error: error.message };
-      }
-    )
-    .then((data) => {
-      prepareData(data);
-      renderChart();
-      populateLegendOptions();
-    });
+      )
+      .then((responseData) => {
+        prepareData(responseData);
+        populateLegendOptions();
+        renderChart();
+      });
+  }
+
+  fetchChartData(window.location.search, window.location.hash);
 
   function prepareData(responseData) {
     codeToName = {};
@@ -97,6 +106,12 @@
   }
 
   function renderChart() {
+    // remove any old chart contents and clone element to remove all old event listeners
+    const oldElem = document.querySelector("#js-comparison-chart");
+    oldElem.innerHTML = "";
+    const newElem = oldElem.cloneNode(true);
+    oldElem.parentNode.replaceChild(newElem, oldElem);
+
     // Set the dimensions and margins of the graph
     const margin = { top: 20, right: 20, bottom: 30, left: 70 };
     const width = 640 - margin.left - margin.right;
@@ -363,8 +378,7 @@
         });
     }
 
-    // ---
-
+    // Legend checkboxes check/uncheck listener
     const optionsElem = document.querySelector("#js-comparison-options");
     optionsElem.addEventListener("change", (e) => {
       console.log(e.target);
@@ -410,8 +424,13 @@
   }
 
   function populateLegendOptions() {
-    const elem = document.querySelector("#js-comparison-options");
+    // reset contents to empty old data and clone element to remove all old event listeners
+    const oldElem = document.querySelector("#js-comparison-options");
+    oldElem.innerHTML = "";
+    const newElem = oldElem.cloneNode(true);
+    oldElem.parentNode.replaceChild(newElem, oldElem);
 
+    // populate with new data
     [...codeKeys].forEach((codeKey, i) => {
       const code = codeKey.replace("code_", "");
       const name = codeToName[codeKey];
@@ -420,13 +439,19 @@
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="${code}" id="checkbox_${code}" checked>
             <label class="form-check-label" for="checkbox_${code}">
-              <i class="icon icon-circle" style="background-color: ${getColor(i)};"></i>
+              <i class="icon icon-circle" style="background-color: ${getColor(
+                i
+              )};"></i>
               <span>${capFirstIfAllCaps(name)}</span>
             </label>
           </div>
         </div>
       `;
-      elem.insertAdjacentHTML("beforeend", template);
+      newElem.insertAdjacentHTML("beforeend", template);
     });
   }
+
+  window.addEventListener("hashchange", () => {
+    fetchChartData(window.location.search, window.location.hash);
+  });
 })();
