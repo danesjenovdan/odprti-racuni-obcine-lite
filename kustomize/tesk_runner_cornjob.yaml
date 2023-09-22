@@ -41,19 +41,19 @@ spec:
                   memory: 200Mi
                   cpu: 200m
           containers:
-          - name: task-runner-cronjob
-            image: odprti-racuni-obcine
-            env:
-              - name: DJANGO_SETTINGS_MODULE
-                value: odprti_racuni_obcine.settings
-            envFrom:
-              - secretRef:
-                  name: odprti-racuni-obcine-credentials
-            command:
-              - python
-              - manage.py
-              - run_tasks
-            volumeMounts:
-              - name: odprti-racuni-obcine-shared-storage
-                mountPath: /pvc
+            - name: task-runner-cronjob
+              image: odprti-racuni-obcine
+              env:
+                - name: DJANGO_SETTINGS_MODULE
+                  value: odprti_racuni_obcine.settings
+              envFrom:
+                - secretRef:
+                    name: odprti-racuni-obcine-credentials
+              command:
+                - python
+                - manage.py
+                - run_tasks
+              volumeMounts:
+                - name: odprti-racuni-obcine-shared-storage
+                  mountPath: /pvc
           restartPolicy: Never
