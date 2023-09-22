@@ -24,4 +24,7 @@ spec:
               - python
               - manage.py
               - run_tasks
+            volumeMounts:
+            - name: odprti-racuni-obcine-shared-storage
+              mountPath: /pvc
           restartPolicy: Never
