@@ -78,7 +78,9 @@
           <div class="col text-left">
             <div class="d-flex align-items-center">
               <div class="footer-logo me-3">
-                <img src="{{ municipality.logo.url }}" alt="Logo {{ municipality.name }}">
+                {% if municipality.logo %}
+                  <img src="{{ municipality.logo.url }}" alt="Logo {{ municipality.name }}">
+                {% endif %}
               </div>
               <div>
                 <h6>{{ municipality.name }}</h6>
