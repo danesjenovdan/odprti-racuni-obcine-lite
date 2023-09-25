@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.http import JsonResponse, Http404
@@ -223,7 +223,7 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
 
 
 def overview(request, municipality_id, year_id=None):
-    municipality = Municipality.objects.get(id=municipality_id)
+    municipality = get_object_or_404(Municipality, pk=municipality_id)
     year = get_year(year_id, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
 
@@ -243,7 +243,7 @@ def overview(request, municipality_id, year_id=None):
 
 
 def cut_of_funds(request, municipality_id, year_id=None):
-    municipality = Municipality.objects.get(id=municipality_id)
+    municipality = get_object_or_404(Municipality, pk=municipality_id)
     year = get_year(year_id, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
@@ -271,7 +271,7 @@ def cut_of_funds(request, municipality_id, year_id=None):
 
 
 def comparison_over_time(request, municipality_id, year_id=None):
-    municipality = Municipality.objects.get(id=municipality_id)
+    municipality = get_object_or_404(Municipality, pk=municipality_id)
     year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
@@ -288,7 +288,7 @@ def comparison_over_time(request, municipality_id, year_id=None):
 
 
 def get_context_for_table_code(request, municipality_id, year_id=None):
-    municipality = Municipality.objects.get(id=municipality_id)
+    municipality = get_object_or_404(Municipality, pk=municipality_id)
     year = get_year(year_id, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
@@ -355,7 +355,7 @@ def comparison_over_time_table(request, municipality_id, year_id=None):
 
 
 def comparison_over_time_chart_data(request, municipality_id, year_id=None):
-    municipality = Municipality.objects.get(id=municipality_id)
+    municipality = get_object_or_404(Municipality, pk=municipality_id)
     year = get_year(year_id, municipality)
     tree_type = get_tree_type(request.GET)
 
