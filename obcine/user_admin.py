@@ -113,7 +113,7 @@ class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
 class MunicipalityFinancialYearAdmin(LimitedAdmin):
     list_display = ['year', 'is_published']
     exclude = ['municipality', 'financial_year']
-    fields = ['adoption_date_of_budget', 'rebalans_date_of_budget', 'is_published', 'page_url']
+    fields = ['budget_date', 'budget_type', 'is_published', 'page_url']
     readonly_fields = ['page_url']
     inlines = [
         BudgetDocumentInlineAdmin,
