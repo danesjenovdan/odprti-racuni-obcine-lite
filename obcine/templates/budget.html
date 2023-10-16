@@ -27,6 +27,8 @@
                     Sprejeti proračun
                     {% endif %}
                     {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
+                  {% else %}
+                    Proračun
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
@@ -76,6 +78,8 @@
                     Sprejeti proračun
                     {% endif %}
                     {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
+                  {% else %}
+                    Proračun
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
