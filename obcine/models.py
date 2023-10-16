@@ -223,6 +223,7 @@ class FinancialYear(models.Model):
 
 class MunicipalityFinancialYear(Timestampable):
     class BType(models.TextChoices):
+        PROPOSAL = "PROPOSAL", _("Predlog proračuna")
         REBALANS = "REBALANS", _("Rebalans proračuna")
         VALID = "VALID", _("Veljavni proračun")
         ADOPTED = "ADOPTED", _("Sprejeti proračun")
