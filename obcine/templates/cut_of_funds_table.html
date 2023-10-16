@@ -29,15 +29,17 @@
         <div class="bar-chart-legend">
           <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i>
           {% if municipality_financial_year.budget_date %}
-                    {% if municipality_financial_year.budget_type == 'VALID' %}
-                    Veljavni proračun
-                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-                    Rebalans proračuna
-                    {% else %}
-                    Sprejeti proračun
-                    {% endif %}
-                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
-                  {% endif %}
+            {% if municipality_financial_year.budget_type == 'VALID' %}
+            Veljavni proračun
+            {% elif municipality_financial_year.budget_type == 'REBALANS' %}
+            Rebalans proračuna
+            {% else %}
+            Sprejeti proračun
+            {% endif %}
+            {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
+          {% else %}
+            Proračun
+          {% endif %}
         </div>
         {% endif %}
         {% if tree_data.realized != None %}
