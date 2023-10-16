@@ -18,11 +18,15 @@
               {% if summary.planned_revenue != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  Proračun
-                  {% if municipality_financial_year.rebalans_date_of_budget %}
-                  (rebalans sprejet {{ municipality_financial_year.rebalans_date_of_budget|date:"j. n. Y" }})
-                  {% elif municipality_financial_year.adoption_date_of_budget %}
-                  (sprejet {{ municipality_financial_year.adoption_date_of_budget|date:"j. n. Y" }})
+                  {% if municipality_financial_year.budget_date %}
+                    {% if municipality_financial_year.budget_type == 'VALID' %}
+                    Veljavni proračun
+                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
+                    Rebalans proračuna
+                    {% else %}
+                    Sprejeti proračun
+                    {% endif %}
+                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
@@ -33,7 +37,7 @@
                 <small class="amount-description">
                   Realizacija
                   {% if summary.realized_revenue_date %}
-                  ({{ summary.realized_revenue_date|date:"j. n. Y" }})
+                  {{ summary.realized_revenue_date|date:"j. n. Y" }}
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.realized_revenue|floatformat:"2g" }}</span>
@@ -63,11 +67,15 @@
               {% if summary.planned_expenses != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  Proračun
-                  {% if municipality_financial_year.rebalans_date_of_budget %}
-                  (rebalans sprejet {{ municipality_financial_year.rebalans_date_of_budget|date:"j. n. Y" }})
-                  {% elif municipality_financial_year.adoption_date_of_budget %}
-                  (sprejet {{ municipality_financial_year.adoption_date_of_budget|date:"j. n. Y" }})
+                  {% if municipality_financial_year.budget_date %}
+                    {% if municipality_financial_year.budget_type == 'VALID' %}
+                    Veljavni proračun
+                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
+                    Rebalans proračuna
+                    {% else %}
+                    Sprejeti proračun
+                    {% endif %}
+                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
@@ -78,7 +86,7 @@
                 <small class="amount-description">
                   Realizacija
                   {% if summary.realized_expenses_date %}
-                  ({{ summary.realized_expenses_date|date:"j. n. Y" }})
+                  {{ summary.realized_expenses_date|date:"j. n. Y" }}
                   {% endif %}
                 </small>
                 <span class="amount-number">{{ summary.realized_expenses|floatformat:"2g" }}</span>

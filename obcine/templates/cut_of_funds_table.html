@@ -27,12 +27,17 @@
       <th>
         {% if tree_data.planned != None %}
         <div class="bar-chart-legend">
-          <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i> Proračun
-          {% if municipality_financial_year.rebalans_date_of_budget %}
-          (rebalans sprejet {{ municipality_financial_year.rebalans_date_of_budget|date:"j. n. Y" }})
-          {% elif municipality_financial_year.adoption_date_of_budget %}
-          (sprejet {{ municipality_financial_year.adoption_date_of_budget|date:"j. n. Y" }})
-          {% endif %}
+          <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i>
+          {% if municipality_financial_year.budget_date %}
+                    {% if municipality_financial_year.budget_type == 'VALID' %}
+                    Veljavni proračun
+                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
+                    Rebalans proračuna
+                    {% else %}
+                    Sprejeti proračun
+                    {% endif %}
+                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
+                  {% endif %}
         </div>
         {% endif %}
         {% if tree_data.realized != None %}
