@@ -30,11 +30,13 @@
           <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i>
           {% if municipality_financial_year.budget_date %}
             {% if municipality_financial_year.budget_type == 'VALID' %}
-            Veljavni proračun
+              Veljavni proračun
             {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-            Rebalans proračuna
+              Rebalans proračuna
+            {% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
+              Predlog proračuna
             {% else %}
-            Sprejeti proračun
+              Sprejeti proračun
             {% endif %}
             {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
           {% else %}
