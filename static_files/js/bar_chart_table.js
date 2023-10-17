@@ -52,7 +52,7 @@
     },
     {
       threshold: 1,
-      rootMargin: "-32px",
+      rootMargin: "-32px 0px",
     }
   );
 

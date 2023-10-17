@@ -29,7 +29,7 @@
           </div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+          Meni
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
@@ -74,10 +74,10 @@
     <footer class="footer bg-body">
       <div class="container">
         <hr class="hr-wave">
-        <div class="row footer-max-width align-items-center justify-content-center my-5 py-2">
-          <div class="col text-left">
+        <div class="row footer-max-width align-items-center justify-content-center my-4 my-md-5 py-2">
+          <div class="col-12 col-md col-municipality">
             <div class="d-flex align-items-center">
-              <div class="footer-logo me-3">
+              <div class="footer-logo me-md-3">
                 {% if municipality.logo %}
                   <img src="{{ municipality.logo.url }}" alt="Logo {{ municipality.name }}">
                 {% endif %}
@@ -90,7 +90,7 @@
               </div>
             </div>
           </div>
-          <div class="col text-center">
+          <div class="col-12 col-md col-about">
             <h6>Odprti računi</h6>
             <p>
               Aplikacijo sta razvila <a href="https://danesjenovdan.si" target="_blank">Danes je nov dan</a> in
@@ -103,9 +103,9 @@
           {% comment %} <div class="col-4">
             <a class="footer-small-link" href="#">Pogoji uporabe</a>
           </div> {% endcomment %}
-          <div class="col text-end align-items-center">
+          <div class="col-12 col-md col-mju align-items-center">
             <span class="footer-small-link">Projekt Odprti računi sofinancira Ministrstvo za javno upravo iz Sklada za NVO.</span>
-            <img class="mju-logo ms-4" src="{% static "mju-logo.svg" %}" alt="Ministrstvo za javno upravo">
+            <img class="mju-logo ms-md-4" src="{% static "mju-logo.svg" %}" alt="Ministrstvo za javno upravo">
           </div>
         </div>
       </div>

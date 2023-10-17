@@ -3,8 +3,8 @@
 {% with request.resolver_match.kwargs.municipality_id as municipality_id %}
 
 <div class="year-chooser">
-  <h4 class="text-center">Izberite leto za prikaz podatkov</h4>
-  <div class="mt-3 mb-4">
+  <h4>Izberite leto za prikaz podatkov</h4>
+  <div class="mt-3 mb-4 d-none d-md-block">
     <div class="year-line">
       {% for year_ in years %}
         <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year_.id %}" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 %}%;">
@@ -13,6 +13,13 @@
         </a>
       {% endfor %}
     </div>
+  </div>
+  <div class="d-md-none">
+    <select onchange="window.location.href = this.options[this.selectedIndex].value">
+      {% for year_ in years %}
+        <option value="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year_.id %}" {% if year_.id == year.id %}selected{% endif %}>{{ year_.name }}</option>
+      {% endfor %}
+    </select>
   </div>
 </div>
 

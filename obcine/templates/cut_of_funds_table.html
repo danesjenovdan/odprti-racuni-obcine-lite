@@ -6,7 +6,7 @@
 
 {% child_max_graph_scale tree_data as value_max %}
 {% graph_scale_values value_max as scale_values %}
-<table class="table bar-chart-table my-5">
+<table class="table bar-chart-table my-md-5">
   <thead>
     <tr>
       <th>
@@ -28,37 +28,25 @@
         {% if tree_data.planned != None %}
         <div class="bar-chart-legend">
           <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-2"></i>
-          {% if municipality_financial_year.budget_date %}
-            {% if municipality_financial_year.budget_type == 'VALID' %}
-              Veljavni proračun
-            {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-              Rebalans proračuna
-            {% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
-              Predlog proračuna
-            {% else %}
-              Sprejeti proračun
-            {% endif %}
-            {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
-          {% else %}
-            Proračun
-          {% endif %}
+          {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
         </div>
         {% endif %}
         {% if tree_data.realized != None %}
         <div class="bar-chart-legend">
-          <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija
+          <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i>
           {% if tree_type == "expenses" %}
-          {% if summary.realized_expenses_date %}
-          ({{ summary.realized_expenses_date|date:"j. n. Y" }})
-          {% endif %}
+            {% include 'legend_realization_text.html' with summary=summary date=summary.realized_expenses_date only %}
           {% else %}
-          {% if summary.realized_revenue_date %}
-          ({{ summary.realized_revenue_date|date:"j. n. Y" }})
-          {% endif %}
+            {% include 'legend_realization_text.html' with summary=summary date=summary.realized_revenue_date only %}
           {% endif %}
         </div>
         {% endif %}
-        {% if tree_data.amount != None %}<div class="bar-chart-legend"><i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i> Realizacija</div>{% endif %}
+        {% if tree_data.amount != None %}
+        <div class="bar-chart-legend">
+          <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i>
+          Realizacija
+        </div>
+        {% endif %}
       </th>
     </tr>
   </thead>

@@ -2,7 +2,7 @@
 
 <section class="budget">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center {% if hide_on_mobile %}d-none d-md-block{% endif %}">
       <div class="col">
         {% if request.resolver_match.url_name == 'overview' %}
         <a class="budget-box-link" href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}">
@@ -18,20 +18,7 @@
               {% if summary.planned_revenue != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  {% if municipality_financial_year.budget_date %}
-                    {% if municipality_financial_year.budget_type == 'VALID' %}
-                      Veljavni proračun
-                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-                      Rebalans proračuna
-                    {% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
-                      Predlog proračuna
-                    {% else %}
-                      Sprejeti proračun
-                    {% endif %}
-                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
-                  {% else %}
-                    Proračun
-                  {% endif %}
+                  {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
                 </small>
                 <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
               </div>
@@ -39,10 +26,7 @@
               {% if summary.realized_revenue != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  Realizacija
-                  {% if summary.realized_revenue_date %}
-                  {{ summary.realized_revenue_date|date:"j. n. Y" }}
-                  {% endif %}
+                  {% include 'legend_realization_text.html' with summary=summary date=summary.realized_revenue_date only %}
                 </small>
                 <span class="amount-number">{{ summary.realized_revenue|floatformat:"2g" }}</span>
               </div>
@@ -71,20 +55,7 @@
               {% if summary.planned_expenses != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  {% if municipality_financial_year.budget_date %}
-                    {% if municipality_financial_year.budget_type == 'VALID' %}
-                      Veljavni proračun
-                    {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-                      Rebalans proračuna
-                    {% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
-                      Predlog proračuna
-                    {% else %}
-                      Sprejeti proračun
-                    {% endif %}
-                    {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
-                  {% else %}
-                    Proračun
-                  {% endif %}
+                  {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
                 </small>
                 <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
               </div>
@@ -92,10 +63,7 @@
               {% if summary.realized_expenses != None %}
               <div class="budget-amount">
                 <small class="amount-description">
-                  Realizacija
-                  {% if summary.realized_expenses_date %}
-                  {{ summary.realized_expenses_date|date:"j. n. Y" }}
-                  {% endif %}
+                  {% include 'legend_realization_text.html' with summary=summary date=summary.realized_expenses_date only %}
                 </small>
                 <span class="amount-number">{{ summary.realized_expenses|floatformat:"2g" }}</span>
               </div>
