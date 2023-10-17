@@ -135,7 +135,7 @@ msgstr "Dokument proračuna prihodkov"
 
 #: obcine/models.py:377
 msgid "Planned revenue documents"
-msgstr "Veljavni proračun - prihodki"
+msgstr "Proračun - prihodki"
 
 #: obcine/models.py:395
 msgid "Yearly revenue document"
@@ -183,7 +183,7 @@ msgstr "Dokument proračuna odhodkov"
 
 #: obcine/models.py:474
 msgid "Planned expense documents"
-msgstr "Veljavni proračun - odhodki"
+msgstr "Proračun - odhodki"
 
 #: obcine/models.py:492
 msgid "Monthly expense realization document"
