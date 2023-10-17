@@ -39,7 +39,8 @@ def amount_percentage(tree_type, summary, amount_type, amount, precision=0):
     amount_type = "realized" if amount_type == "amount" else amount_type
     key = f"{amount_type}_{tree_type}"
     if all := summary.get(key, 0):
-        return round(amount / all * 100, precision)
+        rounded_value = round(amount / all * 100, precision)
+        return str(rounded_value).replace(".", ",")
     return 0
 
 
