@@ -503,11 +503,12 @@ a.budget-box-link:hover {
   font-family: "Metropolis", sans-serif;
   font-weight: 600;
   color: #39444e;
+  text-decoration: none;
   transition: border-color 0.15s ease-in-out;
 }
 
 a.box-link:hover .button-arrow-link,
-a.budget-box-link:hover .button-arrow-link {
+.budget-box-link .button-arrow-link:hover {
   border-color: #39444e;
 }
 
@@ -551,6 +552,14 @@ a.budget-box-link:hover .button-arrow-link {
   }
 }
 
+.budget-box-link .budget-summary .budget-summary-title a {
+  color: inherit;
+}
+
+.budget-box-link .budget-summary .budget-summary-title a:hover {
+  text-decoration: none;
+}
+
 .budget-box-link .budget-summary .budget-amount {
   text-align: right;
 }
@@ -585,12 +594,14 @@ a.budget-box-link:hover .button-arrow-link {
 }
 
 .budget-box-link .budget-summary .budget-bar {
+  display: block;
 }
 .budget-box-link .budget-summary .budget-bar + .budget-bar {
   margin-top: 13px;
 }
 
 .budget-box-link .budget-summary .budget-bar .bar-max {
+  display: block;
   height: 40px;
 }
 .budget-box-link .budget-summary .budget-bar .bar-max--1 {
