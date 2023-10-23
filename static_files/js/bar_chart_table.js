@@ -4,11 +4,11 @@
 
   const scrollToElem = document.querySelector(`a[name="${elemName}"]`);
   if (scrollToElem) {
-    scrollToElem.scrollIntoView({
-      behavior: "instant",
-      block: "start",
-      inline: "start",
-    });
+    // scrollToElem.scrollIntoView({
+    //   behavior: "instant",
+    //   block: "start",
+    //   inline: "start",
+    // });
   }
 
   const breadcrumbsElem = document.getElementById("js-breadcrumbs-container");
@@ -67,9 +67,20 @@
       scrollOnLoad = true;
     }
 
+    // only show loader if it takes more than 0.5s
+    const loaderTimeout = setTimeout(() => {
+      document.querySelector(".loader-bg").classList.remove("hidden-bct");
+    }, 500);
+
+    const hideLoader = () => {
+      clearTimeout(loaderTimeout);
+      document.querySelector(".loader-bg").classList.add("hidden-bct");
+    };
+
     return fetch(url)
       .then(
         (res) => {
+          hideLoader();
           if (!res.ok) {
             console.error(res);
             return `<div class="alert alert-warning">${res.statusText}</div>`;
@@ -77,6 +88,7 @@
           return res.text();
         },
         (error) => {
+          hideLoader();
           console.error(error);
           return `<div class="alert alert-danger">${error.message}</div>`;
         }
@@ -100,11 +112,11 @@
         }
 
         if (scrollOnLoad && scrollToElem) {
-          scrollToElem.scrollIntoView({
-            behavior: "instant",
-            block: "start",
-            inline: "start",
-          });
+          // scrollToElem.scrollIntoView({
+          //   behavior: "instant",
+          //   block: "start",
+          //   inline: "start",
+          // });
         }
         tableElem.querySelectorAll("tr").forEach((tr) => {
           revealObserver.observe(tr);

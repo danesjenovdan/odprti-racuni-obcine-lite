@@ -42,9 +42,20 @@
       url.searchParams.set("code", code);
     }
 
+    // only show loader if it takes more than 0.5s
+    const loaderTimeout = setTimeout(() => {
+      document.querySelector(".loader-bg").classList.remove("hidden-sac");
+    }, 500);
+
+    const hideLoader = () => {
+      clearTimeout(loaderTimeout);
+      document.querySelector(".loader-bg").classList.add("hidden-sac");
+    };
+
     fetch(url)
       .then(
         (res) => {
+          hideLoader();
           if (!res.ok) {
             console.error(res);
             return { error: res.status };
@@ -52,6 +63,7 @@
           return res.json();
         },
         (error) => {
+          hideLoader();
           console.error(error);
           return { error: error.message };
         }

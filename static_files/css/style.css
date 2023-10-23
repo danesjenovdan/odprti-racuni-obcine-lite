@@ -1495,3 +1495,36 @@ a.box-link:hover {
   background-image: url("/static/icons/pike-footer.svg");
   border-top: 0;
 }
+
+.loader-bg {
+  position: fixed;
+  z-index: 9999999;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-bg.hidden-bct.hidden-sac {
+  display: none !important;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 24px 18px;
+  border-radius: 3px;
+  background: #fff;
+  text-align: center;
+  color: #39444e;
+}
+
+.loader-content span {
+  margin-top: 10px;
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}

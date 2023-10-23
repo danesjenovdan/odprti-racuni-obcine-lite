@@ -9,11 +9,11 @@
         <div class="breadcrumb-label">
           <div class="name">{{ parent.name|capfirst_if_allcaps }}</div>
           {% if parent.planned != None and parent.realized != None %}
-            <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned 2 %} %</div>
+            <div class="amount">{{ parent.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" parent.planned 2 %}&nbsp;%</div>
           {% elif parent.realized != None %}
-            <div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized 2 %} %</div>
+            <div class="amount">{{ parent.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" parent.realized 2 %}&nbsp;%</div>
           {% elif parent.amount != None %}
-            <div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount 2 %} %</div>
+            <div class="amount">{{ parent.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" parent.amount 2 %}&nbsp;%</div>
           {% endif %}
         </div>
       </a>
@@ -27,7 +27,7 @@
             <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-1"></i>
             {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
           </div>
-          <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned 2 %} %</div>
+          <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned 2 %}&nbsp;%</div>
         {% endif %}
         {% if tree_data.realized != None %}
           <div class="bar-chart-legend d-md-none">
@@ -38,14 +38,14 @@
               {% include 'legend_realization_text.html' with summary=summary date=summary.realized_revenue_date only %}
             {% endif %}
           </div>
-          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized 2 %} %</div>
+          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized 2 %}&nbsp;%</div>
         {% endif %}
         {% if tree_data.amount != None %}
           <div class="bar-chart-legend d-md-none">
             <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-1"></i>
             Realizacija
           </div>
-          <div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount 2 %} %</div>
+          <div class="amount">{{ tree_data.amount|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "amount" tree_data.amount 2 %}&nbsp;%</div>
         {% endif %}
       </div>
     </a>
