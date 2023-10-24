@@ -90,7 +90,7 @@ def get_document_date(data_model, municipality, year):
 
 
 def get_summary(municipality, year, summary_type="monthly"):
-    summary_cache_key = get_cache_key(municipality, year, "summary", summary_type)
+    summary_cache_key = get_cache_key(municipality, year, "summary2", summary_type)
 
     data = cache.get(summary_cache_key)
     if data:
@@ -138,6 +138,8 @@ def get_summary(municipality, year, summary_type="monthly"):
         summary[f"{key}_percentage"] = (
             summary[key] / summary_max_value if summary_max_value > 0 else 0
         )
+
+    summary["summary_type"] = summary_type
 
     cache.set(summary_cache_key, summary)
 

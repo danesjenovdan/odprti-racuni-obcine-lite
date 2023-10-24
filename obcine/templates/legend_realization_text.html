@@ -1,4 +1,6 @@
 Realizacija
-{% if date %}
+{% if summary.summary_type == "yearly" %}
+  - zaključni račun
+{% elif date %}
   {{ date|date:"j. n. Y" }}
 {% endif %}
