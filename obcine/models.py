@@ -213,7 +213,13 @@ class FinancialYear(models.Model):
         return self.name
 
     def is_current(self):
-        return str(datetime.now().year) == self.name
+        """
+        this method return True if year is current or in future
+        """
+        try:
+            return datetime.now().year <= int(self.name)
+        except:
+            return False
 
     class Meta:
         verbose_name = _('Financial year')
