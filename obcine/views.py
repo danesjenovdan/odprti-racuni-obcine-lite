@@ -3,6 +3,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.http import JsonResponse, Http404
 from django.utils.translation import gettext_lazy as _
+from datetime import datetime
 
 from obcine.models import (
     FinancialYear,
@@ -27,19 +28,28 @@ def get_year(year_id, municipality):
     )
     if municipality_financial_year:
         return municipality_financial_year.first().financial_year
-    else:
-        municipality_financial_year = (
-            MunicipalityFinancialYear.objects.filter(
-                municipality=municipality,
-                is_published=True,
-            )
-            .order_by("-financial_year__name")
-            .first()
+
+    municipality_financial_year = MunicipalityFinancialYear.objects.filter(
+        financial_year__name=str(datetime.now().year),
+        municipality=municipality,
+        is_published=True,
+    )
+
+    if municipality_financial_year:
+        return municipality_financial_year.first().financial_year
+
+    municipality_financial_year = (
+        MunicipalityFinancialYear.objects.filter(
+            municipality=municipality,
+            is_published=True,
         )
-        if municipality_financial_year:
-            return municipality_financial_year.financial_year
-        else:
-            raise Http404(_("No published financial year found"))
+        .order_by("-financial_year__name")
+        .first()
+    )
+    if municipality_financial_year:
+        return municipality_financial_year.financial_year
+    else:
+        raise Http404(_("No published financial year found"))
 
 
 def get_municipality_published_years(municipality):
