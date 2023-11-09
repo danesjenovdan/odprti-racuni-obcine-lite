@@ -43,13 +43,13 @@
       <td>
         {% if child.children|length %}
           <div class="bar-chart-name">
-            <a href="#tabs;{{ child.code }}" title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</a>
+            <a href="#tabs;{{ child.code }}" data-code="{{ child.code }}" title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</a>
             <div class="bar-chart-name-arrow">
               <i class="icon icon-puscica ms-1"></i>
             </div>
           </div>
         {% else %}
-          <div class="bar-chart-name"><span title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</span></div>
+          <div class="bar-chart-name"><span data-code="{{ child.code }}" title="{{ child.name|capfirst_if_allcaps }}">{{ child.name|capfirst_if_allcaps }}</span></div>
         {% endif %}
       </td>
       <td>

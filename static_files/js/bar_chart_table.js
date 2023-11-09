@@ -16,6 +16,8 @@
   if (tableElem) {
     tableElem.style.minHeight = "60vh";
     tableElem.addEventListener("click", onTableRowClick, true);
+    tableElem.addEventListener("mouseover", onTableMouseOver, true);
+    tableElem.addEventListener("mouseleave", onTableMouseLeave, false);
     fetchTable(window.location.search, window.location.hash);
   }
 
@@ -36,6 +38,29 @@
         return;
       }
     }
+  }
+
+  let lastHoverCode = null;
+  function onTableMouseOver(event) {
+    const row = event.target.closest("tbody tr");
+    if (row) {
+      const elem = row.querySelector(".bar-chart-name a, .bar-chart-name span");
+      const code = elem ? elem.dataset.code : null;
+      if (code && code !== lastHoverCode) {
+        lastHoverCode = code;
+        window.postMessage({ type: "bar-chart-row-hover", code }, "*");
+      }
+    }
+    const tbody = event.target.closest("tbody");
+    if (!tbody) {
+      lastHoverCode = null;
+      window.postMessage({ type: "bar-chart-row-hover", code: null }, "*");
+    }
+  }
+
+  function onTableMouseLeave(event) {
+    lastHoverCode = null;
+    window.postMessage({ type: "bar-chart-row-hover", code: null }, "*");
   }
 
   function onHashChange(event) {

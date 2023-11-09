@@ -3,6 +3,7 @@
   let codeKeys = new Set();
   let data = [];
   let selectedColumnIndex = 1;
+  let updateHoveredAreaFunc;
 
   const colors = [
     "#64507d",
@@ -363,6 +364,21 @@
         .attr("stroke", () => getColor(valueIndex))
         .attr("opacity", 1);
     }
+    updateHoveredAreaFunc = (code) => {
+      const columnIndex = selectedColumnIndex;
+      const valueIndex = stackedData.findIndex((d) => d.key === `code_${code}`);
+
+      if (columnIndex < 0 || valueIndex < 0 || columnIndex >= dots.length) {
+        updateTooltip(null);
+        updateHoveredArea(-1, -1);
+        hoverDot(null, null);
+      } else {
+        const dot = dots[columnIndex].filter((d, i) => i === valueIndex);
+        updateTooltip(dot);
+        updateHoveredArea(columnIndex, valueIndex);
+        hoverDot(dot, valueIndex);
+      }
+    };
 
     const yAxis = d3.axisLeft().scale(yScale).tickFormat(slSI.format("$,.0f"));
     const xAxis = d3.axisBottom().scale(xScale).tickValues([]).tickFormat("");
@@ -374,6 +390,27 @@
     svg.append("g").call(yAxis);
 
     svg.call(mouseHovered);
+
+    function hoverDot(dot, valueIndex) {
+      dots.forEach((dotsCol, index) => {
+        dotsCol
+          .interrupt("hoverDot")
+          .attr("r", 3)
+          .attr("fill", (d, i) => getColor(i))
+          .attr("stroke", "none");
+      });
+
+      if (dot) {
+        dot
+          .interrupt("hoverDot")
+          .transition("hoverDot")
+          .duration(150)
+          .attr("r", 6)
+          .attr("fill", "white")
+          .attr("stroke", (d, i) => getColor(valueIndex))
+          .attr("stroke-width", 2);
+      }
+    }
 
     function mouseHovered(elem) {
       const bisectYear = d3.bisector((d) => d.year).center;
@@ -409,37 +446,14 @@
             updateTooltip(dot);
             updateHoveredArea(columnIndex, valueIndex);
             lastHoveredDot = dot.node();
-
-            dots.forEach((dotsCol, index) => {
-              dotsCol
-                .interrupt("hoverDot")
-                .attr("r", 3)
-                .attr("fill", (d, i) => getColor(i))
-                .attr("stroke", "none");
-            });
-
-            dot
-              .interrupt("hoverDot")
-              .transition("hoverDot")
-              .duration(150)
-              .attr("r", 6)
-              .attr("fill", "white")
-              .attr("stroke", (d, i) => getColor(valueIndex))
-              .attr("stroke-width", 2);
+            hoverDot(dot, valueIndex);
           }
         })
         .on("mouseleave", (e) => {
           updateTooltip(null);
           updateHoveredArea(-1, -1);
           lastHoveredDot = null;
-
-          dots.forEach((dotsCol, index) => {
-            dotsCol
-              .interrupt("hoverDot")
-              .attr("r", 3)
-              .attr("fill", (d, i) => getColor(i))
-              .attr("stroke", "none");
-          });
+          hoverDot(null, null);
         });
     }
 
@@ -561,5 +575,12 @@
 
   window.addEventListener("hashchange", () => {
     fetchChartData(window.location.search, window.location.hash);
+  });
+
+  window.addEventListener("message", (event) => {
+    if (event.data.type === "bar-chart-row-hover") {
+      const code = event.data.code;
+      updateHoveredAreaFunc(code);
+    }
   });
 })();
