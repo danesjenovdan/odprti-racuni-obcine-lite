@@ -291,6 +291,26 @@ section.description p.lead {
   right: -100px;
 }
 
+@media (max-width: 1199.98px) {
+  .doodle-container .doodle--left {
+    left: -160px;
+  }
+
+  .doodle-container .doodle--right {
+    right: -160px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .doodle-container .doodle--left {
+    left: -230px;
+  }
+
+  .doodle-container .doodle--right {
+    right: -230px;
+  }
+}
+
 .comparison-chart-year-chooser,
 .year-chooser {
   color: #39444e;
