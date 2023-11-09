@@ -19,7 +19,7 @@
         <div class="mt-3 mb-4 ms-3 me-3 ms-md-0 me-md-0">
           <div class="year-line">
             {% for year_ in years %}
-              <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year_.id %}#tabs" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 %}%;">
+              <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year_.id %}#tabs" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 center=True %}%;">
                 <div class="year-selector"></div>
                 <div class="year-label">{{ year_.name }}</div>
               </a>

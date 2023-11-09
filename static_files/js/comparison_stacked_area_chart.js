@@ -16,6 +16,12 @@
     "#c3cce6",
   ];
 
+  const slSI = d3.formatLocale({
+    thousands: ".",
+    grouping: [3],
+    currency: ["", " €"],
+  });
+
   function getColor(i) {
     return colors[i % colors.length];
   }
@@ -125,7 +131,7 @@
     oldElem.parentNode.replaceChild(newElem, oldElem);
 
     // Set the dimensions and margins of the graph
-    const margin = { top: 20, right: 20, bottom: 30, left: 70 };
+    const margin = { top: 20, right: 20, bottom: 5, left: 80 };
     const width = 640 - margin.left - margin.right;
     const height = 480 - margin.top - margin.bottom;
 
@@ -202,7 +208,7 @@
         .data(stackedData)
         .join("path")
         .attr("data-key", (d) => d.key)
-        .attr("fill", (d, i) => `${getColor(i)}44`);
+        .attr("fill", (d, i) => `${getColor(i)}66`);
 
       if (animateFromZero) {
         tmp = tmp.attr("d", areaForAnimation(true));
@@ -214,6 +220,12 @@
         .attr("d", areaForAnimation(false));
     }
     updateArea(true);
+
+    // add group for hovered area (needs to be under dots)
+    const hoveredAreaGroup = areaSvg
+      .append("g")
+      .attr("class", "hovered-area")
+      .attr("transform", `translate(-${xScale.bandwidth() / 2},0)`);
 
     const lineForAnimation = (zero) =>
       d3
@@ -231,7 +243,8 @@
         .join("path")
         .attr("data-key", (d) => d.key)
         .attr("fill", "none")
-        .attr("stroke", (d, i) => getColor(i));
+        .attr("stroke", (d, i) => getColor(i))
+        .attr("stroke-width", 2);
 
       if (animateFromZero) {
         tmp = tmp.attr("d", lineForAnimation(true));
@@ -284,7 +297,7 @@
           .attr("id", "selectedYear")
           .attr("fill", "none")
           .attr("stroke", "#000")
-          .attr("stroke-width", "2")
+          .attr("stroke-width", "3")
           .attr("x", () => xScale.step() * selectedColumnIndex)
           .attr("width", () => xScale.bandwidth())
           .attr("y", yScale(0))
@@ -315,8 +328,44 @@
     }
     updateSelectedOutline(true);
 
-    const yAxis = d3.axisLeft().scale(yScale);
-    const xAxis = d3.axisBottom().scale(xScale);
+    // Draw the box around hovered area
+    let hoveredAreaElement;
+    function updateHoveredArea(columnIndex, valueIndex) {
+      if (!hoveredAreaElement) {
+        let tmp = hoveredAreaGroup
+          .append("rect")
+          .attr("id", "hoveredArea")
+          .attr("fill", "none")
+          .attr("stroke-width", 2)
+          .attr("width", () => xScale.bandwidth())
+          .attr("opacity", 0);
+        hoveredAreaElement = tmp;
+      }
+
+      if (columnIndex < 0 || valueIndex < 0) {
+        hoveredAreaElement.attr("opacity", 0);
+        return;
+      }
+
+      hoveredAreaElement
+        .attr("x", () => xScale.step() * columnIndex)
+        .attr("y", () => {
+          const range = stackedData[valueIndex][columnIndex];
+          return yScale(range[1]);
+        })
+        .attr("height", () => {
+          const range = stackedData[valueIndex][columnIndex];
+          const maxScaleValue = yScale(range[1]);
+          const minScaleValue = yScale(range[0]);
+          return minScaleValue - maxScaleValue;
+        })
+        .attr("fill", () => `${getColor(valueIndex)}77`)
+        .attr("stroke", () => getColor(valueIndex))
+        .attr("opacity", 1);
+    }
+
+    const yAxis = d3.axisLeft().scale(yScale).tickFormat(slSI.format("$,.0f"));
+    const xAxis = d3.axisBottom().scale(xScale).tickValues([]).tickFormat("");
 
     // add the X Axis
     svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
@@ -358,6 +407,7 @@
 
           if (lastHoveredDot !== dot.node()) {
             updateTooltip(dot);
+            updateHoveredArea(columnIndex, valueIndex);
             lastHoveredDot = dot.node();
 
             dots.forEach((dotsCol, index) => {
@@ -380,6 +430,7 @@
         })
         .on("mouseleave", (e) => {
           updateTooltip(null);
+          updateHoveredArea(-1, -1);
           lastHoveredDot = null;
 
           dots.forEach((dotsCol, index) => {

@@ -348,6 +348,11 @@ section.description p.lead {
   height: 32px;
 }
 
+.comparison-chart-year-chooser {
+  padding-left: 12.5%;
+  padding-right: 2.75%;
+}
+
 .comparison-chart-year-chooser .year-line,
 .year-chooser .year-line {
   position: relative;
@@ -1385,6 +1390,10 @@ a.box-link:hover {
 .chart-legend .chart-legend-option .icon {
   border: 1px solid #39444e;
   background-color: magenta;
+}
+
+.comparison-chart .tick text {
+  font-family: "Metropolis", sans-serif;
 }
 
 .comparison-chart-tooltip {
