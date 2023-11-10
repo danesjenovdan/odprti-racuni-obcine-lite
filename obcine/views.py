@@ -20,6 +20,10 @@ from obcine.models import (
 from obcine.tree_utils import ExpenseTreeBuilder, RevenueTreeBuilder
 
 
+def landing(request):
+    return render(request, 'landing.html')
+
+
 def get_year(year_id, municipality):
     municipality_financial_year = MunicipalityFinancialYear.objects.filter(
         financial_year_id=year_id,

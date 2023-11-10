@@ -1,0 +1,272 @@
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 991.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+body {
+  font-family: Roboto, sans-serif;
+}
+
+.bg-primary {
+  background-color: #eaf1fd !important;
+}
+
+.bg-secondary {
+  background-color: #f2ecf8 !important;
+}
+
+.bg-tertiary {
+  background-color: #f8f6e6 !important;
+}
+
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.page-padding {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+@media (max-width: 767.98px) {
+  .page-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.spaced-container {
+  padding-top: 6.2rem;
+  padding-bottom: 6.2rem;
+}
+
+h2 {
+  margin-bottom: 5rem;
+  font-size: 3rem;
+  font-weight: 500;
+  color: #39444e;
+}
+
+h3 {
+  margin-bottom: 5rem;
+  font-size: 2.25rem;
+  font-weight: 300;
+  color: #39444e;
+}
+
+.navbar {
+  padding: 1.7rem 0;
+}
+
+.jumbotron {
+  margin-bottom: 0;
+  padding-top: 7.8rem;
+  padding-bottom: 7.8rem;
+}
+
+@media (max-width: 767.98px) {
+  .jumbotron {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+.jumbotron h1 {
+  font-size: 3rem;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #39444e;
+  margin-bottom: 2rem;
+}
+
+.jumbotron p.lead {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+@media (max-width: 575.98px) {
+  .jumbotron p.lead {
+    font-size: 1.5rem;
+  }
+}
+
+.lead-boxes {
+  text-align: center;
+}
+.lead-boxes > div {
+  margin-bottom: 1.5rem;
+}
+.lead-boxes .lead-box {
+  height: 100%;
+  border: 1px solid #39444e;
+  padding: 1.5rem;
+}
+@media (max-width: 767.98px) {
+  .lead-boxes .lead-box.lead-box--last .lead-box-image,
+  .lead-boxes .lead-box.lead-box--last hr {
+    display: none;
+  }
+}
+.lead-boxes .lead-box .lead-box-icon {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.lead-boxes .lead-box .lead-box-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.lead-boxes .lead-box .lead-box-image {
+  margin: -1.5rem -1.5rem 1.5rem;
+}
+.lead-boxes .lead-box .lead-box-image .img-fluid {
+  width: 100%;
+}
+.lead-boxes .lead-box h3 {
+  margin-top: 1rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+.lead-boxes .lead-box h3 em {
+  font-weight: 700;
+}
+.lead-boxes .lead-box hr {
+  width: 45%;
+  height: 2px;
+  background-color: #eb937b;
+  border: 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.lead-boxes .lead-box p {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.features-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.features-grid .feature-text {
+  grid-column-start: 1;
+  grid-column-end: span 1;
+  color: #39444e;
+}
+
+.features-grid .feature-text:nth-of-type(4n-3) {
+  grid-column-start: 3;
+}
+
+.features-grid .feature-image {
+  grid-column-start: 2;
+  grid-column-end: span 2;
+}
+
+.features-grid .feature-image:nth-of-type(4n-2) {
+  grid-column-start: 1;
+}
+
+.already-using h4 {
+  max-width: 190px;
+}
+
+.already-using .obcina-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.already-using .obcina-boxes .obcina-box {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem 3rem;
+  width: 230px;
+  border: 1px solid #39444e;
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.obcina-box img {
+  width: 32px;
+  height: auto;
+}
+
+.contact-text {
+  color: #39444e;
+  font-size: 1.8125rem;
+  font-weight: 400;
+}
+
+.footer hr {
+  border-top: 1px solid #39444e;
+}
+
+.footer .footer-padding {
+  padding: 4rem 0;
+}
+
+.footer .footer-col {
+  max-width: 520px;
+}
+
+.footer .footer-col .logo-link {
+  display: inline-block;
+  text-decoration: none;
+  margin-inline: 1rem;
+}
+
+.footer .footer-col .contact-link {
+  font-weight: 300;
+}
+
+.footer .footer-col-wide {
+  max-width: 650px;
+}
+
+.footer p {
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: #39444e;
+}
+
+.footer p.small {
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+@media (max-width: 575.98px) {
+  .footer p.small {
+    font-size: 10px;
+  }
+}
+
+.footer p.small a {
+  font-weight: 300;
+}
