@@ -460,7 +460,7 @@
     // Legend checkboxes check/uncheck listener
     const optionsElem = document.querySelector("#js-comparison-options");
     optionsElem.addEventListener("change", (e) => {
-      console.log(e.target);
+      // console.log(e.target);
       console.log(e.target.checked);
 
       const code = e.target.value;
@@ -485,11 +485,15 @@
 
       stackedData = d3.stack().keys(Array.from(codeKeys))(data);
 
-      d3.selectAll(`[data-key]`).attr("opacity", 1);
+      d3.selectAll(`[data-key]`)
+        .interrupt("hiddenKeys")
+        .transition("hiddenKeys")
+        .attr("opacity", 1);
 
       Object.keys(hiddenKeys).forEach((key) => {
         d3.selectAll(`[data-key="${key}"]`)
-          .transition()
+          .interrupt("hiddenKeys")
+          .transition("hiddenKeys")
           .delay(1750)
           .duration(150)
           .attr("opacity", 0);
@@ -580,7 +584,9 @@
   window.addEventListener("message", (event) => {
     if (event.data.type === "bar-chart-row-hover") {
       const code = event.data.code;
-      updateHoveredAreaFunc(code);
+      if (updateHoveredAreaFunc) {
+        updateHoveredAreaFunc(code);
+      }
     }
   });
 })();
