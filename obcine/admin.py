@@ -37,6 +37,8 @@ class RevenueDefinitionAdmin(MPTTModelAdmin):
     mptt_level_indent = 40
     list_display = ['name', 'code', 'level']
 
+    search_fields = ['name', 'code']
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.prefetch_related('categories_children')
@@ -116,6 +118,9 @@ class YearlyRevenueObcineAdmin(admin.ModelAdmin):
 class RevenueAdmin(admin.ModelAdmin):
     list_display = ['year', 'name', 'code', 'amount', 'status']
     list_filter = ['year', 'municipality']
+    autocomplete_fields = ['definition']
+
+    search_fields = ['name', 'code']
 
     def status(self, obj):
         if obj.definition:
