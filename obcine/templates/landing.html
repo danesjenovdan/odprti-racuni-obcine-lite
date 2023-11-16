@@ -13,9 +13,9 @@
   <meta name="twitter:title" content="Odprti računi">
   <meta property="og:title" content="Odprti računi">
 
-  <meta name="description" content="Enostaven in transparenten prikaz finančnega poslovanja in projektov nevladnih organizacij. Odprti računi, dobri prijatelji!">
-  <meta name="twitter:description" content="Enostaven in transparenten prikaz finančnega poslovanja in projektov nevladnih organizacij. Odprti računi, dobri prijatelji!">
-  <meta property="og:description" content="Enostaven in transparenten prikaz finančnega poslovanja in projektov nevladnih organizacij. Odprti računi, dobri prijatelji!">
+  <meta name="description" content="Enostaven in razumljiv vpogled v občinski proračun">
+  <meta name="twitter:description" content="Enostaven in razumljiv vpogled v občinski proračun">
+  <meta property="og:description" content="Enostaven in razumljiv vpogled v občinski proračun">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
@@ -38,9 +38,9 @@
         <div class="col-12">
           <nav class="navbar navbar-expand-lg navbar-light justify-content-center" data-aos="fade">
             <a href="/">
-              <img src="{% static 'images/OR-logo.svg' %}" alt="odprti računi" style="height: 3rem;">
+              <img src="{% static 'OR-logo-obcine.svg' %}" alt="odprti računi" style="height: 3rem;">
             </a>
-            <a href="/admin" class="position-absolute d-none d-md-block" style="right: -15px; background: #39444e; border-radius: 5em; padding: 0.45em 1.25em; color: #fff; text-decoration: none;">Prijava v administratorski del</a>
+            <a href="/admin" target="_blank" class="position-absolute d-none d-md-block" style="right: -15px; background: #39444e; border-radius: 5em; padding: 0.45em 1.25em; color: #fff; text-decoration: none;">Prijava v administratorski del</a>
           </nav>
         </div>
       </div>
@@ -58,7 +58,7 @@
             </div>
             <div class="col-md-6">
               <div class="jumbo-image" data-aos="fade-up" data-aos-delay="150">
-                <img src="{% static 'images/example_1.png' %}" alt="" class="img-fluid">
+                <img src="{% static 'images/intro.png' %}" alt="" class="img-fluid">
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@
       <div class="container">
         <div class="row">
           <div class="col">
-            <h2 class="text-center mb-5" data-aos="fade-up">Zakaj uporabljati Odprte račune</h2>
+            <h2 class="text-center mb-5" data-aos="fade-up">Zakaj uporabljati Odprte račune?</h2>
           </div>
         </div>
         <div class="row lead-boxes">
@@ -82,7 +82,7 @@
               <h3>Večja transparentnost občinskega proračuna</h3>
               <hr>
               <p>
-                Izboljšajte finančno transparentnost vaše občine in objavite proračun ter načrtovane in realizirane prihodke in odhodke na javnosti prijazen način – brez programerskega znanja in z malo vloženega časa.
+                Izboljšajte finančno transparentnost vaše občine in na javnosti prijazen način prikažite proračun ter načrtovane in realizirane prihodke in odhodke – brez programerskega znanja in z malo vloženega časa.
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@
               <h3>Okrepljeno zaupanje javnosti</h3>
               <hr>
               <p>
-                Z uporabo aplikacije boste okrepili zaupanje javnosti v vaše delovanje in finančno poslovanje. S pomočjo aplikacije Odprti računi lahko občani vidijo, kako velik je proračun občine, bolje razumejo razporeditev občinskih sredstev ali pa se poglobijo v posamezne proračunske kategorije.
+                Z uporabo aplikacije boste okrepili zaupanje javnosti v vaše delovanje in finančno poslovanje. S pomočjo aplikacije Odprti računi lahko občani vidijo obseg proračuna občine, bolje razumejo razporeditev občinskih sredstev ali pa se poglobijo v posamezne proračunske kategorije.
               </p>
             </div>
           </div>
@@ -106,7 +106,7 @@
               <h3>Brezplačna in enostavna uporaba</h3>
               <hr>
               <p>
-                Uporaba aplikacije je brezplačna in ne prinaša dodatnih finančnih bremen za vašo občino. Le vnesite podatke o organizaciji, zaposlenih, prihodkih, odhodkih, donacijah in financiranih projektih, aplikacija pa jih bo sama sistematizirala in vizualizirala.
+                Uporaba aplikacije je brezplačna in ne prinaša dodatnih finančnih bremen za vašo občino, obenem pa je tudi izjemno enostavna. V Odprte račune uvozite podatke iz programa APPRa, ki ga že uporabljate vsak mesec, aplikacija pa podatke samostojno obdela in pripravi grafični prikaz, ki se avtomatsko posodobi vsakič, ko posodobite podatke.
               </p>
             </div>
           </div>
@@ -123,29 +123,29 @@
               <div class="feature-text" data-aos="fade-up" data-aos-delay="300">
                 <h4>Pregled proračunov in zaključnih računov</h4>
                 <p>
-                  Uporabniki lahko pregledujejo posamezne proračunske postavke prihodkov in odhodkov in realizacije.
+                  Občani lahko pregledujejo posamezne proračunske postavke prihodkov in odhodkov ter realizacije – lahko se premikajo po nivojih kontnega drevesa in si podrobno ogledajo, od kod prihajajo sredstva v občinski proračun in za kaj se porabijo. Omogočen jim je tudi vpogled v dejansko realizacijo na posameznih postavkah.
                 </p>
               </div>
               <div class="feature-image" data-aos="fade-up" data-aos-delay="500">
-                <img src="{% static 'images/example_1.png' %}" alt="" class="img-fluid w-100">
+                <img src="{% static 'images/pregled.png' %}" alt="" class="img-fluid w-100">
               </div>
               <div class="feature-text" data-aos="fade-up" data-aos-delay="300">
                 <h4>Primerjava proračunskih kategorij skozi leta</h4>
                 <p>
-                  Odprti računi omogočajo raziskovanje razlik v proračunskih postavkah za različna leta.
+                  Odprti računi omogočajo pregled skozi leta za različna kontna in programska področja proračuna, kar občanom prinaša celovitejše razumevanje večletnih trendov znotraj proračuna.
                 </p>
               </div>
               <div class="feature-image" data-aos="fade-up" data-aos-delay="500">
-                <img src="{% static 'images/example_2.png' %}" alt="" class="img-fluid w-100">
+                <img src="{% static 'images/primerjava.png' %}" alt="" class="img-fluid w-100">
               </div>
               <div class="feature-text" data-aos="fade-up" data-aos-delay="300">
                 <h4>Historični vpogled</h4>
                 <p>
-                  V aplikaciji so lahko hkrati vnešeni proračuni in zaključni računi za zadnjih 10 let.
+                  Aplikacija omogoča prikaz proračunov in zaključnih računov za zadnjih 10 let, obenem pa tudi vnos predloga proračuna za prihodnje proračunsko leto.
                 </p>
               </div>
               <div class="feature-image" data-aos="fade-up" data-aos-delay="500">
-                <img src="{% static 'images/example_3.png' %}" alt="" class="img-fluid w-100">
+                <img src="{% static 'images/historicno.png' %}" alt="" class="img-fluid w-100">
               </div>
             </div>
           </div>
@@ -156,57 +156,59 @@
     <div class="container-fluid spaced-container">
       <div class="container">
         <div class="row already-using">
-          <div class="col-3 d-flex align-items-center">
-            <h4 class="mb-0" data-aos="fade-up">Občine, ki že uporabljajo Odprte račune</h4>
-          </div>
-          <div class="col-9">
-            <div class="obcina-boxes">
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="100">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
+          <div class="col">
+            <h2 class="text-center mb-5" data-aos="fade-up">Primeri uporabe</h2>
+            <div class="row obcina-row">
+              <div class="col-12 col-md-6">
+                <div class="obcina-image">
+                  <img src="{% static 'images/kocevje.png' %}" alt="" class="w-100 img-fluid">
                 </div>
-                <div class="name">
-                  Občina Medvode
+                <div class="obcina-image-description">
+                  Obvestilo in povezava na spletnem mestu občine Kočevje.
                 </div>
               </div>
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="200">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
+              <div class="col-12 col-md-6 d-flex flex-column justify-content-center">
+                <div class="obcina-name">
+                  Občina Kočevje
                 </div>
-                <div class="name">
-                  Občina Hrpelje-Kozina
-                </div>
-              </div>
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="300">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
-                </div>
-                <div class="name">
-                  Mestna občina Nova Gorica
+                <div class="obcina-link">
+                  <a class="d-inline-block" href="https://odprtiracuni-obcine.djnd.si/pregled/17/">Povezava na spletno mesto</a>
                 </div>
               </div>
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="400">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
+            </div>
+            <div class="row obcina-row">
+              <div class="col-12 col-md-6">
+                <div class="obcina-image">
+                  <img src="{% static 'images/celje.png' %}" alt="" class="w-100 img-fluid">
                 </div>
-                <div class="name">
-                  Občina Medvode
-                </div>
-              </div>
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="500">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
-                </div>
-                <div class="name">
-                  Občina Hrpelje-Kozina
+                <div class="obcina-image-description">
+                  Prikaz na spletnem mestu Mestne občine Celje.
                 </div>
               </div>
-              <div class="obcina-box" data-aos="fade-up" data-aos-delay="600">
-                <div class="logo">
-                  <img src="https://s3.fr-par.scw.cloud/odprti-racuni-obcine/media/obcina_medvode.jpg" alt="">
+              <div class="col-12 col-md-6 d-flex flex-column justify-content-center">
+                <div class="obcina-name">
+                  Mestna občina Celje
                 </div>
-                <div class="name">
-                  Mestna občina Nova Gorica
+                <div class="obcina-link">
+                  <a class="d-inline-block" href="https://odprtiracuni-obcine.djnd.si/pregled/18/">Povezava na spletno mesto</a>
+                </div>
+              </div>
+            </div>
+            <div class="row obcina-row">
+              <div class="col-12 col-md-6">
+                <div class="obcina-image">
+                  <img src="{% static 'images/postojna.png' %}" alt="" class="w-100 img-fluid">
+                </div>
+                <div class="obcina-image-description">
+                  Obvestilo in povezava na spletnem mestu občine Postojna.
+                </div>
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column justify-content-center">
+                <div class="obcina-name">
+                  Občina Postojna
+                </div>
+                <div class="obcina-link">
+                  <a class="d-inline-block" href="https://odprtiracuni-obcine.djnd.si/pregled/11/">Povezava na spletno mesto</a>
                 </div>
               </div>
             </div>
@@ -220,7 +222,7 @@
         <div class="row justify-content-center">
           <div class="col-lg-10">
             <h3 class="text-center" data-aos="fade-up">
-              Potrebujete več informacij ali pa si želite začeti z uporabo aplikacije Odprti računi za občine?
+              Potrebujete več informacij ali pa želite uporabljati aplikacijo Odprti računi za občine?
             </h3>
           </div>
         </div>
@@ -269,7 +271,7 @@
         <div class="row justify-content-center">
           <div class="col-12 footer-col-wide text-center">
             <p class="small mb-4">
-              Aplikacija je razvita v sklopu projekta Odprti računi: S transparentno porabo sredstev do večjega zaupanja in vključenosti javnosti, ki je podprt s strani Sklada za NVO Ministrstva za javno upravo.
+              Aplikacija je razvita v sklopu projekta Odprti računi: S transparentno porabo sredstev do večjega zaupanja in vključenosti javnosti, ki je podprt s strani Sklada za NVO Ministrstva za javno upravo RS.
             </p>
             <p class="small">
               Projekt izvajajo

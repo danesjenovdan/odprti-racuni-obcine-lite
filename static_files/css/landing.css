@@ -145,8 +145,9 @@ h3 {
 }
 .lead-boxes .lead-box h3 {
   margin-top: 1rem;
+  margin-bottom: 30px;
   font-size: 1.8rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 .lead-boxes .lead-box h3 em {
   font-weight: 700;
@@ -154,7 +155,7 @@ h3 {
 .lead-boxes .lead-box hr {
   width: 45%;
   height: 2px;
-  background-color: #eb937b;
+  background-color: #3a58ad;
   border: 0;
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -171,6 +172,12 @@ h3 {
   grid-template-columns: 2fr 1fr 2fr;
   gap: 5rem;
   align-items: center;
+}
+
+@media (max-width: 575.98px) {
+  .features-grid {
+    gap: 1rem;
+  }
 }
 
 .features-grid .feature-text {
@@ -192,30 +199,88 @@ h3 {
   grid-column-start: 1;
 }
 
-.already-using h4 {
-  max-width: 190px;
+@media (max-width: 575.98px) {
+  .features-grid .feature-image,
+  .features-grid .feature-text {
+    grid-column-start: 1 !important;
+    grid-column-end: span 3 !important;
+  }
+
+  .features-grid .feature-image {
+    margin-bottom: 3rem;
+  }
 }
 
-.already-using .obcina-boxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
+.features-grid .feature-text h4 {
+  font-size: 1.8rem;
+  font-weight: 500;
 }
 
-.already-using .obcina-boxes .obcina-box {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  padding: 2rem 3rem;
-  width: 230px;
+.features-grid .feature-text p {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+.obcina-row {
+  padding-bottom: 5rem;
+}
+
+@media (max-width: 575.98px) {
+  .obcina-row {
+    padding-bottom: 4rem;
+  }
+}
+
+.obcina-row > div {
+  padding-inline: 2rem;
+}
+
+@media (max-width: 575.98px) {
+  .obcina-row > div {
+    padding-inline: 1rem;
+  }
+}
+
+.obcina-row .obcina-image {
+  padding: 2rem 6rem;
   border: 1px solid #39444e;
-  font-weight: 300;
-  line-height: 1.1;
 }
 
-.obcina-box img {
-  width: 32px;
-  height: auto;
+.obcina-row .obcina-image-description {
+  font-size: 0.75rem;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.obcina-row .obcina-name {
+  font-size: 2.25rem;
+  font-weight: 300;
+  color: #39444e;
+}
+
+@media (max-width: 575.98px) {
+  .obcina-row .obcina-name {
+    margin-top: 1rem;
+    text-align: center;
+  }
+}
+
+.obcina-row .obcina-link {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+  .obcina-row .obcina-link {
+    text-align: center;
+  }
+}
+
+.obcina-row .obcina-link a {
+  background: #39444e;
+  border-radius: 5em;
+  padding: 0.45em 1.25em;
+  color: #fff;
+  text-decoration: none;
 }
 
 .contact-text {
