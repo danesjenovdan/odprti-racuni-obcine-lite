@@ -23,14 +23,14 @@
       <div class="breadcrumb-label">
         <div class="name">{{ tree_data.name|capfirst_if_allcaps }}</div>
         {% if tree_data.planned != None %}
-          <div class="bar-chart-legend d-md-none">
+          <div class="bar-chart-legend d-sm-none">
             <i class="icon icon-circle icon-circle--{{ bar_colors }}-1 icon-size-2 me-1"></i>
             {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
           </div>
           <div class="amount">{{ tree_data.planned|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "planned" tree_data.planned 2 %}&nbsp;%</div>
         {% endif %}
         {% if tree_data.realized != None %}
-          <div class="bar-chart-legend d-md-none">
+          <div class="bar-chart-legend d-sm-none">
             <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-1"></i>
             {% if tree_type == "expenses" %}
               {% include 'legend_realization_text.html' with summary=summary date=summary.realized_expenses_date only %}
@@ -38,10 +38,10 @@
               {% include 'legend_realization_text.html' with summary=summary date=summary.realized_revenue_date only %}
             {% endif %}
           </div>
-          <div class="amount">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized 2 %}&nbsp;%</div>
+          <div class="amount d-sm-none">{{ tree_data.realized|floatformat:"2g" }} EUR | {% amount_percentage tree_type summary "realized" tree_data.realized 2 %}&nbsp;%</div>
         {% endif %}
         {% if tree_data.amount != None %}
-          <div class="bar-chart-legend d-md-none">
+          <div class="bar-chart-legend d-sm-none">
             <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-1"></i>
             Realizacija
           </div>
