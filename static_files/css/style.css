@@ -597,6 +597,15 @@ a.box-link:hover .button-arrow-link,
   }
 }
 
+a.box-link:hover .button-arrow-link .icon,
+.budget-box-link .button-arrow-link:hover .icon {
+  animation-duration: 0.75s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-name: arrowShake;
+}
+
 .budget-box-link .budget-summary {
   display: grid;
   grid-template-columns: max-content max-content auto;
