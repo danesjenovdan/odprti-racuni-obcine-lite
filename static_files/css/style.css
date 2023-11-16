@@ -2,6 +2,11 @@
   scroll-behavior: initial !important;
 }
 
+::selection {
+  color: #fff;
+  background-color: #39444e;
+}
+
 .page-container {
   overflow-x: hidden;
 }
