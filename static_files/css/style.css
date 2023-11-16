@@ -254,16 +254,28 @@ section.description {
   padding-bottom: 152px;
 }
 
+section.description.simple-padding {
+  padding-bottom: 76px;
+}
+
 @media (max-width: 1599.98px) {
   section.description {
     padding-top: 50px;
     padding-bottom: 130px;
+  }
+
+  section.description.simple-padding {
+    padding-bottom: 50px;
   }
 }
 
 @media (max-width: 575.98px) {
   section.description {
     padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  section.description.simple-padding {
     padding-bottom: 32px;
   }
 }
