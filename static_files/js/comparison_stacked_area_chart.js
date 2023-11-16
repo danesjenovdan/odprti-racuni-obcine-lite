@@ -4,6 +4,7 @@
   let data = [];
   let selectedColumnIndex = 1;
   let updateHoveredAreaFunc;
+  let has_children = false;
 
   const colors = [
     "#64507d",
@@ -88,6 +89,7 @@
     codeToName = {};
     codeKeys = new Set();
     data = [];
+    has_children = false;
 
     data = Object.keys(responseData.years_data).map((year, i) => {
       if (year === responseData.year) {
@@ -96,6 +98,9 @@
 
       const yearData = responseData.years_data[year]
         .map((d) => {
+          if (d.children && d.children.length) {
+            has_children = true;
+          }
           const codeKey = `code_${d.code}`;
           if (!codeKeys.has(codeKey)) {
             codeKeys.add(codeKey);
@@ -331,6 +336,7 @@
 
     // Draw the box around hovered area
     let hoveredAreaElement;
+    let hoveredValueIndex = -1;
     function updateHoveredArea(columnIndex, valueIndex) {
       if (!hoveredAreaElement) {
         let tmp = hoveredAreaGroup
@@ -339,15 +345,25 @@
           .attr("fill", "none")
           .attr("stroke-width", 2)
           .attr("width", () => xScale.bandwidth())
-          .attr("opacity", 0);
+          .attr("opacity", 0)
+          .on("click", () => {
+            if (hoveredValueIndex < 0 || !has_children) {
+              return;
+            }
+            const codeKey = stackedData[hoveredValueIndex].key;
+            const code = codeKey.replace("code_", "");
+            window.location.hash = `#tabs;${code}`;
+          });
         hoveredAreaElement = tmp;
       }
 
       if (columnIndex < 0 || valueIndex < 0) {
+        hoveredValueIndex = -1;
         hoveredAreaElement.attr("opacity", 0);
         return;
       }
 
+      hoveredValueIndex = valueIndex;
       hoveredAreaElement
         .attr("x", () => xScale.step() * columnIndex)
         .attr("y", () => {
@@ -362,7 +378,8 @@
         })
         .attr("fill", () => `${getColor(valueIndex)}77`)
         .attr("stroke", () => getColor(valueIndex))
-        .attr("opacity", 1);
+        .attr("opacity", 1)
+        .attr("cursor", has_children ? "pointer" : "");
     }
     updateHoveredAreaFunc = (code) => {
       const columnIndex = selectedColumnIndex;
