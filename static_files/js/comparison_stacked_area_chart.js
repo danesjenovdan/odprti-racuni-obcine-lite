@@ -594,8 +594,18 @@
     }
   }
 
-  window.addEventListener("hashchange", () => {
+  window.addEventListener("hashchange", (e) => {
+    if (e.oldURL.includes(";popup") || e.newURL.includes(";popup")) {
+      return;
+    }
+
+    updateTooltip(null);
+    updateHoveredAreaFunc("-1");
     fetchChartData(window.location.search, window.location.hash);
+  });
+
+  window.addEventListener("scroll", () => {
+    updateTooltip(null);
   });
 
   window.addEventListener("message", (event) => {
@@ -604,6 +614,34 @@
       if (updateHoveredAreaFunc) {
         updateHoveredAreaFunc(code);
       }
+    }
+  });
+
+  const optionsPopupToggle = document.querySelector("#js-chart-legend-popup");
+  const optionsContainer = optionsPopupToggle.closest(".chart-legend");
+  optionsPopupToggle.addEventListener("click", (e) => {
+    if (document.body.classList.contains("show-modal")) {
+      document.body.classList.remove("show-modal");
+      optionsContainer.classList.remove("chart-legend-open");
+      if (window.location.hash.includes(";popup")) {
+        window.history.back();
+      }
+    } else {
+      document.body.classList.add("show-modal");
+      optionsContainer.classList.add("chart-legend-open");
+      const url =
+        window.location.pathname +
+        window.location.search +
+        (window.location.hash || "#tabs") +
+        ";popup";
+      window.history.pushState({}, "", url);
+    }
+  });
+
+  window.addEventListener("popstate", (e) => {
+    if (document.body.classList.contains("show-modal")) {
+      document.body.classList.remove("show-modal");
+      optionsContainer.classList.remove("chart-legend-open");
     }
   });
 })();

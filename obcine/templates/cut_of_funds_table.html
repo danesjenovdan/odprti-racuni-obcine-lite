@@ -70,31 +70,33 @@
         {% if child.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}<div>{{ child.realized|floatformat:"2g" }} EUR</div>{% endif %}
         {% if child.amount != None %}<div>{{ child.amount|floatformat:"2g" }} EUR</div>{% endif %}
       </td>
-      <td class="position-relative">
-        {% for scale_value in scale_values %}
-          <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
-        {% endfor %}
-        {% if child.planned != None %}
-        <div class="bar-chart-bar">
-          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.planned value_max 100 %}%;">
-            <div class="bar-amount bar-amount--1"></div>
+      <td class="has-position-relative">
+        <div class="position-relative">
+          {% for scale_value in scale_values %}
+            <div class="bar-chart-line" style="left: {% line_percent scale_values|length forloop.counter0 %}%;"></div>
+          {% endfor %}
+          {% if child.planned != None %}
+          <div class="bar-chart-bar">
+            <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.planned value_max 100 %}%;">
+              <div class="bar-amount bar-amount--1"></div>
+            </div>
           </div>
-        </div>
-        {% endif %}
-        {% if child.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
-        <div class="bar-chart-bar">
-          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.realized value_max 100 %}%;">
-            <div class="bar-amount bar-amount--2"></div>
+          {% endif %}
+          {% if child.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
+          <div class="bar-chart-bar">
+            <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.realized value_max 100 %}%;">
+              <div class="bar-amount bar-amount--2"></div>
+            </div>
           </div>
-        </div>
-        {% endif %}
-        {% if child.amount != None %}
-        <div class="bar-chart-bar">
-          <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.amount value_max 100 %}%;">
-            <div class="bar-amount bar-amount--2"></div>
+          {% endif %}
+          {% if child.amount != None %}
+          <div class="bar-chart-bar">
+            <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.amount value_max 100 %}%;">
+              <div class="bar-amount bar-amount--2"></div>
+            </div>
           </div>
+          {% endif %}
         </div>
-        {% endif %}
       </td>
     </tr>
     {% endfor %}
@@ -103,12 +105,14 @@
     <tr>
       <td></td>
       <td></td>
-      <td class="position-relative">
-        {% for scale_value in scale_values %}
-          <div class="bar-chart-value" style="left: {% line_percent scale_values|length forloop.counter0 %}%;">
-            {{ scale_value|floatformat:"0g" }} €
-          </div>
-        {% endfor %}
+      <td class="has-position-relative">
+        <div class="position-relative">
+          {% for scale_value in scale_values %}
+            <div class="bar-chart-value" style="left: {% line_percent scale_values|length forloop.counter0 %}%;">
+              {{ scale_value|floatformat:"0g" }} €
+            </div>
+          {% endfor %}
+        </div>
       </td>
     </tr>
   </tfoot>

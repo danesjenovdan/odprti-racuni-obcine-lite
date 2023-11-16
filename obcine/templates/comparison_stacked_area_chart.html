@@ -1,11 +1,15 @@
 {% load static tree_table year_chooser %}
 
-<div class="comparison-chart-container my-5">
+<div class="comparison-chart-container my-3 my-md-5">
   <div class="row">
-    <div class="col-12 col-md-5 d-none d-md-block">
-      <div class="chart-legend">
-        <div class="chart-legend-caption">Izberite kategorije, ki jih želite prikazati na grafu.</div>
-        <div class="chart-legend-options" id="js-comparison-options"></div>
+    <div class="col-12 col-md-5">
+      <div class="chart-legend position-relative mb-3 mb-md-0">
+        <div class="chart-legend-caption">
+          <a id="js-chart-legend-popup" href="javascript:;" class="stretched-link d-md-none"></a>
+          <i class="icon icon-circle icon-filter icon-size-4 me-3 d-md-none"></i>
+          Izberite kategorije, ki jih želite prikazati na grafu.
+        </div>
+        <div class="chart-legend-options d-none d-md-block" id="js-comparison-options"></div>
       </div>
     </div>
     <div class="col-12 col-md-7">
@@ -16,7 +20,7 @@
       </div>
       <div class="comparison-chart" id="js-comparison-chart"></div>
       <div class="comparison-chart-year-chooser">
-        <div class="mt-3 mb-4 ms-3 me-3 ms-md-0 me-md-0">
+        <div class="mt-3 mb-4">
           <div class="year-line">
             {% for year_ in years %}
               <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year_.id %}#tabs" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 center=True %}%;">
