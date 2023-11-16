@@ -20,7 +20,7 @@
                 <span class="amount-number">{{ summary.planned_revenue|floatformat:"2g" }}</span>
               </div>
               {% endif %}
-              {% if summary.realized_revenue != None %}
+              {% if summary.realized_revenue != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-amount">
                 <small class="amount-description">
                   {% include 'legend_realization_text.html' with summary=summary date=summary.realized_revenue_date only %}
@@ -37,7 +37,7 @@
                 </a>
               </div>
               {% endif %}
-              {% if summary.realized_revenue_percentage != None %}
+              {% if summary.realized_revenue_percentage != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-bar">
                 <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="bar-max bar-max--1" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--2"></div>
@@ -58,7 +58,7 @@
                 <span class="amount-number">{{ summary.planned_expenses|floatformat:"2g" }}</span>
               </div>
               {% endif %}
-              {% if summary.realized_expenses != None %}
+              {% if summary.realized_expenses != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-amount">
                 <small class="amount-description">
                   {% include 'legend_realization_text.html' with summary=summary date=summary.realized_expenses_date only %}
@@ -75,7 +75,7 @@
                 </a>
               </div>
               {% endif %}
-              {% if summary.realized_expenses_percentage != None %}
+              {% if summary.realized_expenses_percentage != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-bar">
                 <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="bar-max bar-max--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--2"></div>

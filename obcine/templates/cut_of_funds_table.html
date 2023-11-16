@@ -21,7 +21,7 @@
       </th>
       <th>
         {% if tree_data.planned != None %}<div>{{ tree_data.planned|floatformat:"2g" }} EUR</div>{% endif %}
-        {% if tree_data.realized != None %}<div>{{ tree_data.realized|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if tree_data.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}<div>{{ tree_data.realized|floatformat:"2g" }} EUR</div>{% endif %}
         {% if tree_data.amount != None %}<div>{{ tree_data.amount|floatformat:"2g" }} EUR</div>{% endif %}
       </th>
       <th>
@@ -31,7 +31,7 @@
           {% include 'legend_budget_text.html' with municipality_financial_year=municipality_financial_year only %}
         </div>
         {% endif %}
-        {% if tree_data.realized != None %}
+        {% if tree_data.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
         <div class="bar-chart-legend">
           <i class="icon icon-circle icon-circle--{{ bar_colors }}-2 icon-size-2 me-2"></i>
           {% if tree_type == "expenses" %}
@@ -67,7 +67,7 @@
       </td>
       <td>
         {% if child.planned != None %}<div>{{ child.planned|floatformat:"2g" }} EUR</div>{% endif %}
-        {% if child.realized != None %}<div>{{ child.realized|floatformat:"2g" }} EUR</div>{% endif %}
+        {% if child.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}<div>{{ child.realized|floatformat:"2g" }} EUR</div>{% endif %}
         {% if child.amount != None %}<div>{{ child.amount|floatformat:"2g" }} EUR</div>{% endif %}
       </td>
       <td class="position-relative">
@@ -81,7 +81,7 @@
           </div>
         </div>
         {% endif %}
-        {% if child.realized != None %}
+        {% if child.realized != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
         <div class="bar-chart-bar">
           <div class="bar-max bar-max--{{ bar_colors }}" style="width: {% widthratio child.realized value_max 100 %}%;">
             <div class="bar-amount bar-amount--2"></div>
