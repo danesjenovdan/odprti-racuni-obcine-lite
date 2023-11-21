@@ -1,4 +1,4 @@
-{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+{% with request.resolver_match.kwargs.municipality_slug as municipality_slug %}
 
 <section class="budget">
   <div class="container">
@@ -9,7 +9,7 @@
           <div class="budget-summary">
             <div class="budget-summary-title">
               <i class="icon icon-prihodki me-2"></i>
-              <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs">Prihodki</a>
+              <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=revenue#tabs">Prihodki</a>
             </div>
             <div>
               {% if summary.planned_revenue != None %}
@@ -32,14 +32,14 @@
             <div>
               {% if summary.planned_revenue_percentage != None %}
               <div class="budget-bar">
-                <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="bar-max bar-max--1" style="width: {% widthratio summary.planned_revenue_percentage 1 100 %}%;">
+                <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=revenue#tabs" class="bar-max bar-max--1" style="width: {% widthratio summary.planned_revenue_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--1"></div>
                 </a>
               </div>
               {% endif %}
               {% if summary.realized_revenue_percentage != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-bar">
-                <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="bar-max bar-max--1" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;">
+                <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=revenue#tabs" class="bar-max bar-max--1" style="width: {% widthratio summary.realized_revenue_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--2"></div>
                 </a>
               </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="budget-summary-title">
               <i class="icon icon-odhodki me-2"></i>
-              <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs">Odhodki</a>
+              <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=expenses#tabs">Odhodki</a>
             </div>
             <div>
               {% if summary.planned_expenses != None %}
@@ -70,14 +70,14 @@
             <div>
               {% if summary.planned_expenses_percentage != None %}
               <div class="budget-bar">
-                <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="bar-max bar-max--2" style="width: {% widthratio summary.planned_expenses_percentage 1 100 %}%;">
+                <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=expenses#tabs" class="bar-max bar-max--2" style="width: {% widthratio summary.planned_expenses_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--1"></div>
                 </a>
               </div>
               {% endif %}
               {% if summary.realized_expenses_percentage != None and municipality_financial_year.budget_type != 'PROPOSAL' %}
               <div class="budget-bar">
-                <a href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="bar-max bar-max--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;">
+                <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=expenses#tabs" class="bar-max bar-max--2" style="width: {% widthratio summary.realized_expenses_percentage 1 100 %}%;">
                   <div class="bar-amount bar-amount--2"></div>
                 </a>
               </div>
@@ -86,7 +86,7 @@
           </div>
           {% if request.resolver_match.url_name == 'overview' %}
           <div class="text-center mt-5 mb-3">
-            <a class="button-arrow-link" href="{% url 'cut_of_funds' municipality_id=municipality_id year_id=year.id %}">Podrobneje razišči letošnji proračun in realizacijo <i class="icon icon-puscica ms-1"></i></a>
+            <a class="button-arrow-link" href="{% url 'cut_of_funds' municipality_slug=municipality_slug year_slug=year.name|slugify %}">Podrobneje razišči letošnji proračun in realizacijo <i class="icon icon-puscica ms-1"></i></a>
           </div>
           {% endif %}
         </span>

@@ -1,7 +1,5 @@
 {% load year_chooser tree_table %}
 
-{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
-
 {% include "breadcrumbs.html" %}
 
 <table class="table bar-chart-table no-bar no-bar--{{ bar_colors }} my-3 my-md-5">
@@ -74,5 +72,3 @@
     {% endfor %}
   </tbody>
 </table>
-
-{% endwith %}

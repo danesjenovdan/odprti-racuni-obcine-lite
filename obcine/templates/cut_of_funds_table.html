@@ -1,7 +1,5 @@
 {% load year_chooser tree_table %}
 
-{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
-
 {% include "breadcrumbs.html" %}
 
 {% child_max_graph_scale tree_data as value_max %}
@@ -117,5 +115,3 @@
     </tr>
   </tfoot>
 </table>
-
-{% endwith %}

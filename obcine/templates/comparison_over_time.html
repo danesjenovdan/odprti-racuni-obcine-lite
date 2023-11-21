@@ -7,7 +7,7 @@
 
 {% block content %}
 
-{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+{% with request.resolver_match.kwargs.municipality_slug as municipality_slug %}
 
 <section class="overview-content">
   <div class="container">
@@ -15,8 +15,8 @@
       <div class="col">
         <a name="tabs"></a>
         <div class="tabs">
-          <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year.id %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Pridobljena sredstva</a>
-          <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year.id %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Porabljena sredstva</a>
+          <a href="{% url 'comparison_over_time' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=revenue#tabs" class="tab {% if tree_type == "revenue" %}active{% endif %}"><i class="icon icon-prihodki icon-size-2 me-2"></i> Pridobljena sredstva</a>
+          <a href="{% url 'comparison_over_time' municipality_slug=municipality_slug year_slug=year.name|slugify %}?type=expenses#tabs" class="tab {% if tree_type == "expenses" %}active{% endif %}"><i class="icon icon-odhodki icon-size-2 me-2"></i> Porabljena sredstva</a>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
         {% include "comparison_stacked_area_chart.html" %}
         <div id="js-table-container"></div>
       </div>
-      <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_id=municipality_id year_id=year.id %}";</script>
+      <script>window.__BAR_CHART_TABLE_URL__ = "{% url 'comparison_over_time_table' municipality_slug=municipality_slug year_slug=year.name|slugify %}";</script>
       <script src="{% static 'js/bar_chart_table.js' %}"></script>
     </div>
   </div>

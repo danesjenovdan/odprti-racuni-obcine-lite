@@ -23,7 +23,7 @@
         <div class="mt-3 mb-4">
           <div class="year-line">
             {% for year_ in years %}
-              <a href="{% url 'comparison_over_time' municipality_id=municipality_id year_id=year_.id %}#tabs" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 center=True %}%;">
+              <a href="{% url 'comparison_over_time' municipality_slug=municipality_slug year_slug=year_.name|slugify %}#tabs" class="year-option {% if year_.id == year.id %}active{% endif %}" style="left: {% line_percent years|length forloop.counter0 center=True %}%;">
                 <div class="year-selector"></div>
                 <div class="year-label">{{ year_.name }}</div>
               </a>
@@ -35,7 +35,7 @@
     </div>
   </div>
 </div>
-<script>window.__COMPARISON_CHART_DATA_URL__ = "{% url 'comparison_over_time_chart_data' municipality_id=municipality_id year_id=year.id %}";</script>
+<script>window.__COMPARISON_CHART_DATA_URL__ = "{% url 'comparison_over_time_chart_data' municipality_slug=municipality_slug year_slug=year.name|slugify %}";</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.4/d3.min.js" integrity="sha512-nfUlp2ZWPKWlnAH/OsMeAqRSYBxOdPYeBXwceyw6QqqZ7uTT/s5/eS1hMKphjVBouk0jf/JQ8ULVJRnEqSHkXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{% static 'js/d3_stepMiddle.js' %}"></script>
 <script src="{% static 'js/comparison_stacked_area_chart.js' %}"></script>

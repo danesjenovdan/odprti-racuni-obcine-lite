@@ -23,7 +23,7 @@
 
     <nav class="navbar navbar-expand-lg bg-body">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}">
+        <a class="navbar-brand" href="{% url 'overview' municipality_slug=request.resolver_match.kwargs.municipality_slug %}">
           <div class="logo">
             <span class="subtitle">{{ municipality.name }}</span>
           </div>
@@ -37,21 +37,21 @@
               <a
                 class="nav-link {% if request.resolver_match.url_name == 'overview' %}active{% endif %}"
                 {% if request.resolver_match.url_name == 'overview' %}aria-current="page"{% endif %}
-                href="{% url 'overview' municipality_id=request.resolver_match.kwargs.municipality_id %}"
+                href="{% url 'overview' municipality_slug=request.resolver_match.kwargs.municipality_slug %}"
               >Pregled</a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.resolver_match.url_name == 'cut_of_funds' %}active{% endif %}"
                 {% if request.resolver_match.url_name == 'cut_of_funds' %}aria-current="page"{% endif %}
-                href="{% url 'cut_of_funds' municipality_id=request.resolver_match.kwargs.municipality_id %}"
+                href="{% url 'cut_of_funds' municipality_slug=request.resolver_match.kwargs.municipality_slug %}"
               >Razrez sredstev</a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.resolver_match.url_name == 'comparison_over_time' %}active{% endif %}"
                 {% if request.resolver_match.url_name == 'comparison_over_time' %}aria-current="page"{% endif %}
-                href="{% url 'comparison_over_time' municipality_id=request.resolver_match.kwargs.municipality_id %}"
+                href="{% url 'comparison_over_time' municipality_slug=request.resolver_match.kwargs.municipality_slug %}"
               >Primerjava skozi čas</a>
             </li>
           </ul>

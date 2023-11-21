@@ -175,6 +175,7 @@ class ExpenseParsableDocument(ParsableDocument):
 
 class Municipality(Timestampable):
     name = models.TextField(verbose_name=_('Nemo of municipality'))
+    slug = models.SlugField(verbose_name=_('Slug'), unique=True)
     financial_years = models.ManyToManyField('FinancialYear', through='MunicipalityFinancialYear')
     link = models.URLField(null=True, blank=True, verbose_name=_('Organization\'s link'))
     logo = models.ImageField(

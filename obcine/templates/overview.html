@@ -13,13 +13,13 @@
 
 {% block content %}
 
-{% with request.resolver_match.kwargs.municipality_id as municipality_id %}
+{% with request.resolver_match.kwargs.municipality_slug as municipality_slug %}
 
 <section class="overview-content pt-0">
   <div class="container">
     <div class="row align-items-stretch large-gap">
       <div class="col d-flex align-items-center extend-bg extend-bg--left">
-        <a href="{% url 'cut_of_funds' municipality_id=municipality_id %}" class="box-link ms-auto">
+        <a href="{% url 'cut_of_funds' municipality_slug=municipality_slug %}" class="box-link ms-auto">
           <h4>Razišči proračune in zaključne račune</h4>
           <hr class="hr-wave my-3 my-md-4">
           <p>
@@ -31,7 +31,7 @@
         </a>
       </div>
       <div class="col d-flex align-items-center extend-bg extend-bg--right">
-        <a href="{% url 'comparison_over_time' municipality_id=municipality_id %}" class="box-link">
+        <a href="{% url 'comparison_over_time' municipality_slug=municipality_slug %}" class="box-link">
           <h4>Primerjaj proračunske kategorije skozi leta</h4>
           <hr class="hr-wave my-3 my-md-4">
           <p>

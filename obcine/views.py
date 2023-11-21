@@ -1,30 +1,53 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.decorators.cache import cache_page
-from django.core.cache import cache
-from django.http import JsonResponse, Http404
-from django.utils.translation import gettext_lazy as _
 from datetime import datetime
+
+from django.core.cache import cache
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+from django.views.decorators.cache import cache_page
+from django.views.generic import RedirectView
 
 from obcine.models import (
     FinancialYear,
     MonthlyExpense,
     MonthlyRevenue,
     Municipality,
+    MunicipalityFinancialYear,
     PlannedExpense,
     PlannedRevenue,
     RevenueDefinition,
     YearlyExpense,
     YearlyRevenue,
-    MunicipalityFinancialYear,
 )
 from obcine.tree_utils import ExpenseTreeBuilder, RevenueTreeBuilder
 
 
+class OldUrlRedirectView(RedirectView):
+    permanent = False
+    query_string = True
+
+    def get_redirect_url(self, *args, **kwargs):
+        new_kwargs = {}
+
+        if municipality_id := kwargs.get("municipality_id"):
+            municipality = get_object_or_404(Municipality, pk=municipality_id)
+            new_kwargs["municipality_slug"] = municipality.slug
+
+        if year_id := kwargs.get("year_id"):
+            year = get_object_or_404(FinancialYear, pk=year_id)
+            new_kwargs["year_slug"] = slugify(year.name)
+
+        return super().get_redirect_url(*args, **new_kwargs)
+
+
 def landing(request):
-    return render(request, 'landing.html')
+    return render(request, "landing.html")
 
 
-def get_year(year_id, municipality):
+def get_year(year_slug, municipality):
+    year_id = get_object_or_404(FinancialYear, name=year_slug).id if year_slug else None
+
     municipality_financial_year = MunicipalityFinancialYear.objects.filter(
         financial_year_id=year_id,
         municipality=municipality,
@@ -238,9 +261,9 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
     return data
 
 
-def overview(request, municipality_id, year_id=None):
-    municipality = get_object_or_404(Municipality, pk=municipality_id)
-    year = get_year(year_id, municipality)
+def overview(request, municipality_slug, year_slug=None):
+    municipality = get_object_or_404(Municipality, slug=municipality_slug)
+    year = get_year(year_slug, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
 
     summary_type = "monthly" if year.is_current() else "yearly"
@@ -258,9 +281,9 @@ def overview(request, municipality_id, year_id=None):
     )
 
 
-def cut_of_funds(request, municipality_id, year_id=None):
-    municipality = get_object_or_404(Municipality, pk=municipality_id)
-    year = get_year(year_id, municipality)
+def cut_of_funds(request, municipality_slug, year_slug=None):
+    municipality = get_object_or_404(Municipality, slug=municipality_slug)
+    year = get_year(year_slug, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
 
@@ -286,9 +309,9 @@ def cut_of_funds(request, municipality_id, year_id=None):
     )
 
 
-def comparison_over_time(request, municipality_id, year_id=None):
-    municipality = get_object_or_404(Municipality, pk=municipality_id)
-    year = get_year(year_id, municipality)
+def comparison_over_time(request, municipality_slug, year_slug=None):
+    municipality = get_object_or_404(Municipality, slug=municipality_slug)
+    year = get_year(year_slug, municipality)
     tree_type = get_tree_type(request.GET)
 
     return render(
@@ -303,9 +326,9 @@ def comparison_over_time(request, municipality_id, year_id=None):
     )
 
 
-def get_context_for_table_code(request, municipality_id, year_id=None):
-    municipality = get_object_or_404(Municipality, pk=municipality_id)
-    year = get_year(year_id, municipality)
+def get_context_for_table_code(request, municipality_slug, year_slug=None):
+    municipality = get_object_or_404(Municipality, slug=municipality_slug)
+    year = get_year(year_slug, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
 
@@ -354,25 +377,25 @@ def get_context_for_table_code(request, municipality_id, year_id=None):
     }
 
 
-def cut_of_funds_table(request, municipality_id, year_id=None):
+def cut_of_funds_table(request, municipality_slug, year_slug=None):
     return render(
         request,
         "cut_of_funds_table.html",
-        get_context_for_table_code(request, municipality_id, year_id),
+        get_context_for_table_code(request, municipality_slug, year_slug),
     )
 
 
-def comparison_over_time_table(request, municipality_id, year_id=None):
+def comparison_over_time_table(request, municipality_slug, year_slug=None):
     return render(
         request,
         "comparison_over_time_table.html",
-        get_context_for_table_code(request, municipality_id, year_id),
+        get_context_for_table_code(request, municipality_slug, year_slug),
     )
 
 
-def comparison_over_time_chart_data(request, municipality_id, year_id=None):
-    municipality = get_object_or_404(Municipality, pk=municipality_id)
-    year = get_year(year_id, municipality)
+def comparison_over_time_chart_data(request, municipality_slug, year_slug=None):
+    municipality = get_object_or_404(Municipality, slug=municipality_slug)
+    year = get_year(year_slug, municipality)
     tree_type = get_tree_type(request.GET)
 
     code = request.GET.get("code", None)
