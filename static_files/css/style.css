@@ -1633,6 +1633,10 @@ a.box-link:hover {
   font-family: "Metropolis", sans-serif;
 }
 
+.comparison-chart .dummy {
+  display: none;
+}
+
 .comparison-chart-tooltip {
   width: 200px;
   position: fixed;

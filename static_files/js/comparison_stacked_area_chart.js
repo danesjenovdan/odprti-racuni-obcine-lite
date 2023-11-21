@@ -120,6 +120,12 @@
       };
     });
 
+    if (data.length === 1) {
+      data.unshift({ year: "0000-dummy" });
+      data.push({ year: "9999-dummy" });
+      selectedColumnIndex = 1;
+    }
+
     data.forEach((d) => {
       codeKeys.forEach((codeKey) => {
         if (!d[codeKey]) {
@@ -265,9 +271,13 @@
 
     // Draw the dots
     const dots = [];
-    const dotsGroups = data.map((d, i) =>
-      dotsSvg.append("g").attr("class", `dots-${i}`)
-    );
+    const dotsGroups = data.map((d, i) => {
+      let className = `dots-${i}`;
+      if (d.year.includes("dummy")) {
+        className += " dummy";
+      }
+      return dotsSvg.append("g").attr("class", className);
+    });
     function updateDots(animateFromZero = false) {
       data.forEach((datum, index) => {
         let tmp = dotsGroups[index]
@@ -453,7 +463,11 @@
           const columnValues = stackedData.map((d) => d[columnIndex][1]);
           const valueIndex = columnValues.findIndex((v) => yValue < v);
 
-          if (columnIndex >= dots.length) {
+          if (columnIndex >= dots.length || !xValue || xValue.includes("dummy")) {
+            updateTooltip(null);
+            updateHoveredArea(-1, -1);
+            lastHoveredDot = null;
+            hoverDot(null, null);
             return;
           }
 
