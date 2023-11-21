@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 15:48+0200\n"
+"POT-Creation-Date: 2023-11-21 22:30+0100\n"
 "PO-Revision-Date: 2023-06-14 14:07+0000\n"
 "Last-Translator: Matic Primc <tech+matic@danesjenovdan.si>\n"
-"Language-Team: Slovenian <http://weblate.lb.djnd.si/projects/"
-"odprti-racuni-obcine/django/sl/>\n"
+"Language-Team: Slovenian <http://weblate.lb.djnd.si/projects/odprti-racuni-"
+"obcine/django/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,188 +32,225 @@ msgstr "Dovoljenja"
 msgid "By financial year"
 msgstr "Po finančnem letu"
 
-#: obcine/models.py:111
+#: obcine/models.py:114
 msgid "Municipality Financial Year"
 msgstr "Finančno leto občine"
 
-#: obcine/models.py:114 obcine/models.py:148 obcine/models.py:163
+#: obcine/models.py:117 obcine/models.py:151 obcine/models.py:166
 msgid "File"
 msgstr "Datoteka"
 
-#: obcine/models.py:177
+#: obcine/models.py:180
 msgid "Nemo of municipality"
 msgstr "Ime občine"
 
-#: obcine/models.py:179
+#: obcine/models.py:181
+msgid "Slug"
+msgstr "Ključ"
+
+#: obcine/models.py:181
+msgid ""
+"The name as it will appear in URLs e.g http://domain.com/[my-slug]/pregled/ "
+"(leave blank to auto-generate)"
+msgstr ""
+"Kako se ime pojavi v povezavah npr. http://domain.com/[moj-ključ]/pregled/ "
+"(pusti prazno da se zgenerira samodejno)"
+
+#: obcine/models.py:183
 msgid "Organization's link"
 msgstr "Povezava do spletnega mesta občine"
 
-#: obcine/models.py:182
+#: obcine/models.py:186
 msgid "Logo"
 msgstr "Logo"
 
-#: obcine/models.py:189 obcine/models.py:190 obcine/models.py:200
+#: obcine/models.py:203 obcine/models.py:204 obcine/models.py:214
 msgid "Municipality"
 msgstr "Osnovne informacije o občini"
 
-#: obcine/models.py:203
+#: obcine/models.py:217
 msgid "User"
 msgstr "Uporabnik"
 
-#: obcine/models.py:204
+#: obcine/models.py:218
 msgid "Users"
 msgstr "Uporabniki"
 
-#: obcine/models.py:208 obcine/models.py:239 obcine/models.py:298
-#: obcine/models.py:335
+#: obcine/models.py:222 obcine/models.py:270 obcine/models.py:329
+#: obcine/models.py:366
 msgid "Name"
 msgstr "Ime"
 
-#: obcine/models.py:209
+#: obcine/models.py:223
 msgid "Start date"
 msgstr "Datum začetka"
 
-#: obcine/models.py:210
+#: obcine/models.py:224
 msgid "End date"
 msgstr "Datum konca"
 
-#: obcine/models.py:219
+#: obcine/models.py:239
 msgid "Financial year"
 msgstr "Finančno leto"
 
-#: obcine/models.py:220
+#: obcine/models.py:240
 msgid "Financial years"
 msgstr "Finančna leta"
 
-#: obcine/models.py:226
-msgid "Datum sprejetja proračuna"
+#: obcine/models.py:246
+msgid "Predlog proračuna"
 msgstr ""
 
-#: obcine/models.py:227
-msgid "Datum rebalansa proračuna"
+#: obcine/models.py:247
+msgid "Rebalans proračuna"
 msgstr ""
 
-#: obcine/models.py:234 obcine/models.py:235
+#: obcine/models.py:248
+msgid "Veljavni proračun"
+msgstr ""
+
+#: obcine/models.py:249
+msgid "Sprejeti proračun"
+msgstr ""
+
+#: obcine/models.py:250
+msgid "Leto"
+msgstr ""
+
+#: obcine/models.py:252
+msgid "Datum proračuna"
+msgstr ""
+
+#: obcine/models.py:257
+msgid "Tip proračuna"
+msgstr ""
+
+#: obcine/models.py:259
+msgid "Javno prikazano leto"
+msgstr ""
+
+#: obcine/models.py:265 obcine/models.py:266
 msgid "Municipality financial year"
 msgstr "Dodajanje podatkov za finančna leta"
 
-#: obcine/models.py:240 obcine/models.py:297
+#: obcine/models.py:271 obcine/models.py:328
 msgid "Parent"
 msgstr "Starš"
 
-#: obcine/models.py:241 obcine/models.py:340
+#: obcine/models.py:272 obcine/models.py:371
 msgid "Amount"
 msgstr "Znesek"
 
-#: obcine/models.py:242 obcine/models.py:300
+#: obcine/models.py:273 obcine/models.py:331
 msgid "Order"
 msgstr "Vrstni red"
 
-#: obcine/models.py:243 obcine/models.py:527 obcine/models.py:528
+#: obcine/models.py:274 obcine/models.py:563 obcine/models.py:564
 msgid "Instructions"
 msgstr "Navodila"
 
-#: obcine/models.py:244 obcine/models.py:299 obcine/models.py:336
+#: obcine/models.py:275 obcine/models.py:330 obcine/models.py:367
 msgid "Code"
 msgstr "Šifra"
 
-#: obcine/models.py:337
+#: obcine/models.py:368
 msgid "RevenueDefinition"
 msgstr "Definicija konta"
 
-#: obcine/models.py:338 obcine/models.py:428
+#: obcine/models.py:369 obcine/models.py:462
 msgid "Organiaztion"
 msgstr "Osnovne informacije o občini"
 
-#: obcine/models.py:339 obcine/models.py:429
+#: obcine/models.py:370 obcine/models.py:463
 msgid "Year"
 msgstr "Leto"
 
-#: obcine/models.py:376
+#: obcine/models.py:407
 msgid "Planned revenue document"
 msgstr "Dokument proračuna prihodkov"
 
-#: obcine/models.py:377
+#: obcine/models.py:408
 msgid "Planned revenue documents"
 msgstr "Proračun - prihodki"
 
-#: obcine/models.py:395
-msgid "Yearly revenue document"
-msgstr "Datoteka letne realizacije"
-
-#: obcine/models.py:396
-msgid "Yearly revenue documents"
-msgstr "Zaključni račun - prihodki"
-
-#: obcine/models.py:400 obcine/models.py:449 obcine/models.py:478
+#: obcine/models.py:412 obcine/models.py:433 obcine/models.py:511
+#: obcine/models.py:531
 msgid "Datum obdelave podatkov"
 msgstr ""
 
-#: obcine/models.py:415
+#: obcine/models.py:428
+msgid "Yearly revenue document"
+msgstr "Datoteka letne realizacije"
+
+#: obcine/models.py:429
+msgid "Yearly revenue documents"
+msgstr "Zaključni račun - prihodki"
+
+#: obcine/models.py:449
 msgid "Monthly revenue realization document"
 msgstr "Dokument mesečne realizacije prihodkov"
 
-#: obcine/models.py:416
+#: obcine/models.py:450
 msgid "Monthly revenue realization documents"
 msgstr "Tekoča realizacija - prihodki"
 
-#: obcine/models.py:423
+#: obcine/models.py:457
 msgid "Revenue definition"
 msgstr "Definicje kotov prihodkov"
 
-#: obcine/models.py:424
+#: obcine/models.py:458
 msgid "Revenue definitions"
 msgstr "Definicije kontov prihodkov"
 
-#: obcine/models.py:437 obcine/models.py:438
+#: obcine/models.py:471 obcine/models.py:472
 msgid "Planned expense"
 msgstr "Proračun odhodkov"
 
-#: obcine/models.py:444 obcine/models.py:445
+#: obcine/models.py:478 obcine/models.py:479
 msgid "Yearly expense"
 msgstr "Letni odhodki"
 
-#: obcine/models.py:452 obcine/models.py:453
+#: obcine/models.py:485 obcine/models.py:486
 msgid "Monthly expense"
 msgstr "Mesečni odhodki"
 
-#: obcine/models.py:473
+#: obcine/models.py:506
 msgid "Planned expense document"
 msgstr "Dokument proračuna odhodkov"
 
-#: obcine/models.py:474
+#: obcine/models.py:507
 msgid "Planned expense documents"
 msgstr "Proračun - odhodki"
 
-#: obcine/models.py:492
+#: obcine/models.py:526
 msgid "Monthly expense realization document"
 msgstr "Tekoča realizacija - odhodki"
 
-#: obcine/models.py:493
+#: obcine/models.py:527
 msgid "Monthly expense realization documents"
 msgstr "Tekoča realizacija - odhodki"
 
-#: obcine/models.py:510
+#: obcine/models.py:546
 msgid "Yearly expense document"
 msgstr "Dokument letne realzacije odhodkov"
 
-#: obcine/models.py:511
+#: obcine/models.py:547
 msgid "Yearly expense documents"
 msgstr "Zaključni račun - odhodki"
 
-#: obcine/models.py:515
+#: obcine/models.py:551
 msgid "Model"
 msgstr ""
 
-#: obcine/models.py:516
+#: obcine/models.py:552
 msgid "Instructions for list of objects"
 msgstr "Navodila za seznam objektov"
 
-#: obcine/models.py:517
+#: obcine/models.py:553
 msgid "Instructions for adding object"
 msgstr "Navodila za dodajanje objekta"
 
-#: obcine/models.py:518
+#: obcine/models.py:554
 msgid "Instructions for edit single object"
 msgstr "Navodila za urejanje objekta"
 
@@ -245,6 +282,6 @@ msgstr ""
 msgid "Datoteka ni pravilno izvozena iz sitema APRA."
 msgstr ""
 
-#: obcine/views.py:38
+#: obcine/views.py:79
 msgid "No published financial year found"
 msgstr "Ni objavlenega finančnega leta za izbrano občino."

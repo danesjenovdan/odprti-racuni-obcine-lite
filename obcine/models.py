@@ -1,9 +1,11 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.utils.text import slugify
 
 from importlib import import_module
 
@@ -11,6 +13,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from martor.models import MartorField
 
 from datetime import datetime
+import re
 
 from obcine.parse_utils import XLSXAppraBudget, XLSXAppraRevenue, download_file
 from obcine.validators import (
@@ -175,7 +178,7 @@ class ExpenseParsableDocument(ParsableDocument):
 
 class Municipality(Timestampable):
     name = models.TextField(verbose_name=_('Nemo of municipality'))
-    slug = models.SlugField(verbose_name=_('Slug'), unique=True)
+    slug = models.SlugField(verbose_name=_('Slug'), unique=True, blank=True, help_text=_('The name as it will appear in URLs e.g http://domain.com/[my-slug]/pregled/ (leave blank to auto-generate)'))
     financial_years = models.ManyToManyField('FinancialYear', through='MunicipalityFinancialYear')
     link = models.URLField(null=True, blank=True, verbose_name=_('Organization\'s link'))
     logo = models.ImageField(
@@ -185,6 +188,16 @@ class Municipality(Timestampable):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.name)
+            slug = re.sub(r"mestna-obcina-", "", slug)
+            slug = re.sub(r"obcina-", "", slug)
+            if count := Municipality.objects.filter(Q(slug=slug) | Q(slug__startswith=f'{slug}--')).count():
+                slug = f'{slug}--{count}'
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('Municipality')
