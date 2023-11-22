@@ -261,7 +261,8 @@ class AdminSite(admin.AdminSite):
         app_list = list(self._build_app_dict(request, app_label).values())
         try:
             user_municipality_id = request.user.municipality_id
-            self.site_url = reverse('overview', kwargs={'municipality_id': user_municipality_id})
+            municipality_slug = request.user.municipality.slug
+            self.site_url = reverse('overview', kwargs={'municipality_slug': municipality_slug})
         except:
             pass
 
