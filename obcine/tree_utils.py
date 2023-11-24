@@ -128,19 +128,27 @@ class RevenueTreeBuilder:
         ).annotate(
             sum_amount=Sum("amount"),
         )
-        realized_dict = {item["code"]: item["sum_amount"] for item in realized_revenues}
+        realized_dict = {item["code"]: item for item in realized_revenues}
+        planned_dict = {item["code"]: item for item in planned_revenues}
+
+        all_keys = set(planned_dict.keys()) | set(realized_dict.keys())
 
         leaves = []
-        definiton_keys = self.definiton_storage.keys()
-        for revenue in planned_revenues:
-            if not revenue[self.leaf_parent_key] in definiton_keys:
-                continue  # skip invalid items
-            item = self.definiton_storage[revenue[self.leaf_parent_key]]
-            item.amount = revenue["sum_amount"]
+        for key in all_keys:
+            planned = planned_dict.get(key, {})
+            realized = realized_dict.get(key, {})
+            if planned:
+                item = self.definiton_storage[planned[self.leaf_parent_key]]
+            elif realized:
+                item = self.definiton_storage[realized[self.leaf_parent_key]]
+            else:
+                print("Skipping invalid item")
+                continue
+            item.amount = planned.get("sum_amount", 0)
             item.children = []
             item_dict = item.get_offline_dict()
             item_dict["planned"] = item_dict.pop("amount")
-            item_dict["realized"] = realized_dict.get(item_dict["code"], 0)
+            item_dict["realized"] = realized.pop("sum_amount", 0)
             leaves.append(item_dict)
 
         return list(build_merged_tree(self.definiton_storage, leaves).values())
