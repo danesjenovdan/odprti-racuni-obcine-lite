@@ -25,6 +25,7 @@ urlpatterns = [
     path("<str:municipality_slug>/prikaz-sredstev-skozi-cas/<path:path>", RedirectView.as_view(url="/%(municipality_slug)s/primerjava-skozi-cas/%(path)s", query_string=True)),
 
     # Pages
+    path("<str:municipality_slug>/", RedirectView.as_view(pattern_name="overview")),
     path("<str:municipality_slug>/pregled/", views.overview, name="overview"),
     path("<str:municipality_slug>/pregled/<str:year_slug>/", views.overview, name="overview"),
 
@@ -36,6 +37,4 @@ urlpatterns = [
     path("<str:municipality_slug>/primerjava-skozi-cas/<str:year_slug>/", views.comparison_over_time, name="comparison_over_time"),
     path("<str:municipality_slug>/primerjava-skozi-cas/<str:year_slug>/table/", views.comparison_over_time_table, name="comparison_over_time_table"),
     path("<str:municipality_slug>/primerjava-skozi-cas/<str:year_slug>/chart_data/", views.comparison_over_time_chart_data, name="comparison_over_time_chart_data"),
-
-
 ]
