@@ -133,8 +133,13 @@ class RevenueTreeBuilder:
 
         all_keys = set(planned_dict.keys()) | set(realized_dict.keys())
 
+        definiton_keys = list(self.definiton_storage.keys())
+
         leaves = []
         for key in all_keys:
+            if key not in definiton_keys:
+                print('skip invalid key')
+                continue
             planned = planned_dict.get(key, {})
             realized = realized_dict.get(key, {})
             if planned:
