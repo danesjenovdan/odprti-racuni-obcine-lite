@@ -137,14 +137,11 @@ class RevenueTreeBuilder:
 
         leaves = []
         for key in all_keys:
-            if key not in definiton_keys:
-                print('skip invalid key')
-                continue
             planned = planned_dict.get(key, {})
             realized = realized_dict.get(key, {})
-            if planned:
+            if planned and planned[self.leaf_parent_key]:
                 item = self.definiton_storage[planned[self.leaf_parent_key]]
-            elif realized:
+            elif realized and realized[self.leaf_parent_key]:
                 item = self.definiton_storage[realized[self.leaf_parent_key]]
             else:
                 print("Skipping invalid item")
