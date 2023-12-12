@@ -67,19 +67,13 @@
     fetchTable(window.location.search, window.location.hash);
   }
 
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-revealed");
-        }
-      });
-    },
-    {
-      threshold: 1,
-      rootMargin: "-32px 0px",
-    }
-  );
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-revealed");
+      }
+    });
+  });
 
   function fetchTable(searchString, hashString) {
     const url = new URL(window.__BAR_CHART_TABLE_URL__, window.location.origin);
