@@ -106,7 +106,7 @@ class XLSXAppraBudget(object):
 
             # Do tuki je ok
 
-            pp_id = row[8].value
+            pp_id = f'fk{row[8].value}'
             pp_name = row[9].value
             ppr_pp_id = f'{ppr_id}_{pp_id}'
 
