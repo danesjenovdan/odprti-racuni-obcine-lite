@@ -1,14 +1,13 @@
-{% if municipality_financial_year.budget_date %}
-  {% if municipality_financial_year.budget_type == 'VALID' %}
-    Veljavni proračun
-  {% elif municipality_financial_year.budget_type == 'REBALANS' %}
-    Rebalans proračuna
-  {% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
-    Predlog proračuna
-  {% else %}
-    Sprejeti proračun
-  {% endif %}
-  {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
+
+{% if municipality_financial_year.budget_type == 'VALID' %}
+  Veljavni proračun
+{% elif municipality_financial_year.budget_type == 'REBALANS' %}
+  Rebalans proračuna
+{% elif municipality_financial_year.budget_type == 'PROPOSAL' %}
+  Predlog proračuna
 {% else %}
-  Proračun
+  Sprejeti proračun
+{% endif %}
+{% if municipality_financial_year.budget_date %}
+  {{ municipality_financial_year.budget_date|date:"j. n. Y" }}
 {% endif %}
