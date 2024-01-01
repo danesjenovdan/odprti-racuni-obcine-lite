@@ -44,6 +44,13 @@ class OldUrlRedirectView(RedirectView):
 def landing(request):
     return render(request, "landing.html")
 
+def get_summary_type(municipality, year):
+    summary_type = "monthly" if year.is_current() else "yearly"
+    # WORKAROUND: if there are no yearly expenses, show monthly expenses
+    yearly_expense = YearlyExpense.objects.filter(municipality=municipality, year=year)
+    if not yearly_expense:
+        summary_type = "monthly"
+    return summary_type
 
 def get_year(year_slug, municipality):
     year_id = get_object_or_404(FinancialYear, name=year_slug).id if year_slug else None
@@ -260,13 +267,12 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
     cache.set(expense_tree_cache_key, data)
     return data
 
-
 def overview(request, municipality_slug, year_slug=None):
     municipality = get_object_or_404(Municipality, slug=municipality_slug)
     year = get_year(year_slug, municipality)
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
 
-    summary_type = "monthly" if year.is_current() else "yearly"
+    summary_type = get_summary_type(municipality, year)
     summary = get_summary(municipality, year, summary_type=summary_type)
 
     return render(
@@ -287,7 +293,8 @@ def cut_of_funds(request, municipality_slug, year_slug=None):
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
 
-    summary_type = "monthly" if year.is_current() else "yearly"
+    summary_type = get_summary_type(municipality, year)
+
     summary = get_summary(municipality, year, summary_type=summary_type)
 
     revenue = get_revenue_tree(municipality, year, summary, summary_type)
@@ -332,7 +339,7 @@ def get_context_for_table_code(request, municipality_slug, year_slug=None):
     mfy = year.municipalityfinancialyears.filter(municipality=municipality).first()
     tree_type = get_tree_type(request.GET)
 
-    summary_type = "monthly" if year.is_current() else "yearly"
+    summary_type = get_summary_type(municipality, year)
     summary = get_summary(municipality, year, summary_type=summary_type)
 
     tree_data = []
@@ -418,7 +425,7 @@ def comparison_over_time_chart_data(request, municipality_slug, year_slug=None):
     years = get_municipality_published_years(municipality)
 
     for year_ in years:
-        summary_type = "monthly" if year_.is_current() else "yearly"
+        summary_type = get_summary_type(municipality, year)
         summary = get_summary(municipality, year_, summary_type=summary_type)
 
         if tree_type == "expenses":
