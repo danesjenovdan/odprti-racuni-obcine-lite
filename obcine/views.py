@@ -425,7 +425,7 @@ def comparison_over_time_chart_data(request, municipality_slug, year_slug=None):
     years = get_municipality_published_years(municipality)
 
     for year_ in years:
-        summary_type = get_summary_type(municipality, year)
+        summary_type = get_summary_type(municipality, year_)
         summary = get_summary(municipality, year_, summary_type=summary_type)
 
         if tree_type == "expenses":
