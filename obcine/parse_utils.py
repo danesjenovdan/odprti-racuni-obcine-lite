@@ -47,8 +47,8 @@ class XLSXAppraBudget(object):
 
             # get first level data and save it
             row = sheet.row(row_i)
-            ppp_id = row[2].value
-            ppp_name = row[3].value
+            ppp_id = row[2].value.strip()
+            ppp_name = row[3].value.strip()
 
             if ppp_id in node_keys:
                 ppp = nodes[ppp_id]
@@ -64,8 +64,8 @@ class XLSXAppraBudget(object):
                 node_keys.append(ppp_id)
 
             # get second level data and save it
-            gpr_id = row[4].value
-            gpr_name = row[5].value
+            gpr_id = row[4].value.strip()
+            gpr_name = row[5].value.strip()
 
             if gpr_id in node_keys:
                 gpr = nodes[gpr_id]
@@ -82,8 +82,8 @@ class XLSXAppraBudget(object):
                 node_keys.append(gpr_id)
 
             # get third level data and save it, or update amount on existed
-            ppr_id = row[6].value
-            ppr_name = row[7].value
+            ppr_id = row[6].value.strip()
+            ppr_name = row[7].value.strip()
 
             amount = row[16].value
 
@@ -106,8 +106,8 @@ class XLSXAppraBudget(object):
 
             # Do tuki je ok
 
-            pp_id = f'fk{row[8].value}'
-            pp_name = row[9].value
+            pp_id = f'fk{row[8].value.strip()}'
+            pp_name = row[9].value.strip()
             ppr_pp_id = f'{ppr_id}_{pp_id}'
 
             if ppr_pp_id in node_keys:
@@ -124,8 +124,8 @@ class XLSXAppraBudget(object):
                 nodes[ppr_pp_id] = pp
                 node_keys.append(ppr_pp_id)
 
-            k4_id = row[10].value
-            k4_name = row[11].value
+            k4_id = row[10].value.strip()
+            k4_name = row[11].value.strip()
             amount = row[16].value
             ppr_pp_k4_id = f'{ppr_pp_id}_{k4_id}'
 
@@ -211,8 +211,8 @@ class XLSXAppraRevenue(object):
 
             # get first level data and save it
             row = sheet.row(row_i)
-            k6_id = row[1].value
-            k6_name = row[2].value
+            k6_id = row[1].value.strip()
+            k6_name = row[2].value.strip()
             k6_amount = row[3].value
 
             print(k6_id, k6_name, k6_amount)

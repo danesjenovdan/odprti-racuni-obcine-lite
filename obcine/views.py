@@ -372,6 +372,14 @@ def get_context_for_table_code(request, municipality_slug, year_slug=None):
         if found_code_data:
             tree_parents = found_parent_chain[1:]
             tree_data = found_code_data
+        else:
+            tree_data = {
+                "realized": 0,
+                "name": "Not found",
+                "code": None,
+                "children": [],
+            }
+            tree_parents = []
 
     return {
         "summary": summary,
@@ -439,6 +447,8 @@ def comparison_over_time_chart_data(request, municipality_slug, year_slug=None):
             )
             if found_code_data:
                 tree_data = found_code_data
+            else:
+                tree_data = {"children": []}
 
         years_data[year_.name] = tree_data["children"]
 
