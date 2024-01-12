@@ -508,7 +508,7 @@
 
         if (checked) {
           data.forEach((v) => {
-            codeKeys.forEach((codeKey) => {
+            Object.keys(hiddenKeys).forEach((codeKey) => {
               v[codeKey] = hiddenKeys[codeKey][v.year];
             });
           });
