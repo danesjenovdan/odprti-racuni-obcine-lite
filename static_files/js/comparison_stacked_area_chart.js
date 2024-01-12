@@ -463,7 +463,11 @@
           const columnValues = stackedData.map((d) => d[columnIndex][1]);
           const valueIndex = columnValues.findIndex((v) => yValue < v);
 
-          if (columnIndex >= dots.length || !xValue || xValue.includes("dummy")) {
+          if (
+            columnIndex >= dots.length ||
+            !xValue ||
+            xValue.includes("dummy")
+          ) {
             updateTooltip(null);
             updateHoveredArea(-1, -1);
             lastHoveredDot = null;
@@ -491,27 +495,75 @@
     // Legend checkboxes check/uncheck listener
     const optionsElem = document.querySelector("#js-comparison-options");
     optionsElem.addEventListener("change", (e) => {
-      // console.log(e.target);
-      console.log(e.target.checked);
-
       const code = e.target.value;
       const checked = e.target.checked;
 
-      if (!checked) {
-        hiddenKeys[`code_${code}`] = {};
-      }
+      if (code === "all") {
+        const label = e.target
+          .closest(".form-check")
+          .querySelector(".form-check-label span");
+        optionsElem.querySelectorAll(".form-check-input").forEach((input) => {
+          input.checked = checked;
+        });
 
-      data.forEach((v) => {
         if (checked) {
-          v[`code_${code}`] = hiddenKeys[`code_${code}`][v.year];
+          data.forEach((v) => {
+            codeKeys.forEach((codeKey) => {
+              v[codeKey] = hiddenKeys[codeKey][v.year];
+            });
+          });
+          hiddenKeys = {};
+          label.innerText = "Skrij vse";
         } else {
-          hiddenKeys[`code_${code}`][v.year] = v[`code_${code}`];
-          v[`code_${code}`] = 0;
+          codeKeys.forEach((codeKey) => {
+            if (!hiddenKeys[codeKey]) {
+              hiddenKeys[codeKey] = {};
+            }
+          });
+          data.forEach((v) => {
+            codeKeys.forEach((codeKey) => {
+              if (!hiddenKeys[codeKey][v.year]) {
+                hiddenKeys[codeKey][v.year] = v[codeKey];
+                v[codeKey] = 0;
+              }
+            });
+          });
+          label.innerText = "Prikaži vse";
         }
-      });
+      } else {
+        // code is not "all"
 
-      if (checked) {
-        delete hiddenKeys[`code_${code}`];
+        if (!checked) {
+          hiddenKeys[`code_${code}`] = {};
+        }
+
+        data.forEach((v) => {
+          if (checked) {
+            v[`code_${code}`] = hiddenKeys[`code_${code}`][v.year];
+          } else {
+            hiddenKeys[`code_${code}`][v.year] = v[`code_${code}`];
+            v[`code_${code}`] = 0;
+          }
+        });
+
+        if (checked) {
+          delete hiddenKeys[`code_${code}`];
+        }
+
+        const numHiddenKeys = Object.keys(hiddenKeys).length;
+        if (numHiddenKeys === 0) {
+          optionsElem.querySelector("#checkbox_all").checked = true;
+          optionsElem
+            .querySelector("#checkbox_all")
+            .closest(".form-check")
+            .querySelector(".form-check-label span").innerText = "Skrij vse";
+        } else if (numHiddenKeys === codeKeys.size) {
+          optionsElem.querySelector("#checkbox_all").checked = false;
+          optionsElem
+            .querySelector("#checkbox_all")
+            .closest(".form-check")
+            .querySelector(".form-check-label span").innerText = "Prikaži vse";
+        }
       }
 
       stackedData = d3.stack().keys(Array.from(codeKeys))(data);
@@ -543,6 +595,18 @@
     oldElem.innerHTML = "";
     const newElem = oldElem.cloneNode(true);
     oldElem.parentNode.replaceChild(newElem, oldElem);
+
+    const showHideAllTemplate = `
+      <div class="chart-legend-option chart-legend-option--all">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="all" id="checkbox_all" checked>
+          <label class="form-check-label" for="checkbox_all">
+            <span>Skrij vse</span>
+          </label>
+        </div>
+      </div>
+    `;
+    newElem.insertAdjacentHTML("beforeend", showHideAllTemplate);
 
     // populate with new data
     [...codeKeys].forEach((codeKey, i) => {

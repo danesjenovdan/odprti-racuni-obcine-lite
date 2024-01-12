@@ -1594,6 +1594,10 @@ a.box-link:hover {
   }
 }
 
+.chart-legend .chart-legend-option.chart-legend-option--all {
+  margin-bottom: 0.5rem;
+}
+
 .chart-legend .chart-legend-option .form-check {
   margin-bottom: 0;
 }
@@ -1616,6 +1620,10 @@ a.box-link:hover {
   display: flex;
   font-family: "Metropolis", sans-serif;
   font-size: 12px;
+}
+
+.chart-legend .chart-legend-option.chart-legend-option--all label {
+  font-weight: 500;
 }
 
 .chart-legend .chart-legend-option label .icon {
