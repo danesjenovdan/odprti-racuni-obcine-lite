@@ -1,4 +1,8 @@
-## odprti racuni obcine
+# ODPRTI RAČUNI OBČINE LITE
+
+## Lite verzija aplikacije za občine, ki želijo prikazovati samo aktualni proračun
+
+---
 
 ### How to run?
 
