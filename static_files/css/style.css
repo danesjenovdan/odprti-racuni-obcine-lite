@@ -820,7 +820,7 @@ section.overview-content .extend-bg::before {
 }
 
 section.overview-content .extend-bg--left::before {
-  left: -9999px;
+  /* left: -9999px; */
   background-color: #f2ecf8;
 }
 

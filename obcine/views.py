@@ -316,23 +316,6 @@ def cut_of_funds(request, municipality_slug, year_slug=None):
     )
 
 
-def comparison_over_time(request, municipality_slug, year_slug=None):
-    municipality = get_object_or_404(Municipality, slug=municipality_slug)
-    year = get_year(year_slug, municipality)
-    tree_type = get_tree_type(request.GET)
-
-    return render(
-        request,
-        "comparison_over_time.html",
-        {
-            "municipality": municipality,
-            "year": year,
-            "tree_type": tree_type,
-            "years": get_municipality_published_years(municipality),
-        },
-    )
-
-
 def get_context_for_table_code(request, municipality_slug, year_slug=None):
     municipality = get_object_or_404(Municipality, slug=municipality_slug)
     year = get_year(year_slug, municipality)
@@ -397,65 +380,4 @@ def cut_of_funds_table(request, municipality_slug, year_slug=None):
         request,
         "cut_of_funds_table.html",
         get_context_for_table_code(request, municipality_slug, year_slug),
-    )
-
-
-def comparison_over_time_table(request, municipality_slug, year_slug=None):
-    return render(
-        request,
-        "comparison_over_time_table.html",
-        get_context_for_table_code(request, municipality_slug, year_slug),
-    )
-
-
-def comparison_over_time_chart_data(request, municipality_slug, year_slug=None):
-    municipality = get_object_or_404(Municipality, slug=municipality_slug)
-    year = get_year(year_slug, municipality)
-    tree_type = get_tree_type(request.GET)
-
-    code = request.GET.get("code", None)
-
-    def find_code(code, parent_chain, node):
-        if node["code"] == code:
-            return node, parent_chain
-
-        if children := node.get("children", []):
-            for child in children:
-                found, found_parent_chain = find_code(
-                    code, [*parent_chain, node], child
-                )
-                if found:
-                    return found, found_parent_chain
-
-        return None, None
-
-    years_data = {}
-    years = get_municipality_published_years(municipality)
-
-    for year_ in years:
-        summary_type = get_summary_type(municipality, year_)
-        summary = get_summary(municipality, year_, summary_type=summary_type)
-
-        if tree_type == "expenses":
-            tree_data = get_expense_tree(municipality, year_, summary, summary_type)
-        else:
-            tree_data = get_revenue_tree(municipality, year_, summary, summary_type)
-
-        if code:
-            found_code_data, found_parent_chain = find_code(
-                code, [{"code": None}], tree_data
-            )
-            if found_code_data:
-                tree_data = found_code_data
-            else:
-                tree_data = {"children": []}
-
-        years_data[year_.name] = tree_data["children"]
-
-    return JsonResponse(
-        {
-            "year": year.name,
-            "years_data": years_data,
-            "tree_type": tree_type,
-        }
     )

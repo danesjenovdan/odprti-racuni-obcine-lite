@@ -63,13 +63,6 @@
                 href="{% url 'cut_of_funds' municipality_slug=request.resolver_match.kwargs.municipality_slug %}"
               >Razrez sredstev</a>
             </li>
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.resolver_match.url_name == 'comparison_over_time' %}active{% endif %}"
-                {% if request.resolver_match.url_name == 'comparison_over_time' %}aria-current="page"{% endif %}
-                href="{% url 'comparison_over_time' municipality_slug=request.resolver_match.kwargs.municipality_slug %}"
-              >Primerjava skozi čas</a>
-            </li>
           </ul>
           <span class="nav-right-content" style="visibility: hidden;">
             <a class="nav-right-link" href="#">Kako uporabljati aplikacijo?</a>
