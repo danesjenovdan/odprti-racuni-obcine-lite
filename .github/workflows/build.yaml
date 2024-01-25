@@ -1,8 +1,9 @@
 name: Publish Docker images
 on:
-  push:
-    branches:
-      - 'k8s'
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - 'k8s'
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
