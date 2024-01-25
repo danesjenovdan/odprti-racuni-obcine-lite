@@ -325,12 +325,12 @@ class XLSCodesParser(object):
             items = self.parse_line(row)
             if len(items) != 2:
                 continue
-            print(items)
+            # print(items)
             if last_added:
                 parent = self.get_parent_node(items[0][0], last_added)
             else:
                 parent = None
-            print('pre save')
+            # print('pre save')
             rc = self.model(
                 name=items[1][1],
                 code=int(items[0][1]),
