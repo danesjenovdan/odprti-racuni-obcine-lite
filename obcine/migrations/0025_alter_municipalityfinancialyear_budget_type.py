@@ -6,13 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0024_remove_municipalityfinancialyear_adoption_date_of_budget_and_more'),
+        (
+            "obcine",
+            "0024_remove_municipalityfinancialyear_adoption_date_of_budget_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='municipalityfinancialyear',
-            name='budget_type',
-            field=models.CharField(choices=[('PROPOSAL', 'Predlog proračuna'), ('REBALANS', 'Rebalans proračuna'), ('VALID', 'Veljavni proračun'), ('ADOPTED', 'Sprejeti proračun')], default='VALID', max_length=20, verbose_name='Tip proračuna'),
+            model_name="municipalityfinancialyear",
+            name="budget_type",
+            field=models.CharField(
+                choices=[
+                    ("PROPOSAL", "Predlog proračuna"),
+                    ("REBALANS", "Rebalans proračuna"),
+                    ("VALID", "Veljavni proračun"),
+                    ("ADOPTED", "Sprejeti proračun"),
+                ],
+                default="VALID",
+                max_length=20,
+                verbose_name="Tip proračuna",
+            ),
         ),
     ]

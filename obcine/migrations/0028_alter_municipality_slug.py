@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0027_municipality_slug_fill'),
+        ("obcine", "0027_municipality_slug_fill"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='municipality',
-            name='slug',
-            field=models.SlugField(default='', unique=True, verbose_name='Slug'),
+            model_name="municipality",
+            name="slug",
+            field=models.SlugField(default="", unique=True, verbose_name="Slug"),
             preserve_default=False,
         ),
     ]

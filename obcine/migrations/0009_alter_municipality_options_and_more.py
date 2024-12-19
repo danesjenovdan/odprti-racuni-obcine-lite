@@ -6,17 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0008_alter_plannedexpense_document_and_more'),
+        ("obcine", "0008_alter_plannedexpense_document_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='municipality',
-            options={'verbose_name': 'Municipality', 'verbose_name_plural': 'Municipality'},
+            name="municipality",
+            options={
+                "verbose_name": "Municipality",
+                "verbose_name_plural": "Municipality",
+            },
         ),
         migrations.AddField(
-            model_name='municipalityfinancialyear',
-            name='is_published',
+            model_name="municipalityfinancialyear",
+            name="is_published",
             field=models.BooleanField(default=False),
         ),
     ]

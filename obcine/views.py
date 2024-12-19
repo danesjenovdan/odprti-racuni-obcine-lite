@@ -44,6 +44,7 @@ class OldUrlRedirectView(RedirectView):
 def landing(request):
     return render(request, "landing.html")
 
+
 def get_summary_type(municipality, year):
     summary_type = "monthly" if year.is_current() else "yearly"
     # WORKAROUND: if there are no yearly expenses, show monthly expenses
@@ -51,6 +52,7 @@ def get_summary_type(municipality, year):
     if not yearly_expense:
         summary_type = "monthly"
     return summary_type
+
 
 def get_year(year_slug, municipality):
     year_id = get_object_or_404(FinancialYear, name=year_slug).id if year_slug else None
@@ -151,8 +153,12 @@ def get_summary(municipality, year, summary_type="monthly"):
             "planned_revenue": sum([i["amount"] for i in planned_revenue]),
             "realized_expenses": sum([i["amount"] for i in realized_expenses]),
             "realized_revenue": sum([i["amount"] for i in realized_revenue]),
-            "realized_expenses_date": get_document_date(MonthlyExpense, municipality, year),
-            "realized_revenue_date": get_document_date(MonthlyRevenue, municipality, year),
+            "realized_expenses_date": get_document_date(
+                MonthlyExpense, municipality, year
+            ),
+            "realized_revenue_date": get_document_date(
+                MonthlyRevenue, municipality, year
+            ),
         }
 
     elif summary_type == "yearly":
@@ -162,8 +168,12 @@ def get_summary(municipality, year, summary_type="monthly"):
         summary = {
             "realized_expenses": sum([i["amount"] for i in realized_expenses]),
             "realized_revenue": sum([i["amount"] for i in realized_revenue]),
-            "realized_expenses_date": get_document_date(YearlyExpense, municipality, year),
-            "realized_revenue_date": get_document_date(YearlyRevenue, municipality, year),
+            "realized_expenses_date": get_document_date(
+                YearlyExpense, municipality, year
+            ),
+            "realized_revenue_date": get_document_date(
+                YearlyRevenue, municipality, year
+            ),
         }
 
     summary_keys = list(filter(lambda k: not k.endswith("_date"), summary.keys()))
@@ -266,6 +276,7 @@ def get_expense_tree(municipality, year, summary, summary_type="monthly"):
 
     cache.set(expense_tree_cache_key, data)
     return data
+
 
 def overview(request, municipality_slug, year_slug=None):
     municipality = get_object_or_404(Municipality, slug=municipality_slug)

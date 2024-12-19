@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0025_alter_municipalityfinancialyear_budget_type'),
+        ("obcine", "0025_alter_municipalityfinancialyear_budget_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='municipality',
-            name='slug',
-            field=models.SlugField(null=True, verbose_name='Slug'),
+            model_name="municipality",
+            name="slug",
+            field=models.SlugField(null=True, verbose_name="Slug"),
         ),
     ]

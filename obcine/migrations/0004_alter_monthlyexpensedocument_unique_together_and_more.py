@@ -6,80 +6,80 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0003_task'),
+        ("obcine", "0003_task"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='monthlyexpensedocument',
+            name="monthlyexpensedocument",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='monthlyrevenuedocument',
+            name="monthlyrevenuedocument",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='plannedexpensedocument',
+            name="plannedexpensedocument",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='plannedrevenuedocument',
+            name="plannedrevenuedocument",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='yearlyexpensedocument',
+            name="yearlyexpensedocument",
             unique_together=set(),
         ),
         migrations.AlterUniqueTogether(
-            name='yearlyrevenuedocument',
+            name="yearlyrevenuedocument",
             unique_together=set(),
         ),
         migrations.RemoveField(
-            model_name='monthlyexpensedocument',
-            name='municipality',
+            model_name="monthlyexpensedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='monthlyexpensedocument',
-            name='year',
+            model_name="monthlyexpensedocument",
+            name="year",
         ),
         migrations.RemoveField(
-            model_name='monthlyrevenuedocument',
-            name='municipality',
+            model_name="monthlyrevenuedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='monthlyrevenuedocument',
-            name='year',
+            model_name="monthlyrevenuedocument",
+            name="year",
         ),
         migrations.RemoveField(
-            model_name='plannedexpensedocument',
-            name='municipality',
+            model_name="plannedexpensedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='plannedexpensedocument',
-            name='year',
+            model_name="plannedexpensedocument",
+            name="year",
         ),
         migrations.RemoveField(
-            model_name='plannedrevenuedocument',
-            name='municipality',
+            model_name="plannedrevenuedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='plannedrevenuedocument',
-            name='year',
+            model_name="plannedrevenuedocument",
+            name="year",
         ),
         migrations.RemoveField(
-            model_name='yearlyexpensedocument',
-            name='municipality',
+            model_name="yearlyexpensedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='yearlyexpensedocument',
-            name='year',
+            model_name="yearlyexpensedocument",
+            name="year",
         ),
         migrations.RemoveField(
-            model_name='yearlyrevenuedocument',
-            name='municipality',
+            model_name="yearlyrevenuedocument",
+            name="municipality",
         ),
         migrations.RemoveField(
-            model_name='yearlyrevenuedocument',
-            name='year',
+            model_name="yearlyrevenuedocument",
+            name="year",
         ),
     ]

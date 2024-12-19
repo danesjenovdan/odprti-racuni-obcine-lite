@@ -47,27 +47,28 @@ def build_merged_tree(definiton_storage, items):
 
 
 def get_nested_dictionary_from_tree(queryset, remove_amount):
-        roots = get_cached_trees(queryset)
+    roots = get_cached_trees(queryset)
 
-        def form_a_tree(objects):
-            tree = dict()
+    def form_a_tree(objects):
+        tree = dict()
 
-            for obj in objects:
-                children = obj.get_children()
-                dictionary_category_tree = obj.get_offline_dict_keyed_children()
-                if remove_amount:
-                    dictionary_category_tree['realized'] = 0
-                    dictionary_category_tree['planned'] = dictionary_category_tree['amount']
-                    dictionary_category_tree.pop('amount')
+        for obj in objects:
+            children = obj.get_children()
+            dictionary_category_tree = obj.get_offline_dict_keyed_children()
+            if remove_amount:
+                dictionary_category_tree["realized"] = 0
+                dictionary_category_tree["planned"] = dictionary_category_tree["amount"]
+                dictionary_category_tree.pop("amount")
 
-                if children:
-                    dictionary_category_tree.update({'children': form_a_tree(children)})
+            if children:
+                dictionary_category_tree.update({"children": form_a_tree(children)})
 
-                tree[dictionary_category_tree['code']] = dictionary_category_tree
+            tree[dictionary_category_tree["code"]] = dictionary_category_tree
 
-            return tree
+        return tree
 
-        return form_a_tree(roots)
+    return form_a_tree(roots)
+
 
 class RevenueTreeBuilder:
     def __init__(
@@ -168,7 +169,15 @@ class ExpenseTreeBuilder:
         )
         self.definiton_storage = {expense.id: expense for expense in expenses}
         try:
-            data = list(build_tree(self.definiton_storage, [expanse.get_offline_dict() for expanse in expenses.filter(level=4)]).values())
+            data = list(
+                build_tree(
+                    self.definiton_storage,
+                    [
+                        expanse.get_offline_dict()
+                        for expanse in expenses.filter(level=4)
+                    ],
+                ).values()
+            )
         except KeyError:
             data = []
         return data
@@ -182,23 +191,27 @@ class ExpenseTreeBuilder:
             municipality=self.municipality,
             year=self.financial_year,
         )
-        planned_tree = get_nested_dictionary_from_tree(planned_expenses, remove_amount=True)
-        realized_tree = get_nested_dictionary_from_tree(realized_expenses, remove_amount=False)
-
+        planned_tree = get_nested_dictionary_from_tree(
+            planned_expenses, remove_amount=True
+        )
+        realized_tree = get_nested_dictionary_from_tree(
+            realized_expenses, remove_amount=False
+        )
 
         def update_realized(subtree, realized_subtree):
             for item in subtree.values():
-                if item['code'] in realized_subtree.keys():
-                    item['realized'] = realized_subtree[item['code']]['amount']
-                    if 'children' in item.keys():
-                        update_realized(item['children'], realized_subtree[item['code']]['children'])
-
+                if item["code"] in realized_subtree.keys():
+                    item["realized"] = realized_subtree[item["code"]]["amount"]
+                    if "children" in item.keys():
+                        update_realized(
+                            item["children"], realized_subtree[item["code"]]["children"]
+                        )
 
         def listify_children(tree):
             tree = list(tree.values())
             for item in tree:
-                if 'children' in item.keys():
-                    item['children'] = listify_children(item['children'])
+                if "children" in item.keys():
+                    item["children"] = listify_children(item["children"])
             return list(tree)
 
         update_realized(planned_tree, realized_tree)

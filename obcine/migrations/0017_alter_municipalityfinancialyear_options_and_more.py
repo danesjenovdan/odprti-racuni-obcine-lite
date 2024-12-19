@@ -6,22 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0016_instructions'),
+        ("obcine", "0016_instructions"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='municipalityfinancialyear',
-            options={'verbose_name': 'Municipality financial year', 'verbose_name_plural': 'Municipality financial year'},
+            name="municipalityfinancialyear",
+            options={
+                "verbose_name": "Municipality financial year",
+                "verbose_name_plural": "Municipality financial year",
+            },
         ),
         migrations.AddField(
-            model_name='monthlyexpense',
-            name='timestamp',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum obdelave podatkov'),
+            model_name="monthlyexpense",
+            name="timestamp",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum obdelave podatkov"
+            ),
         ),
         migrations.AddField(
-            model_name='monthlyrevenue',
-            name='timestamp',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum obdelave podatkov'),
+            model_name="monthlyrevenue",
+            name="timestamp",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum obdelave podatkov"
+            ),
         ),
     ]

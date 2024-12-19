@@ -1,25 +1,39 @@
+import json
+
+from django.apps import apps
 from django.contrib import admin, messages
 from django.shortcuts import redirect
 from django.urls import NoReverseMatch, reverse
-from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-from django.apps import apps
 from django.utils.text import capfirst
-
-from obcine.models import (PlannedExpense, MonthlyExpenseDocument, MonthlyExpense, MunicipalityFinancialYear,
-    PlannedExpenseDocument, PlannedRevenueDocument, MonthlyRevenueDocument, PlannedRevenue, YearlyExpense,
-    MonthlyRevenue, YearlyRevenue, YearlyRevenueDocument, YearlyExpenseDocument, Municipality, Instructions)
-from obcine.filters import SimpleFinanceYearListFilter
-
-
-import json
-
+from django.utils.translation import gettext_lazy as _
 from mptt.admin import MPTTModelAdmin
+
+from obcine.filters import SimpleFinanceYearListFilter
+from obcine.models import (
+    Instructions,
+    MonthlyExpense,
+    MonthlyExpenseDocument,
+    MonthlyRevenue,
+    MonthlyRevenueDocument,
+    Municipality,
+    MunicipalityFinancialYear,
+    PlannedExpense,
+    PlannedExpenseDocument,
+    PlannedRevenue,
+    PlannedRevenueDocument,
+    YearlyExpense,
+    YearlyExpenseDocument,
+    YearlyRevenue,
+    YearlyRevenueDocument,
+)
 
 # Register your models here.
 
+
 class LimitedAdmin(admin.ModelAdmin):
-    exclude = ['organization', 'year']
+    exclude = ["organization", "year"]
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
@@ -34,7 +48,9 @@ class LimitedAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        if ('revenuecategory' in request.resolver_match.route) or ('expensescategory' in request.resolver_match.route):
+        if ("revenuecategory" in request.resolver_match.route) or (
+            "expensescategory" in request.resolver_match.route
+        ):
             pass
         else:
             messages.success(request, _("Changes are successful saved"))
@@ -43,13 +59,19 @@ class LimitedAdmin(admin.ModelAdmin):
         """
         override inline formsets for rename add text
         """
-        inline_formsets = super().get_inline_formsets(request, formsets, inline_instances, obj)
+        inline_formsets = super().get_inline_formsets(
+            request, formsets, inline_instances, obj
+        )
 
-        data = [json.loads(inline_formset.inline_formset_data()) for inline_formset in inline_formsets]
+        data = [
+            json.loads(inline_formset.inline_formset_data())
+            for inline_formset in inline_formsets
+        ]
         for item in data:
-            item['options']['addText'] = 'Dodaj'
+            item["options"]["addText"] = "Dodaj"
 
         for i, inline_formset in enumerate(inline_formsets):
+
             def inline_formset_data(data):
                 return json.dumps(data)
 
@@ -59,25 +81,25 @@ class LimitedAdmin(admin.ModelAdmin):
 
 class FinancialCategoryMPTTModelAdmin(MPTTModelAdmin, LimitedAdmin):
     mptt_level_indent = 40
-    list_display = ['name', 'code', 'level', 'amount', 'year']
-    readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_display = ["name", "code", "level", "amount", "year"]
+    readonly_fields = ["document", "year", "amount", "municipality"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related('categories_children')
+        return qs.prefetch_related("categories_children")
 
 
 class RevenueDefinitionAdmin(MPTTModelAdmin, LimitedAdmin):
     mptt_level_indent = 40
-    list_display = ['name', 'code', 'level']
+    list_display = ["name", "code", "level"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related('categories_children')
+        return qs.prefetch_related("categories_children")
 
 
 class DocumentTabularInline(admin.TabularInline):
-    exclude = ['municipality', 'year']
+    exclude = ["municipality", "year"]
 
 
 class BudgetDocumentInlineAdmin(DocumentTabularInline):
@@ -111,24 +133,26 @@ class RevenueBudgetRealizationInlineAdmin(DocumentTabularInline):
 
 
 class MunicipalityFinancialYearAdmin(LimitedAdmin):
-    list_display = ['year', 'is_published']
-    exclude = ['municipality', 'financial_year']
-    fields = ['budget_date', 'budget_type', 'is_published', 'page_url']
-    readonly_fields = ['page_url']
+    list_display = ["year", "is_published"]
+    exclude = ["municipality", "financial_year"]
+    fields = ["budget_date", "budget_type", "is_published", "page_url"]
+    readonly_fields = ["page_url"]
     inlines = [
         BudgetDocumentInlineAdmin,
         MonthlyBudgetRealizationInlineAdmin,
         YearlyBudgetRealizationInlineAdmin,
         RevenueDocumentInlineAdmin,
         RevenueBudgetRealizationInlineAdmin,
-        YearlyRevenueDocumentInlineAdmin
+        YearlyRevenueDocumentInlineAdmin,
     ]
+
     def year(self, obj):
         return obj.financial_year.name
 
     def page_url(self, obj):
-        return mark_safe(f'<a href="/pregled/{obj.municipality.id}/" target="_blank">Povezava do spletnega mesta</a>')
-
+        return mark_safe(
+            f'<a href="/pregled/{obj.municipality.id}/" target="_blank">Povezava do spletnega mesta</a>'
+        )
 
     def save_formset(self, request, form, formset, change):
         """
@@ -147,7 +171,7 @@ class MunicipalityFinancialYearAdmin(LimitedAdmin):
 
 
 class FinancialYearModelAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ["name"]
 
 
 class BudgetAdmin(FinancialCategoryMPTTModelAdmin):
@@ -163,45 +187,46 @@ class YearlyBudgetAdmin(FinancialCategoryMPTTModelAdmin):
 
 
 class RevenueAdmin(LimitedAdmin):
-    list_display = ['year', 'name', 'code', 'amount', 'status']
-    readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_display = ["year", "name", "code", "amount", "status"]
+    readonly_fields = ["document", "year", "amount", "municipality"]
     list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
-            return 'OK'
+            return "OK"
         else:
-            return 'Napaka pri izbiri konta'
+            return "Napaka pri izbiri konta"
 
 
 class YearlyRevenueObcineAdmin(LimitedAdmin):
-    list_display = ['year', 'name', 'code', 'amount', 'status']
-    readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_display = ["year", "name", "code", "amount", "status"]
+    readonly_fields = ["document", "year", "amount", "municipality"]
     list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
-            return 'OK'
+            return "OK"
         else:
-            return 'Napaka pri izbiri konta'
+            return "Napaka pri izbiri konta"
+
 
 class MonthlyRevenueRealizatioObcineAdmin(LimitedAdmin):
-    list_display = ['year', 'name', 'code', 'amount', 'status']
-    readonly_fields = ['document', 'year', 'amount', 'municipality']
+    list_display = ["year", "name", "code", "amount", "status"]
+    readonly_fields = ["document", "year", "amount", "municipality"]
     list_filter = [SimpleFinanceYearListFilter]
 
     def status(self, obj):
         if obj.definition:
-            return 'OK'
+            return "OK"
         else:
-            return 'Napaka pri izbiri konta'
+            return "Napaka pri izbiri konta"
 
 
 class MunicipalityModelAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ["name"]
 
     def response_change(self, request, obj):
-        return redirect(f'/obcine-admin/obcine/municipality/{obj.id}/change/')
+        return redirect(f"/obcine-admin/obcine/municipality/{obj.id}/change/")
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -211,50 +236,47 @@ class MunicipalityModelAdmin(admin.ModelAdmin):
 
 
 class AdminSite(admin.AdminSite):
-    site_header = _('Nadzorna plošča')
-    site_title = _('Nadzorna plošča')
-    index_title = _('Nadzorna plošča')
+    site_header = _("Nadzorna plošča")
+    site_title = _("Nadzorna plošča")
+    index_title = _("Nadzorna plošča")
     site_url = None
 
     def each_context(self, request):
         url_attrs = []
-        preview = ''
+        preview = ""
 
         url_name = request.resolver_match.url_name
-        url_attrs = url_name.split('_')
+        url_attrs = url_name.split("_")
 
         context = super().each_context(request)
 
         # insert instructions
-        instructions = ''
-        if url_attrs[0] == 'login':
+        instructions = ""
+        if url_attrs[0] == "login":
             pass
-        elif url_attrs[0] == 'logout':
+        elif url_attrs[0] == "logout":
             pass
         elif len(url_attrs) == 1:
             instructions = Instructions.objects.filter(model=None).first()
             if instructions and instructions.list_instructions:
                 instructions = instructions.list_instructions
             else:
-                instructions = ''
+                instructions = ""
         elif len(url_attrs) == 3:
             instructions = Instructions.objects.filter(
                 model__model__iexact=url_attrs[1]
             )
             if instructions:
-                if url_attrs[2] == 'change':
+                if url_attrs[2] == "change":
                     instructions = instructions[0].edit_instructions
-                elif url_attrs[2] == 'add':
+                elif url_attrs[2] == "add":
                     instructions = instructions[0].add_instructions
                 else:
                     instructions = instructions[0].list_instructions
             else:
-                instructions = ''
+                instructions = ""
 
-        context.update({
-            'instructions': instructions,
-            'preview': preview
-        })
+        context.update({"instructions": instructions, "preview": preview})
         return context
 
     def get_app_list(self, request, app_label=None):
@@ -262,22 +284,24 @@ class AdminSite(admin.AdminSite):
         try:
             user_municipality_id = request.user.municipality_id
             municipality_slug = request.user.municipality.slug
-            self.site_url = reverse('overview', kwargs={'municipality_slug': municipality_slug})
+            self.site_url = reverse(
+                "overview", kwargs={"municipality_slug": municipality_slug}
+            )
         except:
             pass
 
-
         # Sort the models alphabetically within each app.
         for app in app_list:
-            for idx, model in enumerate(app['models']):
+            for idx, model in enumerate(app["models"]):
                 # add id of users municipality to municipality url
-                if model['object_name'] == 'Municipality':
-                    model['admin_url'] = model['admin_url'] + str(user_municipality_id)
-            #print(app['app_url'])
+                if model["object_name"] == "Municipality":
+                    model["admin_url"] = model["admin_url"] + str(user_municipality_id)
+            # print(app['app_url'])
 
         return app_list
 
-admin_site = AdminSite(name='obcine-admin')
+
+admin_site = AdminSite(name="obcine-admin")
 
 admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 
@@ -291,4 +315,4 @@ admin_site.register(MunicipalityFinancialYear, MunicipalityFinancialYearAdmin)
 
 admin_site.register(Municipality, MunicipalityModelAdmin)
 
-#admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)
+# admin_site.register(RevenueDefinition, RevenueDefinitionAdmin)

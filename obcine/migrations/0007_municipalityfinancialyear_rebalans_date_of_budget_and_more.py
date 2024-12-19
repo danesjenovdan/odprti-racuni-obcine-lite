@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0006_municipalityfinancialyear_adoption_date_of_budget'),
+        ("obcine", "0006_municipalityfinancialyear_adoption_date_of_budget"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='municipalityfinancialyear',
-            name='rebalans_date_of_budget',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum rebalansa proračuna'),
+            model_name="municipalityfinancialyear",
+            name="rebalans_date_of_budget",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum rebalansa proračuna"
+            ),
         ),
         migrations.AlterField(
-            model_name='municipalityfinancialyear',
-            name='adoption_date_of_budget',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum sprejetja proračuna'),
+            model_name="municipalityfinancialyear",
+            name="adoption_date_of_budget",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum sprejetja proračuna"
+            ),
         ),
     ]

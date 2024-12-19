@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0028_alter_municipality_slug'),
+        ("obcine", "0028_alter_municipality_slug"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='municipality',
-            name='slug',
-            field=models.SlugField(blank=True, help_text='The name as it will appear in URLs e.g http://domain.com/[my-slug]/pregled/ (leave blank to auto-generate)', unique=True, verbose_name='Slug'),
+            model_name="municipality",
+            name="slug",
+            field=models.SlugField(
+                blank=True,
+                help_text="The name as it will appear in URLs e.g http://domain.com/[my-slug]/pregled/ (leave blank to auto-generate)",
+                unique=True,
+                verbose_name="Slug",
+            ),
         ),
     ]

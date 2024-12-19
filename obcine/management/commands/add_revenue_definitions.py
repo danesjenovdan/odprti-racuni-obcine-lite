@@ -4,8 +4,8 @@ from obcine.models import RevenueDefinition
 from obcine.parse_utils import XLSCodesParser
 
 
-
 class Command(BaseCommand):
-    help = 'Setup data'
+    help = "Setup data"
+
     def handle(self, *args, **options):
         XLSCodesParser(RevenueDefinition)

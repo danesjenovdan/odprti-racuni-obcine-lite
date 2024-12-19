@@ -6,22 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0018_alter_monthlyexpensedocument_unique_together_and_more'),
+        ("obcine", "0018_alter_monthlyexpensedocument_unique_together_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='monthlyrevenue',
-            name='timestamp',
+            model_name="monthlyrevenue",
+            name="timestamp",
         ),
         migrations.AddField(
-            model_name='monthlyexpensedocument',
-            name='timestamp',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum obdelave podatkov'),
+            model_name="monthlyexpensedocument",
+            name="timestamp",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum obdelave podatkov"
+            ),
         ),
         migrations.AddField(
-            model_name='monthlyrevenuedocument',
-            name='timestamp',
-            field=models.DateField(blank=True, null=True, verbose_name='Datum obdelave podatkov'),
+            model_name="monthlyrevenuedocument",
+            name="timestamp",
+            field=models.DateField(
+                blank=True, null=True, verbose_name="Datum obdelave podatkov"
+            ),
         ),
     ]

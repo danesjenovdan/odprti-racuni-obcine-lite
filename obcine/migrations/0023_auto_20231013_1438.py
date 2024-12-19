@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def migrate_budget_date(apps, schema_editor):
     MunicipalityFinancialYear = apps.get_model("obcine", "MunicipalityFinancialYear")
 
@@ -9,28 +10,18 @@ def migrate_budget_date(apps, schema_editor):
     for mpf in mpfs:
         if mpf.adoption_date_of_budget:
             mpf.budget_date = mpf.adoption_date_of_budget
-            mpf.budget_type = 'VALID'
+            mpf.budget_type = "VALID"
             mpf.save()
         if mpf.rebalans_date_of_budget:
             mpf.budget_date = mpf.rebalans_date_of_budget
-            mpf.budget_type = 'REBALANS'
+            mpf.budget_type = "REBALANS"
             mpf.save()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0022_municipalityfinancialyear_budget_date_and_more'),
+        ("obcine", "0022_municipalityfinancialyear_budget_date_and_more"),
     ]
 
-    operations = [
-        migrations.RunPython(migrate_budget_date)
-    ]
-
-
-
-
-
-
-
-
+    operations = [migrations.RunPython(migrate_budget_date)]

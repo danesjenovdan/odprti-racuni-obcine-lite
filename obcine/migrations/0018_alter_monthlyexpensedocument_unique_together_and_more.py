@@ -2,68 +2,141 @@
 
 import django.core.validators
 from django.db import migrations, models
+
 import obcine.validators
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('obcine', '0017_alter_municipalityfinancialyear_options_and_more'),
+        ("obcine", "0017_alter_municipalityfinancialyear_options_and_more"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='monthlyexpensedocument',
-            unique_together={('municipality_year',)},
+            name="monthlyexpensedocument",
+            unique_together={("municipality_year",)},
         ),
         migrations.AlterUniqueTogether(
-            name='monthlyrevenuedocument',
-            unique_together={('municipality_year',)},
+            name="monthlyrevenuedocument",
+            unique_together={("municipality_year",)},
         ),
         migrations.RemoveField(
-            model_name='monthlyexpense',
-            name='month',
+            model_name="monthlyexpense",
+            name="month",
         ),
         migrations.RemoveField(
-            model_name='monthlyrevenue',
-            name='month',
+            model_name="monthlyrevenue",
+            name="month",
         ),
         migrations.AlterField(
-            model_name='monthlyexpensedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_expanse_file], verbose_name='File'),
+            model_name="monthlyexpensedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_expanse_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.AlterField(
-            model_name='monthlyrevenuedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_revenue_file], verbose_name='File'),
+            model_name="monthlyrevenuedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_revenue_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.AlterField(
-            model_name='plannedexpensedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_expanse_file], verbose_name='File'),
+            model_name="plannedexpensedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_expanse_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.AlterField(
-            model_name='plannedrevenuedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_revenue_file], verbose_name='File'),
+            model_name="plannedrevenuedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_revenue_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.AlterField(
-            model_name='yearlyexpensedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_expanse_file], verbose_name='File'),
+            model_name="yearlyexpensedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_expanse_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.AlterField(
-            model_name='yearlyrevenuedocument',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['xlsx']), obcine.validators.document_size_validator, obcine.validators.validate_revenue_file], verbose_name='File'),
+            model_name="yearlyrevenuedocument",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["xlsx"]
+                    ),
+                    obcine.validators.document_size_validator,
+                    obcine.validators.validate_revenue_file,
+                ],
+                verbose_name="File",
+            ),
         ),
         migrations.RemoveField(
-            model_name='monthlyexpensedocument',
-            name='month',
+            model_name="monthlyexpensedocument",
+            name="month",
         ),
         migrations.RemoveField(
-            model_name='monthlyrevenuedocument',
-            name='month',
+            model_name="monthlyrevenuedocument",
+            name="month",
         ),
     ]
